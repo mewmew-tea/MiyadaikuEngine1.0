@@ -1,0 +1,13 @@
+*.suo
+*.user
+*.sln.docstates
+/[Dd]ebug/
+/[Dd]ebugPublic/
+/[Rr]elease/
+/[Cc]hecked/
+/x64/
+/build/
+/bld/
+/[Bb]in/
+/[Oo]bj/
+.vs/
