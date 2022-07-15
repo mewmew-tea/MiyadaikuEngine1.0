@@ -10,6 +10,7 @@
 
 
     <Grid>
+        
         <StackPanel Margin="0 0 0 0" Grid.ColumnSpan="2">
             <Menu>
                 <MenuItem Header="ファイル">
@@ -26,7 +27,7 @@
                 </MenuItem>
                 <MenuItem Header="表示"/>
             </Menu>
-            <ToolBar Height="45">
+            <ToolBar Height="32">
                 <Button>
                     <Image Source="/Resources/Images/PlayButton_1.png" />
                 </Button>
@@ -37,7 +38,7 @@
             </ToolBar>
         </StackPanel>
 
-        <avalonDock:DockingManager x:Name="uxDockingManager" AllowMixedOrientation="True" Margin="0,64,0,0">
+        <avalonDock:DockingManager x:Name="uxDockingManager" AllowMixedOrientation="True" Margin="0,50,0,0">
             <avalonDock:DockingManager.Theme>
                 <avalonDock:Vs2013BlueTheme/>
             </avalonDock:DockingManager.Theme>
