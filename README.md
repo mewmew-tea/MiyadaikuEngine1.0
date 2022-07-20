@@ -3,40 +3,6 @@
 コンポーネントシステムを備えた、自作のゲームエンジンです。\
 ポートフォリオを兼ねて開発中です。（２０２２年７月中旬～）
 
-# アーキテクチャ概要
-
-現状でのアーキテクチャ設計は下図の通りです。\
-C++で記述したNativeRuntimeがエンジンのコア機能などを持ち、それをC#で書かれたRuntimeモジュールがラッピングします。\
-Editor(WPF)やユーザが定義するScriptAssemblyは、C#のみで記述します。
-
-```mermaid
-graph TD
-    C#:ScriptAssembly-->C#:Runtime;
-    C++:NativeRuntime -->|Monoで呼び出し| C#:ScriptAssembly;
-    C++:NativeRuntime-->|InternalCall| C#:Runtime;
-    C#:Runtime-->C#:Editor;
-    C++:NativeRuntime-->|InternalCall| C#:Editor;
-    C++:NativeRuntime-->C++:App;
-    
-    
-    subgraph エンジンAPI
-    C#:Runtime
-    C++:NativeRuntime
-    end
-    
-    
-    subgraph exeとして出力
-    C++:App
-    C#:Editor
-    end
-    
-    
-    subgraph ユーザが定義
-    C#:ScriptAssembly
-    end
-    
-```
-
 # ロードマップ
 
 おおよその実装予定です。\
