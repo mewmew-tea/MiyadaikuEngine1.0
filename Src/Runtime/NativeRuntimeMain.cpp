@@ -1,0 +1,6 @@
+#include <iostream>
+
+void NativeRuntimeMain()
+{
+
+}
