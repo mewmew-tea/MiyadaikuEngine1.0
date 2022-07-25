@@ -32,6 +32,16 @@ set(files
     ${nativeruntime_h}
     ${nativeruntime_src})
 
+    
+# warning levels
+target_compile_options(
+  NativeRuntime PRIVATE
+   $<$<CXX_COMPILER_ID:MSVC>:/W4>
+)
+# cpp version
+target_compile_features(NativeRuntime PRIVATE cxx_std_20)
+
+
 # generate filters by folders
 set(PrefixDir "\\")
 set(SrcDir ${CMAKE_CURRENT_LIST_DIR})
