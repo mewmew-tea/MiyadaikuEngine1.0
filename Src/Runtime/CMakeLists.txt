@@ -24,7 +24,7 @@ set(nativeruntime_src
 )
 
 # project infos
-add_library(${PROJECT_NAME} SHARED
+add_library(${PROJECT_NAME} STATIC
     ${nativeruntime_h}
     ${nativeruntime_src}
 )
