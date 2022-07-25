@@ -19,6 +19,9 @@ else()
 	project(MiyadaikuEngine_Application)
 endif()
 
+
+set(CMAKE_CONFIGURATION_TYPES "Debug;Release" )
+
 # add source directory
 add_subdirectory(Src)
 
