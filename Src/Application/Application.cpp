@@ -18,6 +18,6 @@ Application::~Application()
 	// ”O‚Ì‚½‚ß‚ÉA–¾¦“I‚É‰ğ•ú‚µ‚Ä‚¨‚­
 	if (m_engine.get())
 	{
-		m_engine.release();
+		m_engine.reset();
 	}
 }
