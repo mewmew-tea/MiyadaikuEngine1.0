@@ -3,6 +3,35 @@
 コンポーネントシステムを備えた、自作のゲームエンジンです。(WIP)\
 ポートフォリオを兼ねて開発中です。（２０２２年７月中旬～）
 
+# How to build
+
+現在はWindows(x64)のみの対応です。
+
+## Requirements
+
+- git
+- Visual Studio 2020 or later
+- cmake 3.22 or later
+
+## Clone and generate projects
+
+リポジトリをCloneしてください。
+
+```
+git clone https://github.com/mewmew-tea/MiyadaikuEngine1.0
+```
+
+`Script/GenerateProjects.bat`をクリックしてください。\
+(テストプロジェクトも含める場合は, `Script/GenerateProjects_Test.bat`をクリックしてください。)
+
+## Build
+
+ルートディレクトリで以下のコマンドを実行して下さい。
+
+```
+cmake --build　build/
+```
+
 # アーキテクチャ
 
 現状のアーキテクチャの設計は下図、表の通りです。
@@ -18,8 +47,6 @@
 | EditorRuntime | エディタにのみ含まれます。NativeRuntimeを .NET Framework上にラッピングして公開します。NativeRuntimeと通信し、エディタに必要な情報をやり取りします。 |
 | Editor | エディタにのみ含まれます。exeファイルとして起動できるエディタをWPFで作成します。 |
 | Application | ゲームビルド時のみ含まれます。NativeRuntimeを使って、ゲームの起動やゲームループを呼び出します。 |
-
-
 
 
 # ロードマップ
