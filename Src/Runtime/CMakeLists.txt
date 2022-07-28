@@ -15,12 +15,11 @@ endif()
 # source codes
 # header files
 file(GLOB nativeruntime_h
-    NativeRuntime.h
+    Core/Engine.h
 )
 # cpp files
 set(nativeruntime_src
-    NativeRuntimeMain.cpp
-    NativeRuntime.cpp
+    Core/Engine.cpp
 )
 
 # project infos
@@ -55,3 +54,7 @@ set(
 set( 
   CMAKE_ARCHIVE_OUTPUT_DIRECTORY_RELEASE libs/Release
 )
+
+if (ENABLE_TEST)
+    add_subdirectory(Test)
+endif()

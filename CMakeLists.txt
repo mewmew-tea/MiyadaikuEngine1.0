@@ -3,9 +3,11 @@ cmake_minimum_required(VERSION 3.22)
 # make project filters use folders
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 
+enable_testing()
+
 # options
 option(EDITOR "is editor build" ON)
-
+option(ENABLE_TEST "is build test" ON)
 
 # For MSVC
 if (MSVC)

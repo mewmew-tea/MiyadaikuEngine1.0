@@ -13,14 +13,28 @@ if (MSVC)
 endif()
 
 
-add_executable(MiyadaikuApplication main.cpp)
+# source codes
+# header files
+set(application_h
+    Application.h
+)
+# cpp files
+set(application_src
+    Application.cpp
+    main.cpp
+)
 
+add_executable(Application ${application_h} ${application_src})
+
+
+# link
+target_link_libraries(Application NativeRuntime)
 
 # warning levels
 target_compile_options(
-  NativeRuntime PRIVATE
+  Application PRIVATE
    $<$<CXX_COMPILER_ID:MSVC>:/W4>
 )
 # cpp version
-target_compile_features(NativeRuntime PRIVATE cxx_std_20)
+target_compile_features(Application PRIVATE cxx_std_20)
 
