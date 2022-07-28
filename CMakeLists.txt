@@ -15,12 +15,7 @@ if (MSVC)
 endif()
 
 # solution
-if (EDITOR)
-	project(MiyadaikuEngine_Editor)
-else()
-	project(MiyadaikuEngine_Application)
-endif()
-
+project(MiyadaikuEngine)
 
 set(CMAKE_CONFIGURATION_TYPES "Debug;Release" )
 
