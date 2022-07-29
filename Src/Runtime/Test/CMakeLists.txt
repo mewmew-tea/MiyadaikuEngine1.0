@@ -17,12 +17,17 @@ if (ENABLE_TEST)
 endif()
 include(GoogleTest)
 
+set (native_runtime_test_h
+	TestEnvironment.h
+)
 
 set(native_runtime_test_src
     main.cpp
+	TestEnvironment.cpp
+	Engine_Test.cpp
 )
 
-add_executable(${PROJECT_NAME} ${native_runtime_test_src})
+add_executable(${PROJECT_NAME} ${native_runtime_test_src} ${native_runtime_test_h})
 target_link_libraries(${PROJECT_NAME} NativeRuntime 
     gtest_main)
 

@@ -1,9 +1,15 @@
-#include <iostream>
-#include "../Core/Engine.h"
+#include "TestEnvironment.h"
 #include <gtest/gtest.h>
+#include <iostream>
 
 int main(int argc, char** argv)
 {
+	TestEnviroment::SetUp();
+
 	testing::InitGoogleTest(&argc, argv);
-	return RUN_ALL_TESTS();
+	int result = RUN_ALL_TESTS();
+	
+	TestEnviroment::TearDown();
+
+	return result;
 }
