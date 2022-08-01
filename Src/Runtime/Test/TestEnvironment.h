@@ -1,15 +1,22 @@
+#pragma once
 #include <memory>
+#include "../../Application/Application.h"
 
 namespace Miyadaiku
 {
 class Engine;
 }
 
+//class Application;
+
 class TestEnviroment
 {
 public:
-	static void SetUp();
-	static void TearDown();
+	TestEnviroment();
+	~TestEnviroment();
 
-	static std::unique_ptr<Miyadaiku::Engine> m_upEngine;
+	static int	Setup();
+	static void Teardown();
+
+	static std::unique_ptr<Application> m_upApplication;
 };

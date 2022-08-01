@@ -1,12 +1,30 @@
 #include "TestEnvironment.h"
+#include "../../Application/Application.h"
 #include "../Core/Engine.h"
 
-void TestEnviroment::SetUp()
+std::unique_ptr<Application> TestEnviroment::m_upApplication;
+
+TestEnviroment::TestEnviroment()
 {
-	m_upEngine = std::make_unique<Miyadaiku::Engine>();
 }
 
-void TestEnviroment::TearDown()
+TestEnviroment::~TestEnviroment()
 {
-	m_upEngine.reset();
+	Teardown();
+}
+
+int TestEnviroment::Setup()
+{
+	m_upApplication = std::make_unique<Application>();
+
+	return 0;
+}
+
+void TestEnviroment::Teardown()
+{
+	if (m_upApplication)
+	{
+		m_upApplication->Cleanup();
+		m_upApplication.reset();
+	}
 }

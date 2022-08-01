@@ -10,12 +10,23 @@
 
 Application::Application()
 {
-	m_engine = std::make_unique<Miyadaiku::Engine>();
+
 }
 
 Application::~Application()
 {
-	// ”O‚Ì‚½‚ß‚ÉA–¾¦“I‚É‰ğ•ú‚µ‚Ä‚¨‚­
+	Cleanup();
+}
+
+int Application::Setup()
+{
+	m_engine = std::make_unique<Miyadaiku::Engine>();
+
+	return 0;
+}
+
+void Application::Cleanup()
+{
 	if (m_engine.get())
 	{
 		m_engine.reset();

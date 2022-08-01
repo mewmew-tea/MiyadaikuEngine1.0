@@ -18,17 +18,32 @@ endif()
 include(GoogleTest)
 
 set (native_runtime_test_h
+	../../Application/Application.h
 	TestEnvironment.h
 )
 
 set(native_runtime_test_src
+	../../Application/Application.cpp
     main.cpp
 	TestEnvironment.cpp
+	Application_Test.cpp
 	Engine_Test.cpp
 )
 
+
 add_executable(${PROJECT_NAME} ${native_runtime_test_src} ${native_runtime_test_h})
-target_link_libraries(${PROJECT_NAME} NativeRuntime 
-    gtest_main)
+
+# warning levels
+target_compile_options(
+  NativeRuntime_Test PRIVATE
+   $<$<CXX_COMPILER_ID:MSVC>:/W4>
+)
+# cpp version
+target_compile_features(NativeRuntime_Test PRIVATE cxx_std_20)
+
+target_link_libraries(${PROJECT_NAME} NativeRuntime GTest::gtest  GTest::gtest_main 
+    )
+
+add_compile_definitions(TESTS_ENABLED)
 
 gtest_discover_tests(${PROJECT_NAME})
