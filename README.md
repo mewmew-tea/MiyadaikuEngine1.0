@@ -10,7 +10,7 @@
 ## Requirements
 
 - git
-- Visual Studio 2020 or later
+- Visual Studio 2022 or later
 - cmake 3.22 or later
 
 ## Clone and generate projects
