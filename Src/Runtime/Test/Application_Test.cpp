@@ -1,4 +1,4 @@
 #include "TestEnvironment.h"
-#include "../../Application/Application.h"
+#include "../Core/Application.h"
 #include "gtest/gtest.h"
 

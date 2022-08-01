@@ -1,5 +1,5 @@
 #include "TestEnvironment.h"
-#include "../../Application/Application.h"
+#include "../Core/Application.h"
 #include "../Core/Engine.h"
 
 std::unique_ptr<Application> TestEnviroment::m_upApplication;

@@ -18,12 +18,11 @@ endif()
 include(GoogleTest)
 
 set (native_runtime_test_h
-	../../Application/Application.h
 	TestEnvironment.h
+	../Core/Application.h
 )
 
 set(native_runtime_test_src
-	../../Application/Application.cpp
     main.cpp
 	TestEnvironment.cpp
 	Application_Test.cpp

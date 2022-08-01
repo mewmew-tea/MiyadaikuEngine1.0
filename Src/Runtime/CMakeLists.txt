@@ -16,10 +16,12 @@ endif()
 # header files
 file(GLOB nativeruntime_h
     Core/Engine.h
+    Core/Application.h
 )
 # cpp files
 set(nativeruntime_src
     Core/Engine.cpp
+    Core/Application.cpp
 )
 
 # project infos

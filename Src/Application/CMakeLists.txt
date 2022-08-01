@@ -16,11 +16,10 @@ endif()
 # source codes
 # header files
 set(application_h
-    Application.h
+    ../Runtime/Core/Application.h
 )
 # cpp files
 set(application_src
-    Application.cpp
     main.cpp
 )
 
