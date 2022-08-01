@@ -1,13 +1,12 @@
 #pragma once
 #include <memory>
-#include "../../Application/Application.h"
 
 namespace Miyadaiku
 {
 class Engine;
 }
 
-//class Application;
+class Application;
 
 class TestEnviroment
 {
