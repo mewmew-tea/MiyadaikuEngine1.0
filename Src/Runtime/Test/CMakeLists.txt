@@ -19,6 +19,7 @@ include(GoogleTest)
 
 set (native_runtime_test_h
 	TestEnvironment.h
+	TestUtils_Math.h
 	../Core/Application.h
 )
 
@@ -27,6 +28,7 @@ set(native_runtime_test_src
 	TestEnvironment.cpp
 	Application_Test.cpp
 	Engine_Test.cpp
+	Math_Vector2I_Test.cpp
 )
 
 

@@ -17,6 +17,7 @@ endif()
 file(GLOB nativeruntime_h
     Core/Engine.h
     Core/Application.h
+    Core/Math/Vector2I.h
 )
 # cpp files
 set(nativeruntime_src
