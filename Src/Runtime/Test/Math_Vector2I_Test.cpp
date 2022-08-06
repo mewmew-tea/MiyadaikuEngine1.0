@@ -1,4 +1,4 @@
-#include <gtest/gtest.h>
+﻿#include <gtest/gtest.h>
 #include "../Core/Math/Vector2I.h"
 #include "TestUtils_Math.h"
 
