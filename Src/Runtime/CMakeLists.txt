@@ -18,6 +18,7 @@ file(GLOB nativeruntime_h
     Core/Engine.h
     Core/Application.h
     Core/Math/Vector2I.h
+    Core/Math/RectangleI.h
 )
 # cpp files
 set(nativeruntime_src
