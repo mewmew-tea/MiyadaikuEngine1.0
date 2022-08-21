@@ -37,9 +37,11 @@ set(files
 
     
 # warning levels
+# and force source charset utf-8
 target_compile_options(
-  NativeRuntime PRIVATE
-   $<$<CXX_COMPILER_ID:MSVC>:/W4>
+    NativeRuntime PRIVATE
+    $<$<CXX_COMPILER_ID:MSVC>:/W4>
+    $<$<CXX_COMPILER_ID:MSVC>:/utf-8>
 )
 # cpp version
 target_compile_features(NativeRuntime PRIVATE cxx_std_20)
