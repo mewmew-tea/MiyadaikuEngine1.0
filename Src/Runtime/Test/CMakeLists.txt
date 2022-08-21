@@ -28,6 +28,7 @@ set(native_runtime_test_src
 	TestEnvironment.cpp
 	Application_Test.cpp
 	Engine_Test.cpp
+	Subsystem_Test.cpp
 	Math_Vector2I_Test.cpp
 	Math_RectangleI_Test.cpp
 )
