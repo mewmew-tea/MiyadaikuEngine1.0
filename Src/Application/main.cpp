@@ -7,5 +7,6 @@ void main()
 		return;
 	}
 	upApp->Setup();
+	upApp->Iteration();
 	upApp->Cleanup();
 }

@@ -21,8 +21,18 @@ Application::~Application()
 int Application::Setup()
 {
 	m_engine = std::make_unique<Miyadaiku::Engine>();
+	if (m_engine)
+		m_engine->SetUp();
 
 	return 0;
+}
+
+void Application::Iteration()
+{
+	while (!m_engine->IsRequestedShutdown())
+	{
+		m_engine->Update();
+	}
 }
 
 void Application::Cleanup()

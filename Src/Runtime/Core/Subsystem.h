@@ -4,6 +4,7 @@
 
 namespace Miyadaiku
 {
+class Engine;
 class Subsystem
 {
 public:
@@ -68,5 +69,11 @@ private:
 		static_assert(std::is_base_of<Subsystem, T>::value,
 					  "Subsystemではない型が指定されました。Subsystemを継承した型を指定してください。");
 	}
+
+	
+private:
+	// コピー禁止
+	SubsystemLocator(const SubsystemLocator& src) = delete;
+	void operator=(const SubsystemLocator& src) = delete;
 };
 } // namespace Miyadaiku
