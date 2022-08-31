@@ -29,7 +29,16 @@ set(native_runtime_test_src
 	Application_Test.cpp
 	Engine_Test.cpp
 	Subsystem_Test.cpp
+
+	Math_Matrix_Test.cpp
+	Math_Quaternion_Test.cpp
+	
+	Math_Vector2_Test.cpp
 	Math_Vector2I_Test.cpp
+	Math_Vector3_Test.cpp
+	Math_Vector4_Test.cpp
+
+	Math_Rectangle_Test.cpp
 	Math_RectangleI_Test.cpp
 )
 
