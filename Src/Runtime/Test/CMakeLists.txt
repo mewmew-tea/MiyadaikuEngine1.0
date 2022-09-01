@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.22)
+﻿cmake_minimum_required(VERSION 3.22)
 
 project(NativeRuntime_Test CXX)
 
@@ -18,16 +18,28 @@ endif()
 include(GoogleTest)
 
 set (native_runtime_test_h
-	../../Application/Application.h
 	TestEnvironment.h
+	TestUtils_Math.h
+	../Core/Application.h
 )
 
 set(native_runtime_test_src
-	../../Application/Application.cpp
     main.cpp
 	TestEnvironment.cpp
 	Application_Test.cpp
 	Engine_Test.cpp
+	Subsystem_Test.cpp
+
+	Math_Matrix_Test.cpp
+	Math_Quaternion_Test.cpp
+	
+	Math_Vector2_Test.cpp
+	Math_Vector2I_Test.cpp
+	Math_Vector3_Test.cpp
+	Math_Vector4_Test.cpp
+
+	Math_Rectangle_Test.cpp
+	Math_RectangleI_Test.cpp
 )
 
 
