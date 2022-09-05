@@ -1,8 +1,11 @@
 ﻿#include "Engine.h"
+#include "Subsystem.h"
 
 #include "Platform/Platform.h"
 #include "Platform/Window.h"
-#include "Subsystem.h"
+
+#include "../Rendering/Renderer.h"
+#include "../Rendering/RenderingResource.h"
 
 #include <iostream>
 #include <assert.h>
@@ -31,20 +34,23 @@ Engine::Engine()
 
 Engine::~Engine()
 {
+	m_subsystemLocator.Remove<Renderer>();
+	m_subsystemLocator.Remove<Platform>();
 }
 
 void Engine::SetUp()
 {
-
-#ifdef _WIN32
 	m_subsystemLocator.Add<Platform>();
-#endif
+	m_subsystemLocator.Add<Renderer>();
 }
 
 void Engine::Update()
 {
 	auto os = m_subsystemLocator.Get<Platform>();
 	os->ProcessSystemEventQueue();
+
+	auto renderer = m_subsystemLocator.Get<Renderer>();
+	renderer->Present();
 }
 
 void Engine::RequestShutdown()
