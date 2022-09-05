@@ -69,7 +69,7 @@ bool D3D11_SwapChain::Init(void*							  _windowHandle,
 	}
 
 	// バックバッファリソースからビューを作成
-	m_spBackBuffer = std::make_shared<DX11_Texture>(_device);
+	m_spBackBuffer = std::make_shared<D3D11_Texture>(_device);
 	RHIResourceHandle_Texture backBufferHandle;
 	backBufferHandle.m_pData = pBackBuffer;
 	if (m_spBackBuffer->Create(backBufferHandle) == false)

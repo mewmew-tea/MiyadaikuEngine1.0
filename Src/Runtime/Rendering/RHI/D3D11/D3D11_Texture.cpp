@@ -7,7 +7,7 @@
 
 namespace Miyadaiku
 {
-bool DX11_Texture::Create(RHIResourceHandle_Texture& _srcResource)
+bool D3D11_Texture::Create(RHIResourceHandle_Texture& _srcResource)
 {
 	ID3D11Texture2D* pSrcTex =
 		reinterpret_cast<ID3D11Texture2D*>(_srcResource.m_pData);
@@ -22,7 +22,7 @@ bool DX11_Texture::Create(RHIResourceHandle_Texture& _srcResource)
 	return CreateRTV();
 }
 
-void DX11_Texture::Release()
+void D3D11_Texture::Release()
 {
 	//if (m_textureHandle.m_pData)
 	//{
@@ -49,7 +49,7 @@ void DX11_Texture::Release()
 	}
 }
 
-bool DX11_Texture::CreateRTV()
+bool D3D11_Texture::CreateRTV()
 {
 	if (!m_textureHandle.m_pData)
 	{

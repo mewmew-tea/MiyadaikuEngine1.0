@@ -4,16 +4,16 @@
 
 namespace Miyadaiku
 {
-class DX11_Texture : public RHI_Texture
+class D3D11_Texture : public RHI_Texture
 {
 public:
 	//DX11_Texture() = delete;
-	DX11_Texture(const std::shared_ptr<RHI_Device>& _spRhiDevice)
+	D3D11_Texture(const std::shared_ptr<RHI_Device>& _spRhiDevice)
 		: RHI_Texture(_spRhiDevice)
 	{
 	
 	}
-	~DX11_Texture()
+	~D3D11_Texture()
 	{
 		Release();
 	}
