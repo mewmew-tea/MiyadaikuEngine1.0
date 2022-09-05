@@ -15,10 +15,12 @@
 
 ## Clone and generate projects
 
-リポジトリをCloneしてください。
+リポジトリをClone、Submoduleを取得してください。
 
 ```
 git clone https://github.com/mewmew-tea/MiyadaikuEngine1.0
+cd MiyadaikuEngine1.0
+git submodule update --init
 ```
 
 `Script/GenerateProjects.bat`をクリックしてください。\
@@ -61,7 +63,7 @@ https://trello.com/b/jDuAlxcO
 | ---- | ---- | ---- |
 |  WPFによるエディタGUI  |  5%  |   |
 |  C#スクリプト  |  0%  | Monoを用いて実装予定です。  |
-|  D3D11レンダラ  |  0%  | C++(Win32API)で実装予定。  |
+|  D3D11レンダラ  |  20%  | C++(Win32API)で実装予定。  |
 |  D3D12レンダラ  |  0%  | 低優先度。C++(Win32API)で実装予定。  |
 | オーディオ(XAudio) | 0% |  |
 |  物理,コリジョン  |  0%  | PhysX採用？  |
