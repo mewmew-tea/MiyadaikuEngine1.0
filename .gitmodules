@@ -1,3 +1,6 @@
 [submodule "Src/Runtime/External/stb"]
 	path = Src/Runtime/External/stb
 	url = https://github.com/nothings/stb.git
+[submodule "Src/Runtime/External/strconv"]
+	path = Src/Runtime/External/strconv
+	url = https://github.com/javacommons/strconv.git
