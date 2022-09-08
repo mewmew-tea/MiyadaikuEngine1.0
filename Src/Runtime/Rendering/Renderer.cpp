@@ -4,6 +4,7 @@
 #include "../Core/Platform/Windows/Window_Windows.h"
 #include "RHI/D3D11/D3D11_Device.h"
 #include "RHI/D3D11/D3D11_SwapChain.h"
+#include "RHI/D3D11/D3D11_Shader.h"
 
 namespace Miyadaiku
 {
@@ -34,6 +35,13 @@ void Renderer::OnAwake()
 		m_spRHISwapChain->Init(window->GetWindowHandle(), m_spRHIDevice,
 							   window->GetRect().width,
 							   window->GetRect().height);
+	}
+
+	m_spRHIVertexShader = std::make_shared<D3D11_Shader>(m_spRHIDevice);
+	if (m_spRHIVertexShader)
+	{
+		m_spRHIVertexShader->Load("Assets/Shaders/Unlit_VS.hlsl",
+								  RHI_Shader::ShaderType::Vertex, "main");
 	}
 }
 void Renderer::OnShutdown()

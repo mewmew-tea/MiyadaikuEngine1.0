@@ -1,6 +1,9 @@
 ﻿#pragma once
-#include <memory>
 #include "../RenderingResource.h"
+#include <memory>
+#include <vector>
+#include <string>
+#include <string_view>
 
 namespace Miyadaiku
 {
@@ -8,7 +11,7 @@ class RHI_Device;
 class RHI_Texture
 {
 public:
-	//RHI_Texture() = delete;
+	// RHI_Texture() = delete;
 	RHI_Texture(const std::shared_ptr<RHI_Device>& _spRhiDevice)
 	{
 		m_wpRHIDevice = _spRhiDevice;
@@ -18,6 +21,7 @@ public:
 	}
 
 	virtual bool Create(RHIResourceHandle_Texture& _srcResource) = 0;
+	virtual bool Create(std::string_view _filePath) = 0;
 
 	virtual void Release() = 0;
 
@@ -39,6 +43,27 @@ public:
 	}
 
 protected:
+	///**
+	// * 画像ファイルからデータを読み込みます。
+	// * 
+	// * @param _filePath ファイルパス
+	// * @param _ppOutData 出力先のデータ
+	// * @param _pOutWidth 得られた画像データの横画素数
+	// * @param _pOutHeight 得られた画像データの縦画素数
+	// * @param _pOutChannelsInFile 得られた画像データのチャンネル数
+	// * @param _imageDesiredChannels 画像から抽出するチャンネル数
+	// * @return 読み込みの成否
+	// */
+	//bool LoadImageData(std::string_view			   _filePath,
+	//				   unsigned char** _ppOutData, int* _pOutWidth,
+	//				   int* _pOutHeight, int* _pOutChannelsInFile,
+	//				   int _imageDesiredChannels = 4);
+	//bool LoadImageData(std::string_view			   _filePath,
+	//				   std::vector<unsigned char>& _outData, int* _pOutWidth,
+	//				   int* _pOutHeight, int* _pOutChannelsInFile,
+	//				   int _imageDesiredChannels = 4);
+
+
 	// テクスチャのリソースやビューなど
 	RHIResourceHandle_Texture m_textureHandle;
 	RHIResourceHandle_SRV	  m_srvHandle;

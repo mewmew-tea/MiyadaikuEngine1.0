@@ -43,12 +43,18 @@ file(GLOB nativeruntime_h
     Rendering/RHI/RHI_Device.h
     Rendering/RHI/RHI_SwapChain.h
     Rendering/RHI/RHI_Texture.h
+    Rendering/RHI/RHI_Shader.h
+    Rendering/RHI/RHI_InputLayout.h
+    Rendering/RHI/RHI_VertexBuffer.h
 
     # D3D11
     Rendering/RHI/D3D11/D3D11Common.h
     Rendering/RHI/D3D11/D3D11_Device.h
     Rendering/RHI/D3D11/D3D11_SwapChain.h
     Rendering/RHI/D3D11/D3D11_Texture.h
+    Rendering/RHI/D3D11/D3D11_Shader.h
+    Rendering/RHI/D3D11/D3D11_InputLayout.h
+    Rendering/RHI/D3D11/D3D11_VertexBuffer.h
 )
 # cpp files
 set(nativeruntime_src
@@ -79,11 +85,17 @@ set(nativeruntime_src
     Rendering/RHI/RHI_Device.cpp
     Rendering/RHI/RHI_SwapChain.cpp
     Rendering/RHI/RHI_Texture.cpp
+    Rendering/RHI/RHI_Shader.cpp
+    Rendering/RHI/RHI_InputLayout.cpp
+    Rendering/RHI/RHI_VertexBuffer.cpp
 
     # D3D11
     Rendering/RHI/D3D11/D3D11_Device.cpp
     Rendering/RHI/D3D11/D3D11_SwapChain.cpp
     Rendering/RHI/D3D11/D3D11_Texture.cpp
+    Rendering/RHI/D3D11/D3D11_Shader.cpp
+    Rendering/RHI/D3D11/D3D11_InputLayout.cpp
+    Rendering/RHI/D3D11/D3D11_VertexBuffer.cpp
 )
 
 # project infos

@@ -20,6 +20,8 @@ public:
 
 	bool Create(RHIResourceHandle_Texture& _srcResource) override;
 
+	bool Create(std::string_view _filePath) override;
+
 	void Release() override;
 
 private:
