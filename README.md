@@ -23,8 +23,8 @@ cd MiyadaikuEngine1.0
 git submodule update --init
 ```
 
-`Script/GenerateProjects.bat`をクリックしてください。\
-(テストプロジェクトも含める場合は, `Script/GenerateProjects_Test.bat`をクリックしてください。)
+テストを含まない場合： `Script/GenerateProjects.bat`をクリックしてください。\
+テストを含む場合：`Script/GenerateProjects_Test.bat`をクリックしてください。
 
 ## Build
 
@@ -39,17 +39,20 @@ cmake --build　build/
 現状のアーキテクチャの設計は下図、表の通りです。
 ユーザはScript(C#)を定義します。
 
-![](docs/images/Architecture_20220720.jpg)
+![](docs/images/Architecture_20220906.jpg.jpg)
 
 |  モジュール  |  概要  |
 | ---- | ---- |
 | Script | ユーザが定義する、コンポーネントスクリプトのアセンブリ。NativeRuntimeによってmono上で呼び出されます。 |
 | Runtime | NativeRuntimeをmono上にラッピングして公開します。エンジン標準のコンポーネントもここで定義されます。 |
 | NativeRuntime | C++で記述されます。各種APIの管理や、入出力、アセット管理などを行います。また、Runtimeとゲームオブジェクトやメモリの情報を共有し、それらをEditorRuntimeへ公開します。 |
-| EditorRuntime | エディタにのみ含まれます。NativeRuntimeを .NET Framework上にラッピングして公開します。NativeRuntimeと通信し、エディタに必要な情報をやり取りします。 |
-| Editor | エディタにのみ含まれます。exeファイルとして起動できるエディタをWPFで作成します。 |
-| Application | ゲームビルド時のみ含まれます。NativeRuntimeを使って、ゲームの起動やゲームループを呼び出します。 |
+| Application | C++で記述されます。NativeRuntimeを使って、ゲームの起動やゲームループを呼び出す実行ファイルです。 |
+| EditorRuntime | エディタにのみ含まれます。NativeRuntimeのAPIを、 .NET Framework上にラッピングして公開します。NativeRuntimeと通信し、エディタに必要な情報や命令をやり取りします。 |
+| Editor | エディタにのみ含まれます。WPFを用いた、exeファイルとして起動できるエディタです。 |
 
+# 特徴
+
+- RHI(Render Hardware Interface)層を含む、マルチプラットフォームを見据えたレンダラ設計
 
 # ロードマップ
 
@@ -61,10 +64,13 @@ https://trello.com/b/jDuAlxcO
 
 |  項目名  |  進捗度  | 概要 |
 | ---- | ---- | ---- |
-|  WPFによるエディタGUI  |  5%  |   |
-|  C#スクリプト  |  0%  | Monoを用いて実装予定です。  |
-|  D3D11レンダラ  |  20%  | C++(Win32API)で実装予定。  |
+|  エンジンコア  |  70%  | プラットフォーム機能、ファイルシステムなど  |
+|  算術ライブラリ  |  90%  | C++のNaitiveRuntimeに含まれます。  |
+|  D3D11レンダラ  |  20%  | C++(Win32API)  |
 |  D3D12レンダラ  |  0%  | 低優先度。C++(Win32API)で実装予定。  |
+|  C#スクリプトシステム  |  0%  | Monoを用いて実装予定。  |
+|  WPFによるエディタGUI  |  5%  |   |
+| アセットシステム | 0% |  |
 | オーディオ(XAudio) | 0% |  |
 |  物理,コリジョン  |  0%  | PhysX採用？  |
 |  Dear ImGui, ImGuizmo  |  0%  | デバッグ、仮のマニピュレータとして使用予定。  |
