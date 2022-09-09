@@ -39,7 +39,7 @@ cmake --build　build/
 現状のアーキテクチャの設計は下図、表の通りです。
 ユーザはScript(C#)を定義します。
 
-![](docs/images/Architecture_20220906.jpg.jpg)
+![](docs/images/Architecture_20220906.jpg)
 
 |  モジュール  |  概要  |
 | ---- | ---- |
