@@ -58,4 +58,12 @@ target_link_libraries(${PROJECT_NAME} NativeRuntime GTest::gtest  GTest::gtest_m
 
 add_compile_definitions(TESTS_ENABLED)
 
+# copy assets
+add_custom_command(TARGET NativeRuntime_Test POST_BUILD COMMAND ${CMAKE_COMMAND} -E make_directory ${PROJECT_BINARY_DIR}/Assets/)
+add_custom_command(TARGET NativeRuntime_Test POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_SOURCE_DIR}/Assets/ ${PROJECT_BINARY_DIR}/Assets/)
+# for CI(GitHub Actions)
+add_custom_command(TARGET NativeRuntime_Test POST_BUILD COMMAND ${CMAKE_COMMAND} -E make_directory $<TARGET_FILE_DIR:NativeRuntime_Test>/Assets/)
+add_custom_command(TARGET NativeRuntime_Test POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_SOURCE_DIR}/Assets/ $<TARGET_FILE_DIR:NativeRuntime_Test>/Assets/)
+
+
 gtest_discover_tests(${PROJECT_NAME})
