@@ -42,4 +42,12 @@ jobs:
       #run: ctest -C ${{env.BUILD_TYPE}}
       run: ${{github.workspace}}/build/Src/Runtime/Test/${{env.BUILD_TYPE}}/NativeRuntime_Test.exe
 
-      
+    # Post Discord Notify(by Actions Status Discord)
+    - name: Actions Status Discord
+      # uses: sarisia/actions-status-discord@f268209d088ace9f9666322b04d60e013fef212d
+      uses: sarisia/actions-status-discord@v1.10.0
+      if: always()
+      env: 
+        DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK_URL }}
+      with:
+        status: ${{ job.status }}
