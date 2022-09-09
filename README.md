@@ -1,3 +1,4 @@
+![example workflow](https://github.com/mewmew-tea/MiyadaikuEngine1.0/actions/workflows/build.yml/badge.svg)
 # MiyadaikuEngine1.0
 
 コンポーネントシステムを備えた、自作のゲームエンジンです。(WIP)\
