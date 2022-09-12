@@ -259,28 +259,28 @@ bool D3D11_Texture::Create(std::string_view _filePath)
 	 unsigned char* pImageData =
 		stbi_load(_filePath.data(), &width, &height, &channels,
 				  4); // RGBAの4チャンネル
-	if (pImageData)
+	if (!pImageData)
 	{
 		return false;
 	}
 
-	D3D11_TEXTURE2D_DESC desc = {};
-	desc.Width = width;
-	desc.Height = height;
-	desc.MipLevels = 1;
-	desc.ArraySize = 1;
-	desc.Format = DXGI_FORMAT_R8G8B8A8_UNORM_SRGB;
-	desc.SampleDesc.Count = 1;
-	desc.SampleDesc.Quality = 0;
-	desc.Usage = D3D11_USAGE_DEFAULT;
-	desc.BindFlags = D3D11_BIND_SHADER_RESOURCE;
+	m_desc = {};
+	m_desc.Width = width;
+	m_desc.Height = height;
+	m_desc.MipLevels = 1;
+	m_desc.ArraySize = 1;
+	m_desc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
+	m_desc.SampleDesc.Count = 1;
+	m_desc.SampleDesc.Quality = 0;
+	m_desc.Usage = D3D11_USAGE_DEFAULT;
+	m_desc.BindFlags = D3D11_BIND_SHADER_RESOURCE;
 
 	D3D11_SUBRESOURCE_DATA subresourceData = {};
 	subresourceData.pSysMem = pImageData;
 	subresourceData.SysMemPitch = 4 * width;
 
 	ID3D11Texture2D* texture2D;
-	if (FAILED(spDevice->GetDevice()->CreateTexture2D(&desc, &subresourceData,
+	if (FAILED(spDevice->GetDevice()->CreateTexture2D(&m_desc, &subresourceData,
 													  &texture2D)))
 	{
 		assert(0 && "ID3D11Texture2Dテクスチャ作成失敗");

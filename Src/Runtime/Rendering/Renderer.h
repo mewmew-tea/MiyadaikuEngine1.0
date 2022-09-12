@@ -7,6 +7,7 @@ namespace Miyadaiku
 class RHI_Device;
 class RHI_SwapChain;
 class RHI_Shader;
+class RHI_CommandList;
 
 class Renderer final : public Subsystem
 {
@@ -25,12 +26,14 @@ public:
 	}
 
 private:
-	std::shared_ptr<RHI_Device>	   m_spRHIDevice = nullptr;
-	std::shared_ptr<RHI_SwapChain> m_spRHISwapChain = nullptr;
+	std::shared_ptr<RHI_Device>		 m_spRHIDevice = nullptr;
+	std::shared_ptr<RHI_SwapChain>	 m_spRHISwapChain = nullptr;
+	std::shared_ptr<RHI_CommandList> m_spRHIComandList = nullptr;
 
-	// TODO: シェーダはどこか（RHI_CommandListとか(RHI_?)RenderingPipelineとか）に移動
+	// TODO:
+	// シェーダはどこか（RHI_CommandListとか(RHI_?)RenderingPipelineとか）に移動
 	// アイデアとして、RenderingPipelineの概念はUnityに近い感じ。RenderPassの組み合わせとか？
-	
+
 	std::shared_ptr<RHI_Shader> m_spRHIVertexShader = nullptr;
 	std::shared_ptr<RHI_Shader> m_spRHIPixelShader = nullptr;
 };

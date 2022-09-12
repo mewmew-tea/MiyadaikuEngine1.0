@@ -27,6 +27,11 @@ public:
 		return m_pShaderBlob;
 	}
 
+	ID3D11InputLayout* GetInputLayout()
+	{
+		return m_pInputLayout;
+	}
+
 private:
 	ID3DBlob*		   m_pShaderBlob = nullptr;
 	ID3D11InputLayout* m_pInputLayout = nullptr;

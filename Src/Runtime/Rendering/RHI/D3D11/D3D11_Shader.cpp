@@ -103,8 +103,8 @@ bool D3D11_Shader::Load(std::string_view _filePath, ShaderType _type,
 					layout, ARRAYSIZE(layout), pShaderBlob->GetBufferPointer(),
 					pShaderBlob->GetBufferSize(), &m_pInputLayout)))
 				{
-						//assert(0 && "頂点レイアウト作成失敗");
-						//return false;
+						assert(0 && "頂点レイアウト作成失敗");
+						return false;
 				}
 			}
 			break;
@@ -127,8 +127,8 @@ bool D3D11_Shader::Load(std::string_view _filePath, ShaderType _type,
 		pShaderBlob = nullptr;
 	}
 
-	pShaderView;
-
+	m_dataHandle.m_pData = pShaderView;
+	
 	return true;
 }
 } // namespace Miyadaiku

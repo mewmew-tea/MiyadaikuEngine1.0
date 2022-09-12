@@ -4,6 +4,20 @@
 namespace Miyadaiku
 {
 
+// enum class RHIDataSemantic : uint8_t
+//{
+//     Position = 0,
+//     Normal,
+//     Tangent,
+//     BiTangent,
+//     Color,
+//     TexCoord,
+//     BlendIndex,
+//     BlendWeight,
+//
+//     None,
+// };
+
 enum class RHIResourceType
 {
 	None,
@@ -16,7 +30,8 @@ enum class RHIResourceType
 
 	SwapChain, // 例：DXGISwapChain
 
-	ShaderInputBinding,
+	Shader,
+
 	BlendState,
 	RasterizerState,
 	SamplerState,
@@ -72,5 +87,6 @@ typedef RHIResourceHandle<RHIResourceType::SRV>		  RHIResourceHandle_SRV;
 typedef RHIResourceHandle<RHIResourceType::RT>		  RHIResourceHandle_RT;
 typedef RHIResourceHandle<RHIResourceType::DS>		  RHIResourceHandle_DS;
 typedef RHIResourceHandle<RHIResourceType::SwapChain> RHIResourceHandle_SwapChain;
+typedef RHIResourceHandle<RHIResourceType::Shader> RHIResourceHandle_Shader;
 
 } // namespace Miyadaiku
