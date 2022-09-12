@@ -1,7 +1,7 @@
 ﻿#include "../Core/Math/Matrix.h"
 #include "../Core/Math/Vector3.h"
 #include "TestUtils_Math.h"
-#include <gtest/gtest.h>
+#include "TestCommon.h"
 
 using namespace Miyadaiku;
 

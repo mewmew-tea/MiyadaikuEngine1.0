@@ -1,6 +1,6 @@
 ﻿#include "../Core/Math/Quaternion.h"
 #include "TestUtils_Math.h"
-#include <gtest/gtest.h>
+#include "TestCommon.h"
 
 using namespace Miyadaiku;
 

@@ -1,5 +1,5 @@
-﻿#pragma once
-#include <gtest/gtest.h>
+﻿#pragma once 
+#include "TestCommon.h"
 
 // テスト時の浮動小数の誤差しきい値
 #define FLOAT_THRESHOLD 0.0001f

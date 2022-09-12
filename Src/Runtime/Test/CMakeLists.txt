@@ -18,6 +18,7 @@ endif()
 include(GoogleTest)
 
 set (native_runtime_test_h
+	TestCommon.h
 	TestEnvironment.h
 	TestUtils_Math.h
 	../Core/Application.h

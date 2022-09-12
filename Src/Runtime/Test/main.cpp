@@ -1,4 +1,4 @@
-﻿#include <gtest/gtest.h>
+﻿#include "TestCommon.h"
 #include <iostream>
 #include "TestEnvironment.h"
 

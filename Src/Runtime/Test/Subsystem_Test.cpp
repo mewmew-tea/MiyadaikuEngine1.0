@@ -1,5 +1,5 @@
 ﻿#include "../Core/Subsystem.h"
-#include <gtest/gtest.h>
+#include "TestCommon.h"
 #include <memory>
 #include <typeinfo>
 #include <iostream>
