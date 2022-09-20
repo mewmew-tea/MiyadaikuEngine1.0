@@ -31,5 +31,7 @@ private:
 	ID3D11Device*		 m_pDevice = nullptr;
 	ID3D11DeviceContext* m_pDeviceContext = nullptr;
 	IDXGIFactory*		 m_pFactory = nullptr;
+
+	ID3D11Debug* m_pD3DDebug = nullptr;
 };
 } // namespace Miyadaiku

@@ -9,6 +9,9 @@ class RHI_SwapChain;
 class RHI_Shader;
 class RHI_CommandList;
 
+struct RHI_RasterizerState;
+struct RHI_SamplerState;
+
 class Renderer final : public Subsystem
 {
 public:
@@ -17,6 +20,8 @@ public:
 	void OnAwake() override;
 
 	void OnShutdown() override;
+
+	void Tick();
 
 	void Present();
 
@@ -36,5 +41,9 @@ private:
 
 	std::shared_ptr<RHI_Shader> m_spRHIVertexShader = nullptr;
 	std::shared_ptr<RHI_Shader> m_spRHIPixelShader = nullptr;
+
+
+	std::shared_ptr<RHI_RasterizerState> m_spRHIRasterizerState = nullptr;
+	std::shared_ptr<RHI_SamplerState> m_spRHISamplerState = nullptr;
 };
 } // namespace Miyadaiku

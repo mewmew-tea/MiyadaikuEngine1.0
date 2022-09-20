@@ -14,9 +14,9 @@
 namespace Miyadaiku
 {
 
-static bool D3D11_CreateRTV(ID3D11Texture2D*		   _resource,
-							ID3D11RenderTargetView**   _ppRTV,
-							ID3D11Device*			   _pDevice)
+static bool D3D11_CreateRTV(ID3D11Texture2D*		 _resource,
+							ID3D11RenderTargetView** _ppRTV,
+							ID3D11Device*			 _pDevice)
 {
 	if (_resource == nullptr)
 	{
@@ -136,9 +136,9 @@ static bool D3D11_CreateSRV(ID3D11Texture2D*		   _resource,
 	return true;
 }
 
-static bool D3D11_CreateDSV(ID3D11Texture2D*		   _resource,
-							ID3D11DepthStencilView**   _ppDSV,
-							ID3D11Device*			   _pDevice)
+static bool D3D11_CreateDSV(ID3D11Texture2D*		 _resource,
+							ID3D11DepthStencilView** _ppDSV,
+							ID3D11Device*			 _pDevice)
 {
 	if (_resource == nullptr)
 	{
@@ -170,7 +170,6 @@ static bool D3D11_CreateDSV(ID3D11Texture2D*		   _resource,
 			assert(0 && "[DepthStencil] 対応していないフォーマットです");
 			break;
 		}
-
 
 		if (desc.ArraySize == 1)
 		{
@@ -255,8 +254,8 @@ bool D3D11_Texture::Create(std::string_view _filePath)
 	int			   width;
 	int			   height;
 	int			   channels;
-	//unsigned char* pImageData;
-	 unsigned char* pImageData =
+	// unsigned char* pImageData;
+	unsigned char* pImageData =
 		stbi_load(_filePath.data(), &width, &height, &channels,
 				  4); // RGBAの4チャンネル
 	if (!pImageData)
@@ -289,26 +288,29 @@ bool D3D11_Texture::Create(std::string_view _filePath)
 	free(pImageData);
 
 	if (!D3D11_CreateViewsFromTexture2D(
-		texture2D,
-		reinterpret_cast<ID3D11ShaderResourceView**>(m_srvHandle.GetAddress()),
-		reinterpret_cast<ID3D11RenderTargetView**>(m_rtHandle.GetAddress()),
-		reinterpret_cast<ID3D11DepthStencilView**>(m_dsHandle.GetAddress()),
-		spDevice->GetDevice()))
+			texture2D,
+			reinterpret_cast<ID3D11ShaderResourceView**>(
+				m_srvHandle.GetAddress()),
+			reinterpret_cast<ID3D11RenderTargetView**>(m_rtHandle.GetAddress()),
+			reinterpret_cast<ID3D11DepthStencilView**>(m_dsHandle.GetAddress()),
+			spDevice->GetDevice()))
 	{
 		return false;
 	}
 
+	texture2D->Release();
 
 	return true;
 }
 
 void D3D11_Texture::Release()
 {
-	// if (m_textureHandle.m_pData)
-	//{
-	//	reinterpret_cast<ID3D11Texture2D*>(m_textureHandle.m_pData)->Release();
-	//	m_textureHandle.Reset();
-	// }
+	if (m_textureHandle.m_pData)
+	{
+		// reinterpret_cast<ID3D11Texture2D*>(m_textureHandle.m_pData)->Release();
+		m_textureHandle.Reset();
+	}
+
 	if (m_srvHandle.m_pData)
 	{
 		reinterpret_cast<ID3D11ShaderResourceView*>(m_srvHandle.m_pData)

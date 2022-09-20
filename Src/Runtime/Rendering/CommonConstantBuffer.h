@@ -1,6 +1,6 @@
-﻿#include "RHI_CommandList.h"
-
+﻿#pragma once
 
 namespace Miyadaiku
 {
+
 } // namespace Miyadaiku

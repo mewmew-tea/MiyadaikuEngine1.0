@@ -11,7 +11,19 @@ public:
 	{
 	}
 
+	void SetPipelineState(RHI_PipelineState& _pso) override;
+
 	void SetViewport(const RectangleI& _rect, float _minDepth = 0.0f,
 					 float _maxDepth = 1.0f) override;
+
+	void SetSamplerState(
+		const std::uint32_t						 _slot,
+		const std::shared_ptr<RHI_SamplerState>& _spSamplerState) override;
+
+	
+	// Draw
+	virtual void Draw(uint32_t _indexCount, uint32_t _vertexStart);
+	virtual void DrawIndexed(uint32_t _indexCount, uint32_t _indexOffset,
+							 uint32_t _vertexOffset = 0);
 };
 } // namespace Miyadaiku

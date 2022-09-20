@@ -11,6 +11,7 @@ public:
 		: RHI_Shader(_spRhiDevice)
 	{
 	}
+	~D3D11_Shader();
 
 	bool Load(std::string_view _filePath, ShaderType _type,
 			  std::string_view _entryFuncName) override;

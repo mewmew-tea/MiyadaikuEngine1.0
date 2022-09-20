@@ -78,7 +78,7 @@ bool D3D11_SwapChain::Init(void*							  _windowHandle,
 		return false;
 	}
 
-	pBackBuffer->Release();
+	D3D11_SafeCastRelease<ID3D11Texture2D>(backBufferHandle.m_pData);
 
 	return true;
 }

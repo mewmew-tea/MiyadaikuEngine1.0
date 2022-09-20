@@ -40,13 +40,18 @@ file(GLOB nativeruntime_h
     # Rendering
     Rendering/Renderer.h
     Rendering/RenderingResource.h
+    Rendering/CommonConstantBuffer.h
+
     Rendering/RHI/RHI_Device.h
     Rendering/RHI/RHI_SwapChain.h
     Rendering/RHI/RHI_Texture.h
     Rendering/RHI/RHI_Shader.h
     Rendering/RHI/RHI_InputLayout.h
     Rendering/RHI/RHI_VertexBuffer.h
+    Rendering/RHI/RHI_ConstantBuffer.h
     Rendering/RHI/RHI_CommandList.h
+    Rendering/RHI/RHI_PipelineState.h
+    Rendering/RHI/RHI_RenderState.h
 
     # D3D11
     Rendering/RHI/D3D11/D3D11Common.h
@@ -56,7 +61,10 @@ file(GLOB nativeruntime_h
     Rendering/RHI/D3D11/D3D11_Shader.h
     Rendering/RHI/D3D11/D3D11_InputLayout.h
     Rendering/RHI/D3D11/D3D11_VertexBuffer.h
+    Rendering/RHI/D3D11/D3D11_ConstantBuffer.h
     Rendering/RHI/D3D11/D3D11_CommandList.h
+    Rendering/RHI/D3D11/D3D11_PipelineState.h
+    Rendering/RHI/D3D11/D3D11_RenderState.h
 )
 # cpp files
 set(nativeruntime_src
@@ -84,13 +92,18 @@ set(nativeruntime_src
     # Rendering
     Rendering/Renderer.cpp
     Rendering/RenderingResource.cpp
+    Rendering/CommonConstantBuffer.cpp
+
     Rendering/RHI/RHI_Device.cpp
     Rendering/RHI/RHI_SwapChain.cpp
     Rendering/RHI/RHI_Texture.cpp
     Rendering/RHI/RHI_Shader.cpp
     Rendering/RHI/RHI_InputLayout.cpp
     Rendering/RHI/RHI_VertexBuffer.cpp
+    Rendering/RHI/RHI_ConstantBuffer.cpp
     Rendering/RHI/RHI_CommandList.cpp
+    Rendering/RHI/RHI_PipelineState.cpp
+    Rendering/RHI/RHI_RenderState.cpp
 
     # D3D11
     Rendering/RHI/D3D11/D3D11_Device.cpp
@@ -99,7 +112,10 @@ set(nativeruntime_src
     Rendering/RHI/D3D11/D3D11_Shader.cpp
     Rendering/RHI/D3D11/D3D11_InputLayout.cpp
     Rendering/RHI/D3D11/D3D11_VertexBuffer.cpp
+    Rendering/RHI/D3D11/D3D11_ConstantBuffer.h
     Rendering/RHI/D3D11/D3D11_CommandList.cpp
+    Rendering/RHI/D3D11/D3D11_PipelineState.cpp
+    Rendering/RHI/D3D11/D3D11_RenderState.cpp
 )
 
 # project infos

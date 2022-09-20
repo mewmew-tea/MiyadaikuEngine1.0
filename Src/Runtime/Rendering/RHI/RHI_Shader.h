@@ -26,7 +26,7 @@ public:
 	virtual bool Load(std::string_view _filePath, ShaderType _type,
 					  std::string_view _entryFuncName) = 0;
 
-	RHIResourceHandle_Shader GetDataHandle()
+	RHIResourceHandle_Shader& GetDataHandle()
 	{
 		return m_dataHandle;
 	}

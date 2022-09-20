@@ -11,6 +11,7 @@
 #include "RHI/D3D11/D3D11_CommandList.h"
 #include "RHI/D3D11/D3D11_Shader.h"
 #include "RHI/D3D11/D3D11_Texture.h"
+#include "RHI/D3D11/D3D11_RenderState.h"
 
 namespace Miyadaiku
 {
@@ -19,19 +20,19 @@ Renderer::~Renderer()
 }
 void Renderer::OnAwake()
 {
-	m_spRHIDevice = std::make_shared<D3D11_Device>();
-	// m_device = new D3D11_Device();
-	if (m_spRHIDevice)
-	{
-		m_spRHIDevice->Init();
-	}
-
 	std::shared_ptr<Window_Windows> window =
 		static_pointer_cast<Window_Windows>(GetEngine()
 												->GetSubsystemLocator()
 												.Get<Platform>()
 												->GetMainWindow());
-
+	// Create device
+	m_spRHIDevice = std::make_shared<D3D11_Device>();
+	if (m_spRHIDevice)
+	{
+		m_spRHIDevice->Init();
+	}
+	
+	// Create command list
 	m_spRHIComandList = std::make_shared<D3D11_CommandList>(m_spRHIDevice);
 	if (m_spRHIComandList)
 	{
@@ -41,9 +42,7 @@ void Renderer::OnAwake()
 		m_spRHIComandList->SetViewport(rect);
 	}
 
-	// m_swapChain = std::make_shared<D3D11_SwapChain>(
-	//	window->GetWindowHandle(), m_device, //
-	//	window->GetRect().width, window->GetRect().height);
+	// Create swapchain
 	m_spRHISwapChain = std::make_shared<D3D11_SwapChain>();
 	if (m_spRHISwapChain)
 	{
@@ -52,6 +51,7 @@ void Renderer::OnAwake()
 							   window->GetRect().height);
 	}
 
+	// Create shaders
 	m_spRHIVertexShader = std::make_shared<D3D11_Shader>(m_spRHIDevice);
 	if (m_spRHIVertexShader)
 	{
@@ -65,35 +65,37 @@ void Renderer::OnAwake()
 								  RHI_Shader::ShaderType::Pixel, "main");
 	}
 
+	// Create sampler states
+	m_spRHISamplerState = std::make_shared<D3D11_SamplerState>(m_spRHIDevice, SS_FilterMode::Aniso, SS_AddressMode::Wrap);
+	m_spRHIComandList->SetSamplerState(0, m_spRHISamplerState);
+	// Create rasterize state
+	m_spRHIRasterizerState = std::make_shared<D3D11_RasterizerState>(m_spRHIDevice, RS_CullMode::Back, RS_FillMode::Solid);
 
-	//00000000000000000000000000000000000
-	ID3D11Device* pDevivce =
-		std::static_pointer_cast<D3D11_Device>(m_spRHIDevice)->GetDevice();
-	ID3D11DeviceContext* pDevivceContext =
-		std::static_pointer_cast<D3D11_Device>(m_spRHIDevice)
-			->GetDeviceContext();
-
-	D3D11_SAMPLER_DESC smpDesc = {};
-	smpDesc.MaxLOD = D3D11_FLOAT32_MAX;
-		smpDesc.Filter = D3D11_FILTER_ANISOTROPIC;
-		// smpDesc.MaxAnisotropy = 4;
-		smpDesc.AddressU = smpDesc.AddressV = smpDesc.AddressW =
-			D3D11_TEXTURE_ADDRESS_WRAP;
-	ID3D11SamplerState* smpState;
-		pDevivce->CreateSamplerState(
-		&smpDesc, &smpState);
-	pDevivceContext->PSSetSamplers(0, 1, &smpState);
-		pDevivceContext->VSSetSamplers(0, 1, &smpState);
 }
 void Renderer::OnShutdown()
 {
+	m_spRHIPixelShader.reset();
+	m_spRHIVertexShader.reset();
+	m_spRHISamplerState.reset();
+
+
 	m_spRHIDevice->Release();
 	m_spRHISwapChain->Release();
+}
+void Renderer::Tick()
+{
 }
 void Renderer::Present()
 {
 	// TODO: SwapChain->Present以外を、RHI_CommandListに移行
 	// TODO: DepthStencil関連の処理
+
+	std::shared_ptr<Window_Windows> window =
+		static_pointer_cast<Window_Windows>(GetEngine()
+												->GetSubsystemLocator()
+												.Get<Platform>()
+												->GetMainWindow());
+
 
 	ID3D11DeviceContext* pDevivceContext =
 		std::static_pointer_cast<D3D11_Device>(m_spRHIDevice)
@@ -120,19 +122,45 @@ void Renderer::Present()
 	{
 		clearColor[i] = 0.0f;
 	}
-	static float r = 0.0f;
+	static float g = 0.0f;
 	static float n = 0.003f;
-	r += n;
-	if (r > 1.0f || r < 0.0f)
+	g += n;
+	if (g > 1.0f || g < 0.0f)
 	{
 		n = -n;
 	}
-	clearColor[0] = r;
+	clearColor[1] = g;
+	{
+	//RHI_PipelineState pso = {};
+	//pso.m_spVertexShader = m_spRHIVertexShader;
+	//pso.m_spPixelShader = m_spRHIPixelShader;
+	//pso.m_spRasterizerState = m_spRHIRasterizerState;
+	////pso.m_spBlendState = ;
+	////pso.m_spDepthStencilState;
+	//pso.m_primitiveTopology = RHI_PrimitiveTopology::TriangleList;
+	//
+	//RectangleI rect = window->GetRect();
+	//rect.left = 0;
+	//rect.top = 0;
+	//m_spRHIComandList->SetViewport(rect);
+	//pso.m_viewportRect = rect;
+
+	////pso.m_spDepthStencilBuffer;
+	////pso.m_spRenderTargets;
+	////pso.m_spRenderTargetClearColors;
+
+	//m_spRHIComandList->SetPipelineState(pso);
+	}
+
 
 	pDevivceContext->ClearRenderTargetView(rtv, clearColor);
 
-	std::shared_ptr<D3D11_Texture> spTex = std::make_shared<D3D11_Texture>(m_spRHIDevice);
-	spTex->Create("Assets/Textures/4.png");
+	static std::shared_ptr<D3D11_Texture> spTex;
+	if (!spTex)
+	{
+		spTex= std::make_shared<D3D11_Texture>(m_spRHIDevice);
+		spTex->Create("Assets/Textures/4.png");
+	}
 	pDevivceContext->PSSetShaderResources(0, 1, (ID3D11ShaderResourceView**)&(spTex->GetSRVHandle().m_pData));
 
 	std::shared_ptr<D3D11_Shader> spPixelShader =
@@ -179,15 +207,16 @@ void Renderer::Present()
 	HRESULT hr =
 		pDevivce->CreateBuffer(&desc, &vertex[0] ? &data : nullptr, &pBuffer);
 
-	// 頂点リストの並び順
+	//// 頂点リストの並び順
 	pDevivceContext->IASetPrimitiveTopology(
 		D3D_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP);
 
 	// GPUへ転送・描画
 	UINT offset = 0;
 	pDevivceContext->IASetVertexBuffers(0, 1, &pBuffer, &oneSize, &offset);
-	pDevivceContext->Draw((UINT)vertex.size(), 0);
-
+	//pDevivceContext->Draw((UINT)vertex.size(), 0);
+	//pDevivceContext->DrawInstanced((UINT)vertex.size(), 1, 0, 0);
+	m_spRHIComandList->Draw((uint16_t)vertex.size(), 0);
 	pBuffer->Release();
 
 	//pDevivceContext->ClearDepthStencilView(

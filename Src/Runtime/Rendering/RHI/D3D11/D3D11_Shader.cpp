@@ -10,6 +10,10 @@
 
 namespace Miyadaiku
 {
+D3D11_Shader::~D3D11_Shader()
+{
+	D3D11_SafeCastRelease<ID3D11PixelShader>(m_dataHandle.m_pData);
+}
 bool D3D11_Shader::Load(std::string_view _filePath, ShaderType _type,
 						std::string_view _entryFuncName)
 {
