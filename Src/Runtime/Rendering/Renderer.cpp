@@ -13,6 +13,10 @@
 #include "RHI/D3D11/D3D11_Texture.h"
 #include "RHI/D3D11/D3D11_RenderState.h"
 
+// TODO: これは取り除く
+#include "../Scripting/Scripting.h"
+
+
 namespace Miyadaiku
 {
 Renderer::~Renderer()
@@ -190,10 +194,19 @@ void Renderer::Present()
 	UINT					oneSize = sizeof(TestVertex);
 	ID3D11Buffer* pBuffer = nullptr;
 	std::vector<TestVertex> vertex;
-	vertex.push_back(TestVertex({0, 0, 0}, {0, 1}, 0xFFFFFFFF));
-	vertex.push_back(TestVertex({0, 1, 0}, {0, 0}, 0xFFFFFFFF));
-	vertex.push_back(TestVertex({1, 0, 0}, {1, 1}, 0xFFFFFFFF));
-	vertex.push_back(TestVertex({1, 1, 0}, {1, 0}, 0xFFFFFFFF));
+	//vertex.push_back(TestVertex({0, 0, 0}, {0, 1}, 0xFFFFFFFF));
+	//vertex.push_back(TestVertex({0, 1, 0}, {0, 0}, 0xFFFFFFFF));
+	//vertex.push_back(TestVertex({1, 0, 0}, {1, 1}, 0xFFFFFFFF));
+	//vertex.push_back(TestVertex({1, 1, 0}, {1, 0}, 0xFFFFFFFF));
+
+	Vector2 pos = {ScriptingAPI_GetPositionX(), ScriptingAPI_GetPositionY()};
+	pos /= 4.0f;
+
+	vertex.push_back(TestVertex({pos.x + 0, pos.y + 0, 0}, {0, 1}, 0xFFFFFFFF));
+	vertex.push_back(TestVertex({pos.x + 0, pos.y + 1, 0}, {0, 0}, 0xFFFFFFFF));
+	vertex.push_back(TestVertex({pos.x + 1, pos.y + 0, 0}, {1, 1}, 0xFFFFFFFF));
+	vertex.push_back(TestVertex({pos.x + 1, pos.y + 1, 0}, {1, 0}, 0xFFFFFFFF));
+
 
 	D3D11_BUFFER_DESC desc = {};
 	desc.BindFlags = D3D11_BIND_VERTEX_BUFFER;

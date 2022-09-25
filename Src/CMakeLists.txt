@@ -9,3 +9,4 @@ else()
 	add_subdirectory(Application)
 endif()
 
+add_subdirectory(Sandbox)

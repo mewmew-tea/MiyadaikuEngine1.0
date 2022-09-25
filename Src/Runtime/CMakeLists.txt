@@ -65,6 +65,9 @@ file(GLOB nativeruntime_h
     Rendering/RHI/D3D11/D3D11_CommandList.h
     Rendering/RHI/D3D11/D3D11_PipelineState.h
     Rendering/RHI/D3D11/D3D11_RenderState.h
+
+    # Scripting
+    Scripting/Scripting.h
 )
 # cpp files
 set(nativeruntime_src
@@ -116,6 +119,9 @@ set(nativeruntime_src
     Rendering/RHI/D3D11/D3D11_CommandList.cpp
     Rendering/RHI/D3D11/D3D11_PipelineState.cpp
     Rendering/RHI/D3D11/D3D11_RenderState.cpp
+
+    # Scripting
+    Scripting/Scripting.cpp
 )
 
 # project infos
@@ -126,6 +132,11 @@ add_library(${PROJECT_NAME} STATIC
 set(files
     ${nativeruntime_h}
     ${nativeruntime_src})
+
+# link external libs
+include_directories(External/mono/Include) 
+#link_directories(${CMAKE_CURRENT_SOURCE_DIR}/External/mono/Lib/)
+target_link_libraries(${PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/External/mono/Lib/mono-2.0-sgen.lib)
 
     
 # warning levels

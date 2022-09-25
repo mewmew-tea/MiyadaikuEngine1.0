@@ -7,6 +7,8 @@
 #include "../Rendering/Renderer.h"
 #include "../Rendering/RenderingResource.h"
 
+#include "../Scripting/Scripting.h"
+
 #include <iostream>
 #include <assert.h>
 
@@ -36,16 +38,20 @@ Engine::~Engine()
 {
 	m_subsystemLocator.Remove<Renderer>();
 	m_subsystemLocator.Remove<Platform>();
+	m_subsystemLocator.Remove<Scripting>();
 }
 
 void Engine::SetUp()
 {
 	m_subsystemLocator.Add<Platform>();
 	m_subsystemLocator.Add<Renderer>();
+	m_subsystemLocator.Add<Scripting>();
 }
 
 void Engine::Update()
 {
+	m_subsystemLocator.Get<Scripting>()->Update();
+
 	auto os = m_subsystemLocator.Get<Platform>();
 	os->ProcessSystemEventQueue();
 
