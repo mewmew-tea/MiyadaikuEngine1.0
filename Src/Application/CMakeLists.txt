@@ -48,3 +48,9 @@ add_custom_command(TARGET Application POST_BUILD COMMAND ${CMAKE_COMMAND} -E cop
 add_custom_command(TARGET Application POST_BUILD COMMAND ${CMAKE_COMMAND} -E make_directory ${PROJECT_BINARY_DIR}/Assets/Assembly/)
 add_custom_command(TARGET Application POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_directory $<TARGET_FILE_DIR:UserAssembly>/ $<TARGET_FILE_DIR:Application>/Assets/Assembly/)
 
+# copy dll
+add_custom_command(TARGET Application POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_SOURCE_DIR}/dlls/mono-2.0-sgen.dll ${PROJECT_BINARY_DIR})
+add_custom_command(TARGET Application POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_SOURCE_DIR}/dlls/mono-2.0-sgen.dll $<TARGET_FILE_DIR:Application>)
+# MonoAssembly
+#add_custom_command(TARGET Application POST_BUILD COMMAND ${CMAKE_COMMAND} -E make_directory ${PROJECT_BINARY_DIR}/MonoAssembly/)
+#add_custom_command(TARGET Application POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_SOURCE_DIR}/MonoAssembly/ ${PROJECT_BINARY_DIR}/MonoAssembly/)
