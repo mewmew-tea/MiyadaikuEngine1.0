@@ -5,8 +5,24 @@
     <UseWPF>true</UseWPF>
   </PropertyGroup>
   <ItemGroup>
+    <None Remove="Resources\Images\PauseButton_1.png" />
+    <None Remove="Resources\Images\PauseButton_2.png" />
+    <None Remove="Resources\Images\PauseButton_3.png" />
+    <None Remove="Resources\Images\PlayButton_1.png" />
+    <None Remove="Resources\Images\PlayButton_2.png" />
+    <None Remove="Resources\Images\PlayButton_3.png" />
+  </ItemGroup>
+  <ItemGroup>
     <PackageReference Include="Dirkster.AvalonDock" Version="4.70.2" />
     <PackageReference Include="Dirkster.AvalonDock.Themes.VS2013" Version="4.70.2" />
     <PackageReference Include="Prism.Unity" Version="8.1.97" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Images\PauseButton_1.png" />
+    <Resource Include="Resources\Images\PauseButton_2.png" />
+    <Resource Include="Resources\Images\PauseButton_3.png" />
+    <Resource Include="Resources\Images\PlayButton_1.png" />
+    <Resource Include="Resources\Images\PlayButton_2.png" />
+    <Resource Include="Resources\Images\PlayButton_3.png" />
   </ItemGroup>
 </Project>

@@ -18,7 +18,7 @@
                 <MenuItem Header="編集">
                     <MenuItem Header="元に戻す">
                         <MenuItem.Icon>
-                            <Image Source="/Resources/Images/PauseButton_1.png" />
+                            <Image Source="../Resources/Images/PauseButton_1.png" />
                         </MenuItem.Icon>
                     </MenuItem>
                     <MenuItem Header="やり直し"/>
@@ -26,11 +26,11 @@
                 <MenuItem Header="表示"/>
             </Menu>
             <ToolBar Height="32">
-                <Button Content="Play">
-                    <!--<Image Source="/Resources/Images/PlayButton_1.png" />-->
+                <Button>
+                    <Image Source="../Resources/Images/PlayButton_1.png" />
                 </Button>
                 <Button>
-                    <Image Source="/Resources/Images/PauseButton_1.png" />
+                    <Image Source="../Resources/Images/PauseButton_1.png" />
                 </Button>
                 <Separator/>
             </ToolBar>
@@ -46,7 +46,6 @@
 
 
                         <avalonDock:LayoutDocumentPane x:Name="uxDocumentPane2">
-                            <!-- ドキュメント  ★ここから-->
                             <avalonDock:LayoutDocument Title="Hierarchy" ContentId="Hierarchy">
                                 <TreeView FontSize="20">
                                     <TreeViewItem Header="Hoge">
@@ -58,20 +57,16 @@
                                     </TreeViewItem>
                                 </TreeView>
                             </avalonDock:LayoutDocument>
-                            <!-- ドキュメント ★ここまで-->
                         </avalonDock:LayoutDocumentPane>
 
                         <avalonDock:LayoutDocumentPane x:Name="uxDocumentPane">
-                            <!-- ドキュメント  ★ここから-->
                             <avalonDock:LayoutDocument Title="SceneView" ContentId="SceneView">
                                 <!--<TextBox/>-->
                             </avalonDock:LayoutDocument>
-                            <!-- ドキュメント ★ここまで-->
                         </avalonDock:LayoutDocumentPane>
 
 
                         <avalonDock:LayoutDocumentPane x:Name="uxDocumentPane3">
-                            <!-- ドキュメント  ★ここから-->
                             <avalonDock:LayoutDocument Title="Inspector" ContentId="Inspector">
                                 <StackPanel>
                                     <Expander Header="TitleA" Margin="10" IsExpanded="True">
