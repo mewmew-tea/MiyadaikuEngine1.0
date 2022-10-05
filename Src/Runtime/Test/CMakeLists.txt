@@ -66,5 +66,12 @@ add_custom_command(TARGET NativeRuntime_Test POST_BUILD COMMAND ${CMAKE_COMMAND}
 add_custom_command(TARGET NativeRuntime_Test POST_BUILD COMMAND ${CMAKE_COMMAND} -E make_directory $<TARGET_FILE_DIR:NativeRuntime_Test>/Assets/)
 add_custom_command(TARGET NativeRuntime_Test POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_SOURCE_DIR}/Assets/ $<TARGET_FILE_DIR:NativeRuntime_Test>/Assets/)
 
+# copy dlls
+# MonoAssembly
+add_custom_command(TARGET NativeRuntime_Test POST_BUILD COMMAND ${CMAKE_COMMAND} -E make_directory $<TARGET_FILE_DIR:NativeRuntime_Test>/MonoAssembly/)
+add_custom_command(TARGET NativeRuntime_Test POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_SOURCE_DIR}/bin/MonoAssembly/ $<TARGET_FILE_DIR:NativeRuntime_Test>/MonoAssembly/)
+# mono-2.0-sgen.dll
+add_custom_command(TARGET NativeRuntime_Test POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_SOURCE_DIR}/bin/mono-2.0-sgen.dll ${PROJECT_BINARY_DIR})
+add_custom_command(TARGET NativeRuntime_Test POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_SOURCE_DIR}/bin/mono-2.0-sgen.dll $<TARGET_FILE_DIR:NativeRuntime_Test>)
 
 gtest_discover_tests(${PROJECT_NAME})

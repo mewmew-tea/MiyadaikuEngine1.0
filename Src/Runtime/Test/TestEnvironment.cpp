@@ -16,6 +16,8 @@ TestEnviroment::~TestEnviroment()
 int TestEnviroment::Setup()
 {
 	m_upApplication = std::make_unique<Application>();
+	if (m_upApplication)
+		m_upApplication->Setup();
 
 	return 0;
 }
