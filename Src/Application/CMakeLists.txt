@@ -28,6 +28,7 @@ add_executable(Application ${application_h} ${application_src})
 
 # link
 target_link_libraries(Application NativeRuntime)
+target_link_libraries(Application UserAssembly)
 
 # warning levels
 target_compile_options(
