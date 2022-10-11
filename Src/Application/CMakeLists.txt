@@ -39,8 +39,8 @@ target_compile_options(
 target_compile_features(Application PRIVATE cxx_std_20)
 
 # copy assets
-#add_custom_command(TARGET Application POST_BUILD COMMAND ${CMAKE_COMMAND} -E make_directory $<TARGET_FILE_DIR:Application>/Assets/)
-#add_custom_command(TARGET Application POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_SOURCE_DIR}/Assets/ $<TARGET_FILE_DIR:Application>/Assets/)
+add_custom_command(TARGET Application POST_BUILD COMMAND ${CMAKE_COMMAND} -E make_directory $<TARGET_FILE_DIR:Application>/Assets/)
+add_custom_command(TARGET Application POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_SOURCE_DIR}/Assets/ $<TARGET_FILE_DIR:Application>/Assets/)
 
 
 add_custom_command(TARGET Application POST_BUILD COMMAND ${CMAKE_COMMAND} -E make_directory ${PROJECT_BINARY_DIR}/Assets/)
@@ -53,5 +53,8 @@ add_custom_command(TARGET Application POST_BUILD COMMAND ${CMAKE_COMMAND} -E cop
 add_custom_command(TARGET Application POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_SOURCE_DIR}/dlls/mono-2.0-sgen.dll ${PROJECT_BINARY_DIR})
 add_custom_command(TARGET Application POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_SOURCE_DIR}/dlls/mono-2.0-sgen.dll $<TARGET_FILE_DIR:Application>)
 # MonoAssembly
-#add_custom_command(TARGET Application POST_BUILD COMMAND ${CMAKE_COMMAND} -E make_directory ${PROJECT_BINARY_DIR}/MonoAssembly/)
-#add_custom_command(TARGET Application POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_SOURCE_DIR}/MonoAssembly/ ${PROJECT_BINARY_DIR}/MonoAssembly/)
+add_custom_command(TARGET Application POST_BUILD COMMAND ${CMAKE_COMMAND} -E make_directory ${PROJECT_BINARY_DIR}/MonoAssembly/)
+add_custom_command(TARGET Application POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_SOURCE_DIR}/dlls/MonoAssembly/ ${PROJECT_BINARY_DIR}/MonoAssembly/)
+
+add_custom_command(TARGET Application POST_BUILD COMMAND ${CMAKE_COMMAND} -E make_directory $<TARGET_FILE_DIR:Application>/MonoAssembly/)
+add_custom_command(TARGET Application POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_SOURCE_DIR}/dlls/MonoAssembly/ $<TARGET_FILE_DIR:Application>/MonoAssembly/)
