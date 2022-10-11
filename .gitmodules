@@ -4,3 +4,6 @@
 [submodule "Src/Runtime/External/strconv"]
 	path = Src/Runtime/External/strconv
 	url = https://github.com/javacommons/strconv.git
+[submodule "Src/Runtime/External/Effekseer"]
+	path = Src/Runtime/External/Effekseer
+	url = https://github.com/effekseer/Effekseer.git
