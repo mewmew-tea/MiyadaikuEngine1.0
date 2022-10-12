@@ -1,4 +1,4 @@
-![example workflow](https://github.com/mewmew-tea/MiyadaikuEngine1.0/actions/workflows/build.yml/badge.svg)
+<!-- ![build and test workflow](https://github.com/mewmew-tea/MiyadaikuEngine1.0/actions/workflows/build.yml/badge.svg) -->
 # MiyadaikuEngine1.0
 
 コンポーネントシステムを備えた、自作のゲームエンジンです。(WIP)\
@@ -69,7 +69,7 @@ https://trello.com/b/jDuAlxcO
 |  算術ライブラリ  |  90%  | C++のNaitiveRuntimeに含まれます。  |
 |  D3D11レンダラ  |  20%  | C++(Win32API)  |
 |  D3D12レンダラ  |  0%  | 低優先度。C++(Win32API)で実装予定。  |
-|  C#スクリプトシステム  |  0%  | Monoを用いて実装予定。  |
+|  C#スクリプトシステム  |  30%  | Monoを用いて実装予定。  |
 |  WPFによるエディタGUI  |  5%  |   |
 | アセットシステム | 0% |  |
 | オーディオ(XAudio) | 0% |  |
