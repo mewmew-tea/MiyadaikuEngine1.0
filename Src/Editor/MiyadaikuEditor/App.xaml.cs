@@ -1,8 +1,8 @@
-﻿using MiyadaikuEditor.Views;
+﻿using Miyadaiku.Editor.Views;
 using Prism.Ioc;
 using System.Windows;
 
-namespace MiyadaikuEditor
+namespace Miyadaiku.Editor
 {
     /// <summary>
     /// Interaction logic for App.xaml

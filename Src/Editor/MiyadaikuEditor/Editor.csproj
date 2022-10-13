@@ -18,6 +18,9 @@
     <PackageReference Include="Prism.Unity" Version="8.1.97" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\EditorCore\EditorCore.csproj" />
+  </ItemGroup>
+  <ItemGroup>
     <Resource Include="Resources\Images\PauseButton_1.png" />
     <Resource Include="Resources\Images\PauseButton_2.png" />
     <Resource Include="Resources\Images\PauseButton_3.png" />

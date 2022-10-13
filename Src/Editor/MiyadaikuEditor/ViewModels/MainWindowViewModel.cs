@@ -1,10 +1,10 @@
 ﻿using Prism.Mvvm;
 
-namespace MiyadaikuEditor.ViewModels
+namespace Miyadaiku.Editor.ViewModels
 {
     public class MainWindowViewModel : BindableBase
     {
-        private string _title = "Prism Application";
+        private string _title = "Miyadaiku Editor";
         public string Title
         {
             get { return _title; }

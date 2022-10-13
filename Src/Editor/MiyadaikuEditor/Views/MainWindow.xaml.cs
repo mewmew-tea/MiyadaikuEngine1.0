@@ -1,6 +1,6 @@
 ﻿using System.Windows;
 
-namespace MiyadaikuEditor.Views
+namespace Miyadaiku.Editor.Views
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
