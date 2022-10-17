@@ -7,3 +7,9 @@
 [submodule "Src/Runtime/External/Effekseer"]
 	path = Src/Runtime/External/Effekseer
 	url = https://github.com/effekseer/Effekseer.git
+[submodule "Src/Runtime/External/imgui"]
+	path = Src/Runtime/External/imgui
+	url = https://github.com/ocornut/imgui.git
+[submodule "Src/Runtime/External/ImGuizmo"]
+	path = Src/Runtime/External/ImGuizmo
+	url = https://github.com/CedricGuillemet/ImGuizmo.git
