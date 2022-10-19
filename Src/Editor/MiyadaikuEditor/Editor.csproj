@@ -3,6 +3,8 @@
     <OutputType>WinExe</OutputType>
     <TargetFramework>net6.0-windows</TargetFramework>
     <UseWPF>true</UseWPF>
+    <AssemblyName>MiyadaikuEditor</AssemblyName>
+    <ApplicationIcon>Resources\Images\Logo.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
     <None Remove="Resources\Images\PauseButton_1.png" />
@@ -11,6 +13,9 @@
     <None Remove="Resources\Images\PlayButton_1.png" />
     <None Remove="Resources\Images\PlayButton_2.png" />
     <None Remove="Resources\Images\PlayButton_3.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Resources\Images\Logo.ico" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Dirkster.AvalonDock" Version="4.70.2" />
