@@ -17,4 +17,5 @@ bld/
 /out/
 .vs/
 
+!/dlls/**
 
