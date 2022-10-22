@@ -1,0 +1,52 @@
+﻿<UserControl x:Class="Miyadaiku.EditorCore.Controls.Views.Vector3"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:prism="http://prismlibrary.com/"         
+             prism:ViewModelLocator.AutoWireViewModel="True"
+             x:Name="root"
+             Height="26" Width="400">
+             <!--xmlns:d="http://schemas.microsoft.com/expression/blend/2008"-->     
+    <!--d:DesignHeight="26" d:DesignWidth="400"-->
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"></ColumnDefinition>
+            <ColumnDefinition Width="*"></ColumnDefinition>
+            <ColumnDefinition Width="*"></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+        <Grid Grid.Column="0">
+            <DockPanel>
+                <Label FontSize="15" VerticalContentAlignment="Center" Foreground="White" Background="Red">X</Label>
+                <TextBox Name="TextBoxX" VerticalContentAlignment="Center"
+                         Text="{Binding TextX, Mode=TwoWay}"></TextBox>
+            </DockPanel>
+        </Grid>
+        <Grid Grid.Column="1">
+            <DockPanel>
+                <Label FontSize="15" VerticalContentAlignment="Center" Foreground="White" Background="ForestGreen">Y</Label>
+                <TextBox Name="TextBoxY" VerticalContentAlignment="Center" 
+                         Text="{Binding TextY, Mode=TwoWay}"></TextBox>
+            </DockPanel>
+        </Grid>
+        <Grid Grid.Column="2">
+            <DockPanel>
+                <Label FontSize="15" VerticalContentAlignment="Center" Foreground="White" Background="Blue">Z</Label>
+                <TextBox Name="TextBoxZ" VerticalContentAlignment="Center"
+                         Text="{Binding TextZ, Mode=TwoWay}"></TextBox>
+            </DockPanel>
+        </Grid>
+    </Grid>
+    
+    <!--<Grid Width="Auto">
+        <StackPanel Orientation="Horizontal">
+            <Label Height="30" Content="X" FontSize="18" Foreground="White" Background="Red"/>
+            <TextBox Text="{Binding TextX, ElementName=root}" Height="30" MinWidth="40" FontSize="18" InputMethod.IsInputMethodEnabled="False" PreviewTextInput="TextBoxInput"/>
+            
+            <Label Height="30" Content="Y" FontSize="18"  Foreground="White" Background="Green"/>
+            <TextBox Text="{Binding TextY, ElementName=root}" Height="30" MinWidth="40" FontSize="18" InputMethod.IsInputMethodEnabled="False" PreviewTextInput="TextBoxInput"/>
+            
+            <Label Height="30" Content="Z" FontSize="18" Foreground="White" Background="Blue"/>
+            <TextBox Text="{Binding TextZ, ElementName=root}" Height="30" MinWidth="40" FontSize="18" InputMethod.IsInputMethodEnabled="False" PreviewTextInput="TextBoxInput"/>
+            --><!--<Button  Height="30" MinWidth="90"/>--><!--
+        </StackPanel>
+    </Grid>-->
+</UserControl>

@@ -3,6 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:avalonDock="https://github.com/Dirkster99/AvalonDock"
         xmlns:prism="http://prismlibrary.com/"
+        xmlns:mydCtrs="clr-namespace:Miyadaiku.EditorCore.Controls.Views;assembly=EditorCore"
         prism:ViewModelLocator.AutoWireViewModel="True"
         Title="{Binding Title}" Height="700" Width="1200" >
     <Grid>
@@ -68,12 +69,42 @@
 
                         <avalonDock:LayoutDocumentPane x:Name="uxDocumentPane3">
                             <avalonDock:LayoutDocument Title="Inspector" ContentId="Inspector">
+
                                 <StackPanel>
-                                    <Expander Header="TitleA" Margin="10" IsExpanded="True">
-                                        <StackPanel Margin="6"  HorizontalAlignment="Left" Width="200">
-                                            <RadioButton Content="AAA" FontSize="20"/>
-                                            <RadioButton Content="BBB" FontSize="20"/>
-                                        </StackPanel>
+                                    <!--Background="#2f2f34">-->
+
+                                    <Expander Margin="10" IsExpanded="True">
+                                        <Expander.Header>
+                                            
+                                            <StackPanel Orientation="Horizontal">
+                                                <!--<Image Height="16" Source="/Icons/Labels/cube.png"/>-->
+                                                <CheckBox Margin="4,0,0,0" IsChecked="True"/>
+                                                <TextBlock Margin="4,0,0,0" Text="Transform"></TextBlock>
+                                            </StackPanel>
+                                        </Expander.Header>
+                                        <!--<StackPanel Margin="6"  HorizontalAlignment="Left">-->
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="3*"/>
+                                                <ColumnDefinition Width="7*"/>
+                                            </Grid.ColumnDefinitions>
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition />
+                                                <RowDefinition />
+                                                <RowDefinition />
+                                            </Grid.RowDefinitions>
+                                            <Label Content="Positon" Grid.Row="0" Grid.Column="0"></Label>
+                                            <mydCtrs:Vector3 Width="Auto" Grid.Row="0" Grid.Column="1"/>
+
+                                            <Label Content="Scale" Grid.Row="1" Grid.Column="0"></Label>
+                                            <mydCtrs:Vector3 TextX="1" TextY="1" TextZ="1" Width="Auto" Grid.Row="1" Grid.Column="1"/>
+                                            
+                                            <Label Content="Rotation" Grid.Row="2" Grid.Column="0"></Label>
+                                            <mydCtrs:Vector3 Width="Auto" Grid.Row="2" Grid.Column="1"/>
+                                            <!--<RadioButton Content="AAA" FontSize="20"/>
+                                            <RadioButton Content="BBB" FontSize="20"/>-->
+                                        </Grid>
+                                        <!--</StackPanel>-->
                                     </Expander>
 
                                     <Expander Header="TitleB" Margin="10" IsExpanded="True">
