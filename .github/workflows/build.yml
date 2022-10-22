@@ -41,7 +41,7 @@ jobs:
       # See https://cmake.org/cmake/help/latest/manual/ctest.1.html for more detail
       #run: ctest -C ${{env.BUILD_TYPE}}
       run: |
-        cd ${{github.workspace}}/build/Src/Runtime/Test/${{env.BUILD_TYPE}}
+        cd build/Src/Runtime/Test/${{env.BUILD_TYPE}}
         NativeRuntime_Test.exe
       shell: cmd
       
