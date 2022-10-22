@@ -41,8 +41,11 @@ jobs:
       # See https://cmake.org/cmake/help/latest/manual/ctest.1.html for more detail
       #run: ctest -C ${{env.BUILD_TYPE}}
       run: ${{github.workspace}}/build/Src/Runtime/Test/${{env.BUILD_TYPE}}/NativeRuntime_Test.exe
+      
+      
     - name: Upload Artifacts
       uses: actions/upload-artifact@v3
+      if: always()
       with:
         name: BuildArtifact
         path: ./
