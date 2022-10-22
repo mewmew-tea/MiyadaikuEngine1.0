@@ -43,6 +43,7 @@ jobs:
       run: |
         cd ${{github.workspace}}/build/Src/Runtime/Test/${{env.BUILD_TYPE}}
         NativeRuntime_Test.exe
+      shell: cmd
       
       
 #    - name: Upload Artifacts
