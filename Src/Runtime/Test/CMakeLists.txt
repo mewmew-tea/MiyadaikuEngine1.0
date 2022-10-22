@@ -60,8 +60,8 @@ target_link_libraries(${PROJECT_NAME} NativeRuntime GTest::gtest  GTest::gtest_m
 add_compile_definitions(TESTS_ENABLED)
 
 # copy assets
-add_custom_command(TARGET NativeRuntime_Test POST_BUILD COMMAND ${CMAKE_COMMAND} -E make_directory ${PROJECT_BINARY_DIR}/Assets/)
-add_custom_command(TARGET NativeRuntime_Test POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_SOURCE_DIR}/Assets/ ${PROJECT_BINARY_DIR}/Assets/)
+add_custom_command(TARGET NativeRuntime_Test PRE_BUILD COMMAND ${CMAKE_COMMAND} -E make_directory ${PROJECT_BINARY_DIR}/Assets/)
+add_custom_command(TARGET NativeRuntime_Test PRE_BUILD COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_SOURCE_DIR}/Assets/ ${PROJECT_BINARY_DIR}/Assets/)
 # for CI(GitHub Actions)
 add_custom_command(TARGET NativeRuntime_Test POST_BUILD COMMAND ${CMAKE_COMMAND} -E make_directory $<TARGET_FILE_DIR:NativeRuntime_Test>/Assets/)
 add_custom_command(TARGET NativeRuntime_Test POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_SOURCE_DIR}/Assets/ $<TARGET_FILE_DIR:NativeRuntime_Test>/Assets/)
@@ -71,12 +71,12 @@ add_custom_command(TARGET NativeRuntime_Test POST_BUILD COMMAND ${CMAKE_COMMAND}
 add_custom_command(TARGET NativeRuntime_Test POST_BUILD COMMAND ${CMAKE_COMMAND} -E make_directory $<TARGET_FILE_DIR:NativeRuntime_Test>/MonoAssembly/)
 add_custom_command(TARGET NativeRuntime_Test POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_SOURCE_DIR}/dlls/MonoAssembly/ $<TARGET_FILE_DIR:NativeRuntime_Test>/MonoAssembly/)
 
-add_custom_command(TARGET NativeRuntime_Test POST_BUILD COMMAND ${CMAKE_COMMAND} -E make_directory ${PROJECT_BINARY_DIR}/MonoAssembly/)
-add_custom_command(TARGET NativeRuntime_Test POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_SOURCE_DIR}/dlls/MonoAssembly/ ${PROJECT_BINARY_DIR}/MonoAssembly/)
+add_custom_command(TARGET NativeRuntime_Test PRE_BUILD COMMAND ${CMAKE_COMMAND} -E make_directory ${PROJECT_BINARY_DIR}/MonoAssembly/)
+add_custom_command(TARGET NativeRuntime_Test PRE_BUILD COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_SOURCE_DIR}/dlls/MonoAssembly/ ${PROJECT_BINARY_DIR}/MonoAssembly/)
 
 # mono-2.0-sgen.dll
-add_custom_command(TARGET NativeRuntime_Test POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_SOURCE_DIR}/dlls/mono-2.0-sgen.dll ${PROJECT_BINARY_DIR})
+add_custom_command(TARGET NativeRuntime_Test PRE_BUILD COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_SOURCE_DIR}/dlls/mono-2.0-sgen.dll ${PROJECT_BINARY_DIR})
+# ex. Debug/
 add_custom_command(TARGET NativeRuntime_Test POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_SOURCE_DIR}/dlls/mono-2.0-sgen.dll $<TARGET_FILE_DIR:NativeRuntime_Test>)
-
 
 gtest_discover_tests(${PROJECT_NAME})
