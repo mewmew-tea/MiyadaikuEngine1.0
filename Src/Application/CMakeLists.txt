@@ -42,10 +42,14 @@ target_compile_features(Application PRIVATE cxx_std_20)
 add_custom_command(TARGET Application POST_BUILD COMMAND ${CMAKE_COMMAND} -E make_directory $<TARGET_FILE_DIR:Application>/Assets/)
 add_custom_command(TARGET Application POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_SOURCE_DIR}/Assets/ $<TARGET_FILE_DIR:Application>/Assets/)
 
-
 add_custom_command(TARGET Application POST_BUILD COMMAND ${CMAKE_COMMAND} -E make_directory ${PROJECT_BINARY_DIR}/Assets/)
 add_custom_command(TARGET Application POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_SOURCE_DIR}/Assets/ ${PROJECT_BINARY_DIR}/Assets/)
 
+# build CSharp scripts
+add_custom_command(TARGET Application PRE_BUILD COMMAND cmd //c ${PROJECT_BINARY_DIR}/Assets/BuildScripts.bat)
+add_custom_command(TARGET Application PRE_BUILD COMMAND cmd //c $<TARGET_FILE_DIR:Application>/Assets/BuildScripts.bat)
+
+# copy assemblies
 add_custom_command(TARGET Application POST_BUILD COMMAND ${CMAKE_COMMAND} -E make_directory ${PROJECT_BINARY_DIR}/Assets/Assembly/)
 add_custom_command(TARGET Application POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_directory $<TARGET_FILE_DIR:UserAssembly>/ $<TARGET_FILE_DIR:Application>/Assets/Assembly/)
 

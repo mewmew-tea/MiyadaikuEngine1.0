@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.32428.217
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CSScript", "CSScript.csproj", "{88C7B370-28B6-4C6E-B1C9-33926A3F1488}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Debug|x64 = Debug|x64
+		Release|Any CPU = Release|Any CPU
+		Release|x64 = Release|x64
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{88C7B370-28B6-4C6E-B1C9-33926A3F1488}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{88C7B370-28B6-4C6E-B1C9-33926A3F1488}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{88C7B370-28B6-4C6E-B1C9-33926A3F1488}.Debug|x64.ActiveCfg = Debug|x64
+		{88C7B370-28B6-4C6E-B1C9-33926A3F1488}.Debug|x64.Build.0 = Debug|x64
+		{88C7B370-28B6-4C6E-B1C9-33926A3F1488}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{88C7B370-28B6-4C6E-B1C9-33926A3F1488}.Release|Any CPU.Build.0 = Release|Any CPU
+		{88C7B370-28B6-4C6E-B1C9-33926A3F1488}.Release|x64.ActiveCfg = Release|x64
+		{88C7B370-28B6-4C6E-B1C9-33926A3F1488}.Release|x64.Build.0 = Release|x64
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {9C77923A-9F1B-4CB4-8336-FD25CF9B0A1C}
+	EndGlobalSection
+EndGlobal

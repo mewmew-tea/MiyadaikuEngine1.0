@@ -66,6 +66,10 @@ add_custom_command(TARGET NativeRuntime_Test PRE_BUILD COMMAND ${CMAKE_COMMAND} 
 add_custom_command(TARGET NativeRuntime_Test POST_BUILD COMMAND ${CMAKE_COMMAND} -E make_directory $<TARGET_FILE_DIR:NativeRuntime_Test>/Assets/)
 add_custom_command(TARGET NativeRuntime_Test POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_SOURCE_DIR}/Assets/ $<TARGET_FILE_DIR:NativeRuntime_Test>/Assets/)
 
+# copy assets
+add_custom_command(TARGET NativeRuntime_Test PRE_BUILD COMMAND ${CMAKE_COMMAND} -E make_directory $<TARGET_FILE_DIR:NativeRuntime_Test>/Assets/)
+add_custom_command(TARGET NativeRuntime_Test PRE_BUILD COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_SOURCE_DIR}/Assets/ $<TARGET_FILE_DIR:NativeRuntime_Test>/Assets/)
+
 # copy dlls
 # MonoAssembly
 add_custom_command(TARGET NativeRuntime_Test POST_BUILD COMMAND ${CMAKE_COMMAND} -E make_directory $<TARGET_FILE_DIR:NativeRuntime_Test>/MonoAssembly/)
