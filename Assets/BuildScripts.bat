@@ -9,3 +9,11 @@ if %ERRORLEVEL% neq 0 (
     echo ErrorLevel:%ERRORLEVEL%
     echo FailedBuild
 )
+
+rem generate CSFileList.txt
+
+if exist CSFileList.txt del CSFileList.txt
+
+for /r %%f in (*.cs) do (
+	echo %%~nf >> CSFileList.txt
+)
