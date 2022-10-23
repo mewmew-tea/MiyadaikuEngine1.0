@@ -1,6 +1,10 @@
 <!-- ![build and test workflow](https://github.com/mewmew-tea/MiyadaikuEngine1.0/actions/workflows/build.yml/badge.svg) -->
 # MiyadaikuEngine1.0
 
+> **Note**
+> **本リポジトリは、開発の初期段階です。**\
+> 機能追加など長期的に開発を進めていく予定です。
+
 コンポーネントシステムを備えた、自作のゲームエンジンです。(WIP)\
 ポートフォリオを兼ねて開発中です。（２０２２年７月中旬～）
 
@@ -60,8 +64,8 @@ cmake --build　build/
 おおよその実装予定です。\
 適宜加筆修正します。
 
-タスク管理用のTrelloはこちら \
-https://trello.com/b/jDuAlxcO
+<!-- タスク管理用のTrelloはこちら \
+https://trello.com/b/jDuAlxcO -->
 
 |  項目名  |  進捗度  | 概要 |
 | ---- | ---- | ---- |
