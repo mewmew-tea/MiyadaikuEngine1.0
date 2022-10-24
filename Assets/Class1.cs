@@ -18,8 +18,12 @@ namespace CSScript
 
     }
 
+    public class MonoBehaviour
+    {
 
-    public class CSClass
+    }
+
+    public class CSClass : MonoBehaviour
     {
         private static TestClass testClass = new TestClass();
         private static Game game = new Game();
@@ -28,7 +32,7 @@ namespace CSScript
             GameConsole.DebugOutStringLineToVS("Init");
         }
 
-        public static void Main()
+        public static void Update()
         {
             //DefaultTraceListener.Write("aaaa");
             //System.Diagnostics.Debug.Flush();

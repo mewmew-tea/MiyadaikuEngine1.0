@@ -1,0 +1,7 @@
+Class1 
+Game 
+GameConsole 
+TestSub 
+.NETFramework,Version=v4.7.2.AssemblyAttributes 
+.NETFramework,Version=v4.7.2.AssemblyAttributes 
+AssemblyInfo 
