@@ -173,13 +173,15 @@ void LoadMonoAssembly()
 	// read class
 	scriptClassType.name = "Game";
 	scriptClassType.nameSpace = "CSScript";
-	scriptClassType.ReadClass(assemblyImage);
-
-	spScriptClassInstance = scriptClassType.CreateInstance(domain);
-	// method：Init
-	spScriptClassInstance->InvokeInitMethod();
-	// method：Update
-	spScriptClassInstance->InvokeUpdateMethod();
+	if (scriptClassType.ReadClass(assemblyImage))
+	{
+		// create a instance of the class
+		spScriptClassInstance = scriptClassType.CreateInstance(domain);
+		// method：Init
+		spScriptClassInstance->InvokeInitMethod();
+		// method：Update
+		spScriptClassInstance->InvokeUpdateMethod();
+	}
 
 	//
 	// if (rootDomain)
@@ -264,23 +266,11 @@ void Scripting::Update()
 	//scriptClassType.updateMethod->Invoke(nullptr, nullptr, nullptr);
 	spScriptClassInstance->InvokeUpdateMethod();
 
-
-
-	//if (!scriptClassType.updateMethod->pMethod)
-	//{
-	//	MessageBoxA(NULL, "", "Method is not found.", MB_OK);
-	//}
-	//// ptrExObject = nullptr;
-	//// mono_runtime_invoke(ptrMainMethod, nullptr, nullptr, &ptrExObject);
-	//mono_runtime_invoke(scriptClassType.updateMethod->pMethod, nullptr, nullptr,
-	//					&ptrExObject);
-	//// Report exception
-	//if (ptrExObject)
-	//{
-	//	MonoString* exString = mono_object_to_string(ptrExObject, nullptr);
-	//	const char* exCString = mono_string_to_utf8(exString);
-	//	MessageBoxA(NULL, exCString, "Mono Invoke issue", MB_OK | MB_ICONERROR);
-	//}
+	float value = 0;
+	auto  fieldInfo = spScriptClassInstance->pClassType->spFieldInfos[0];
+	fieldInfo->GetValue(
+		spScriptClassInstance->pInstance, &value);
+	printf("Type: %s = %f\n", fieldInfo->name.c_str(), value);
 }
 void Scripting::Release()
 {
@@ -288,8 +278,10 @@ void Scripting::Release()
 void Scripting::LoadUserAssembly(std::string_view _path)
 {
 }
-//==============================================
 
+//==============================================
+// ScriptMethod
+//==============================================
 ScriptMethod::ScriptMethod(ScriptClassTypeInfo* _pClassType,
 						   std::string_view		_name)
 {
@@ -313,7 +305,6 @@ bool ScriptMethod::Read()
 		return false;
 	}
 
-	// Find main in mainclass
 	pMethod = mono_method_desc_search_in_class(
 		pMethodDesc, pClassType->pMonoClass);
 	if (!pMethod)
@@ -326,6 +317,38 @@ bool ScriptMethod::Read()
 	return true;
 }
 
+//==============================================
+// ScriptFieldInfo
+//==============================================
+bool ScriptFieldInfo::IsStatic()
+{
+	return (mono_field_get_flags(pField) & MONO_FIELD_ATTR_STATIC) != 0;
+}
+
+void ScriptFieldInfo::SetValue(MonoObject* _pInstance, void* _pValue)
+{
+	if (!_pInstance || !_pValue)
+	{
+		return;
+	}
+
+	mono_field_set_value(_pInstance, pField, _pValue);
+}
+
+void ScriptFieldInfo::GetValue(MonoObject* _pInstance, void* _pOutValue)
+{
+	if (!_pInstance || !_pOutValue)
+	{
+		return;
+	}
+
+	MonoType*	type = mono_field_get_type(pField);
+	mono_field_get_value(spScriptClassInstance->pInstance, pField, _pOutValue);
+}
+
+//==============================================
+// ScriptClassTypeInfo
+//==============================================
 bool ScriptClassTypeInfo::ReadClass(MonoImage* _pImage)
 {
 	if (!_pImage)
@@ -346,9 +369,10 @@ bool ScriptClassTypeInfo::ReadClass(MonoImage* _pImage)
 	spFieldInfos.reserve(mono_class_num_fields(pMonoClass));
 	while ((field = mono_class_get_fields(pMonoClass, &iter)))
 	{
-		// printf("Field: %s, flags 0x%x\n", mono_field_get_name(field),
-		//	   mono_field_get_flags(field));
+		 printf("Field: %s, flags 0x%x\n", mono_field_get_name(field),
+			   mono_field_get_flags(field));
 
+		
 		auto spFieldInfo = std::make_shared<ScriptFieldInfo>();
 		spFieldInfo->pField = field;
 		spFieldInfo->name = mono_field_get_name(field);
@@ -400,6 +424,9 @@ std::shared_ptr<ScriptClassInstance> ScriptClassTypeInfo::CreateInstance(MonoDom
 	return spInst;
 }
 
+//==============================================
+// ScriptMethod
+//==============================================
 bool ScriptMethod::Invoke(void* _instance, void** _params, MonoObject** _ret)
 {
 	if (!pMethod)
@@ -427,6 +454,9 @@ bool ScriptMethod::Invoke(void* _instance, void** _params, MonoObject** _ret)
 	return true;
 }
 
+//==============================================
+// ScriptClassInstance
+//==============================================
 ScriptClassInstance::ScriptClassInstance(MonoObject*			_pInst,
 									   ScriptClassTypeInfo* _pClassType)
 {

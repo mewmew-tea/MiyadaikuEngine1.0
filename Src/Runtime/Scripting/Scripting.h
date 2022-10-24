@@ -71,11 +71,6 @@ enum class ScriptVaueType : uint16_t
 	Other = UINT16_MAX,
 };
 
-struct ScriptValue
-{
-	void*		   value;
-	ScriptVaueType type = ScriptVaueType::Other;
-};
 
 struct ScriptFieldInfo
 {
@@ -84,9 +79,12 @@ struct ScriptFieldInfo
 	bool isSerializeField = false;
 
 	MonoClassField* pField = nullptr;
+	// TODO judge the type
+	ScriptVaueType	type = ScriptVaueType::Other;
 
-	//void		SetValue(ScriptValue& _val);
-	//ScriptValue GetValue();
+	bool IsStatic();
+	void SetValue(MonoObject* _pInstance, void* _pValue);
+	void GetValue(MonoObject* _pInstance, void* _pOutValue);
 };
 
 struct ScriptClassTypeInfo
