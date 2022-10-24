@@ -4,6 +4,7 @@
 
 #include <string>
 #include <string_view>
+#include <unordered_map>
 void ScriptingAPI_SetPosition(float _x, float _y);
 float	  ScriptingAPI_GetPositionX();
 float	  ScriptingAPI_GetPositionY();
@@ -17,6 +18,15 @@ typedef struct _MonoMethod	  MonoMethod;
 
 typedef struct _MonoObject MonoObject;
 
+typedef struct _MonoDomain	MonoDomain;
+typedef struct _MonoJitInfo MonoJitInfo;
+
+
+typedef struct MonoVTable MonoVTable;
+
+typedef struct _MonoClassField MonoClassField;
+typedef struct _MonoProperty   MonoProperty;
+typedef struct _MonoEvent	   MonoEvent;
 //struct MonoClass;
 //struct MonoMethodDesc;
 //struct MonoMethod;
@@ -27,10 +37,12 @@ typedef struct _MonoObject MonoObject;
 
 namespace Miyadaiku
 {
-struct ScriptClassType;
+struct ScriptClassTypeInfo;
+struct ScriptClassInstance;
+
 struct ScriptMethod
 {
-	ScriptMethod(ScriptClassType* _pClassType, std::string_view _name);
+	ScriptMethod(ScriptClassTypeInfo* _pClassType, std::string_view _name);
 
 	bool Read();
 
@@ -38,15 +50,50 @@ struct ScriptMethod
 
 	std::string		 name = "";
 	bool			 isRead = false;
-	ScriptClassType* pClassType = nullptr;
+	ScriptClassTypeInfo* pClassType = nullptr;
 	MonoMethod*		 pMethod = nullptr;
 	MonoMethodDesc*	 pMethodDesc = nullptr;
 };
 
-struct ScriptClassType
+enum class ScriptVaueType : uint16_t
+{
+	// primiteve and string
+	Int = 0,
+	Float,
+	Bool,
+	String,
+	// support types
+	Vector2 = 100,
+	Vector3,
+	Vector4,
+	Quaternion,
+	// unsupport types
+	Other = UINT16_MAX,
+};
+
+struct ScriptValue
+{
+	void*		   value;
+	ScriptVaueType type = ScriptVaueType::Other;
+};
+
+struct ScriptFieldInfo
+{
+	std::string name = "";
+
+	bool isSerializeField = false;
+
+	MonoClassField* pField = nullptr;
+
+	//void		SetValue(ScriptValue& _val);
+	//ScriptValue GetValue();
+};
+
+struct ScriptClassTypeInfo
 {
 	bool ReadClass(MonoImage* _pImage);
-
+	
+	std::shared_ptr<ScriptClassInstance> CreateInstance(MonoDomain* _pDomain);
 	
 	std::string name = "";
 	std::string nameSpace = "";
@@ -54,8 +101,20 @@ struct ScriptClassType
 	bool		isComponent = false;
 	MonoClass*	pMonoClass = nullptr;
 
+	std::vector<std::shared_ptr<ScriptFieldInfo>> spFieldInfos;
+
 	std::shared_ptr<ScriptMethod> initMethod;
 	std::shared_ptr<ScriptMethod> updateMethod;
+};
+
+struct ScriptClassInstance
+{
+	ScriptClassInstance(MonoObject* _pInst, ScriptClassTypeInfo* _pClassType);
+	MonoObject*			 pInstance = nullptr;
+	ScriptClassTypeInfo* pClassType = nullptr;
+
+	bool InvokeInitMethod();
+	bool InvokeUpdateMethod();
 };
 
 class Scripting final : public Subsystem
@@ -73,6 +132,8 @@ public:
 	void LoadUserAssembly(std::string_view _path);
 
 private:
-	std::list<std::shared_ptr<ScriptClassType>> m_spScriptClasses;
+	std::list<std::shared_ptr<ScriptClassTypeInfo>> m_spScriptClasses;
+
+	//ScriptClassTypeInfo m_serializeFieldAttribute;
 };
 } // namespace Miyadaiku

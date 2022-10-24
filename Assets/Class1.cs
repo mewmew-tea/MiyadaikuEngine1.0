@@ -27,6 +27,13 @@ namespace CSScript
     {
         private static TestClass testClass = new TestClass();
         private static Game game = new Game();
+
+
+        [SerializeField]
+        float x = 0f;
+        [SerializeField]
+        float y = 0f;
+
         public static void Init()
         {
             GameConsole.DebugOutStringLineToVS("Init");

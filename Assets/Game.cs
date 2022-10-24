@@ -2,9 +2,19 @@
 
 namespace CSScript
 {
-    internal class Game
+    [AttributeUsage(AttributeTargets.Property | AttributeTargets.Field,
+    AllowMultiple = true,
+    Inherited = false)]
+    public class SerializeFieldAttribute : Attribute
     {
+
+    }
+
+    public class Game
+    {
+        [SerializeField]
         float x = 0f;
+        [SerializeField]
         float y = 0f;
         public void Init()
         {

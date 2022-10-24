@@ -11,6 +11,7 @@
 #include <mono/metadata/appdomain.h>
 #include <mono/metadata/debug-helpers.h>
 #include <mono/metadata/exception.h>
+#include <mono/metadata/attrdefs.h>
 
 #include <iostream>
 #include <fstream>
@@ -78,7 +79,8 @@ float ScriptingAPI_GetPositionY()
 
 namespace Miyadaiku
 {
-ScriptClassType scriptClassType;
+ScriptClassTypeInfo scriptClassType;
+std::shared_ptr<ScriptClassInstance> spScriptClassInstance;
 
 
 static std::string execute_command(const char* cmd)
@@ -169,13 +171,15 @@ void LoadMonoAssembly()
 						   &DebugOutStringLineToVS);
 
 	// read class
-	scriptClassType.name = "CSClass";
+	scriptClassType.name = "Game";
 	scriptClassType.nameSpace = "CSScript";
 	scriptClassType.ReadClass(assemblyImage);
+
+	spScriptClassInstance = scriptClassType.CreateInstance(domain);
 	// method：Init
-	scriptClassType.initMethod->Invoke(nullptr, nullptr, nullptr);
+	spScriptClassInstance->InvokeInitMethod();
 	// method：Update
-	scriptClassType.updateMethod->Invoke(nullptr, nullptr, nullptr);
+	spScriptClassInstance->InvokeUpdateMethod();
 
 	//
 	// if (rootDomain)
@@ -245,7 +249,7 @@ void Scripting::OnAwake()
 				str = str.erase(str.find(" "));
 				std::cout << "#" << str << "#" << std::endl;
 
-				auto spClassType = std::make_shared<ScriptClassType>();
+				auto spClassType = std::make_shared<ScriptClassTypeInfo>();
 				spClassType->name = str;
 				spClassType->ReadClass(assemblyImage);
 			}
@@ -257,7 +261,10 @@ void Scripting::OnShutdown()
 }
 void Scripting::Update()
 {
-	scriptClassType.updateMethod->Invoke(nullptr, nullptr, nullptr);
+	//scriptClassType.updateMethod->Invoke(nullptr, nullptr, nullptr);
+	spScriptClassInstance->InvokeUpdateMethod();
+
+
 
 	//if (!scriptClassType.updateMethod->pMethod)
 	//{
@@ -283,7 +290,8 @@ void Scripting::LoadUserAssembly(std::string_view _path)
 }
 //==============================================
 
-ScriptMethod::ScriptMethod(ScriptClassType* _pClassType, std::string_view _name)
+ScriptMethod::ScriptMethod(ScriptClassTypeInfo* _pClassType,
+						   std::string_view		_name)
 {
 	pClassType = _pClassType;
 	name = _name;
@@ -318,7 +326,7 @@ bool ScriptMethod::Read()
 	return true;
 }
 
-bool ScriptClassType::ReadClass(MonoImage* _pImage)
+bool ScriptClassTypeInfo::ReadClass(MonoImage* _pImage)
 {
 	if (!_pImage)
 	{
@@ -332,7 +340,43 @@ bool ScriptClassType::ReadClass(MonoImage* _pImage)
 		return false;
 	}
 
+	// get fields
+	MonoClassField* field;
+	void*			iter = nullptr;
+	spFieldInfos.reserve(mono_class_num_fields(pMonoClass));
+	while ((field = mono_class_get_fields(pMonoClass, &iter)))
+	{
+		// printf("Field: %s, flags 0x%x\n", mono_field_get_name(field),
+		//	   mono_field_get_flags(field));
+
+		auto spFieldInfo = std::make_shared<ScriptFieldInfo>();
+		spFieldInfo->pField = field;
+		spFieldInfo->name = mono_field_get_name(field);
+
+		// get attributes
+		MonoClass*			parentClass = mono_field_get_parent(field);
+		MonoCustomAttrInfo* attrInfo =
+			mono_custom_attrs_from_field(parentClass, field);
+		if (attrInfo != nullptr)
+		{
+			// serach serialize field
+			auto attrClass = mono_class_from_name(_pImage, nameSpace.c_str(),
+												  "SerializeFieldAttribute");
+			MonoObject* foundAttr =
+				mono_custom_attrs_get_attr(attrInfo, attrClass);
+			mono_custom_attrs_free(attrInfo);
+			if (foundAttr)
+			{
+				spFieldInfo->isSerializeField = true;
+				printf("Serialize Field Attribute!!\n");
+			}
+		}
+		spFieldInfos.push_back(spFieldInfo);
+	}
+
 	isRead = true;
+
+	// read methods
 
 	// method：Update
 	updateMethod = std::make_shared<ScriptMethod>(this, "Update");
@@ -343,7 +387,18 @@ bool ScriptClassType::ReadClass(MonoImage* _pImage)
 
 	return true;
 }
-
+std::shared_ptr<ScriptClassInstance> ScriptClassTypeInfo::CreateInstance(MonoDomain* _pDomain)
+{
+	if (!pMonoClass)
+	{
+		return nullptr;		
+	}
+    MonoObject* pInst;
+	pInst = mono_object_new(_pDomain, pMonoClass);
+	mono_runtime_object_init(pInst);
+	auto spInst = std::make_shared<ScriptClassInstance>(pInst, this);
+	return spInst;
+}
 
 bool ScriptMethod::Invoke(void* _instance, void** _params, MonoObject** _ret)
 {
@@ -370,5 +425,32 @@ bool ScriptMethod::Invoke(void* _instance, void** _params, MonoObject** _ret)
 	}
 
 	return true;
+}
+
+ScriptClassInstance::ScriptClassInstance(MonoObject*			_pInst,
+									   ScriptClassTypeInfo* _pClassType)
+{
+	pInstance = _pInst;
+	pClassType = _pClassType;
+}
+
+bool ScriptClassInstance::InvokeInitMethod()
+{
+	if (!pInstance || !pClassType || !pClassType->initMethod)
+	{
+		return false;
+	}
+
+	return pClassType->initMethod->Invoke(pInstance, nullptr, nullptr);
+}
+
+bool ScriptClassInstance::InvokeUpdateMethod()
+{
+	if (!pInstance || !pClassType || !pClassType->updateMethod)
+	{
+		return false;
+	}
+
+	return pClassType->updateMethod->Invoke(pInstance, nullptr, nullptr);
 }
 } // namespace Miyadaiku
