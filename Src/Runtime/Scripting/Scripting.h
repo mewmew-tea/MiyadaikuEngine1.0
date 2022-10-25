@@ -57,17 +57,17 @@ struct ScriptMethod
 
 enum class ScriptVaueType : uint16_t
 {
-	// primiteve and string
+	// built-in types
 	Int = 0,
-	Float,
-	Bool,
-	String,
-	// support types
+	Float = 10,
+	Bool = 20,
+	String = 30,
+	// MiyadaikuEngine types
 	Vector2 = 100,
 	Vector3,
 	Vector4,
 	Quaternion,
-	// unsupport types
+	// unsupported types
 	Other = UINT16_MAX,
 };
 

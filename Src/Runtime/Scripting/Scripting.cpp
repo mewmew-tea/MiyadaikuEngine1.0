@@ -16,6 +16,8 @@
 #include <iostream>
 #include <fstream>
 
+#include "../Core/Math/Vector3.h"
+
 MonoClass*		mainClass = nullptr;
 //MonoMethodDesc* mainMethodDesc = nullptr;
 //MonoMethodDesc* initMethodDesc = nullptr;
@@ -265,12 +267,21 @@ void Scripting::Update()
 {
 	//scriptClassType.updateMethod->Invoke(nullptr, nullptr, nullptr);
 	spScriptClassInstance->InvokeUpdateMethod();
+	{
+		float value = 0;
+		auto  fieldInfo = spScriptClassInstance->pClassType->spFieldInfos[0];
+		fieldInfo->GetValue(spScriptClassInstance->pInstance, &value);
+		printf("Type: %s = %f\n", fieldInfo->name.c_str(), value);
+	}
+	{
+		Vector3 value;
+		auto  fieldInfo = spScriptClassInstance->pClassType->spFieldInfos[2];
+		fieldInfo->GetValue(spScriptClassInstance->pInstance, &value);
+		printf("Type: %s = %f, %f, %f\n", fieldInfo->name.c_str(), value.x, value.y, value.z);
+	}
+	printf("=========================================");
+	
 
-	float value = 0;
-	auto  fieldInfo = spScriptClassInstance->pClassType->spFieldInfos[0];
-	fieldInfo->GetValue(
-		spScriptClassInstance->pInstance, &value);
-	printf("Type: %s = %f\n", fieldInfo->name.c_str(), value);
 }
 void Scripting::Release()
 {
@@ -376,6 +387,35 @@ bool ScriptClassTypeInfo::ReadClass(MonoImage* _pImage)
 		auto spFieldInfo = std::make_shared<ScriptFieldInfo>();
 		spFieldInfo->pField = field;
 		spFieldInfo->name = mono_field_get_name(field);
+		
+		// jugde type
+		MonoType* pMonoType = mono_field_get_type(field);
+		std::string typeName = mono_type_get_name(pMonoType);
+		if (typeName == "System.Int32")
+		{
+			spFieldInfo->type = ScriptVaueType::Int;
+		}
+		else if (typeName == "System.Single")
+		{
+			spFieldInfo->type = ScriptVaueType::Float;
+		}
+		else if (typeName == "System.Boolean")
+		{
+			spFieldInfo->type = ScriptVaueType::Bool;
+		}
+		else if (typeName == "System.String")
+		{
+			spFieldInfo->type = ScriptVaueType::String;
+		}
+		else if (typeName == "MiyadaikuEngine.Vector3")
+		{
+			spFieldInfo->type = ScriptVaueType::Vector3;
+		}
+		// unsupported types
+		else
+		{
+			spFieldInfo->type = ScriptVaueType::Other;
+		}
 
 		// get attributes
 		MonoClass*			parentClass = mono_field_get_parent(field);
