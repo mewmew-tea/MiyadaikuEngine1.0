@@ -78,6 +78,7 @@
     <Compile Include="Class1.cs" />
     <Compile Include="Game.cs" />
     <Compile Include="GameConsole.cs" />
+    <Compile Include="Miyadaiku\Math\Vector3.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -86,6 +87,9 @@
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Connected Services\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Miyadaiku\System\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

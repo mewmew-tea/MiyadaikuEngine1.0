@@ -1,4 +1,5 @@
 ﻿using System;
+using MiyadaikuEngine;
 
 namespace CSScript
 {
@@ -16,6 +17,10 @@ namespace CSScript
         float x = 0f;
         [SerializeField]
         float y = 0f;
+
+        [SerializeField]
+        Vector3 pos = new Vector3(0,0,0);
+
         public void Init()
         {
         }
@@ -39,6 +44,8 @@ namespace CSScript
             {
                 x += speed;
             }
+            pos.x = x;
+            pos.y = y;
             GameConsole.SetPosition(x, y);
         }
     }
