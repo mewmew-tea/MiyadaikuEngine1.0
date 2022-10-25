@@ -1,6 +1,7 @@
 ﻿#include "Scripting.h"
 #include <filesystem>
 #include <assert.h>
+#include <cstdarg>
 
 #include <Windows.h>
 
@@ -17,6 +18,12 @@
 #include <fstream>
 
 #include "../Core/Math/Vector3.h"
+
+// dear imgui
+#include "imgui.h"
+
+#define IMGUI_DEFINE_MATH_OPERATORS
+#define IMGUI_DEFINE_PLACEMENT_NEW
 
 MonoClass*		mainClass = nullptr;
 //MonoMethodDesc* mainMethodDesc = nullptr;
@@ -74,6 +81,22 @@ float ScriptingAPI_GetPositionX()
 float ScriptingAPI_GetPositionY()
 {
 	return y;
+}
+
+bool ScriptingAPI_ImGui_Begin(MonoString* _label)
+{
+	return ImGui::Begin(mono_string_to_utf8(_label));
+}
+
+void ScriptingAPI_ImGui_End()
+{
+	ImGui::End();
+}
+
+void ScriptingAPI_ImGui_Text(MonoString* _str)
+{
+	char* str = mono_string_to_utf8(_str);
+	ImGui::Text(str);
 }
 
 //========================================================
@@ -162,16 +185,23 @@ void LoadMonoAssembly()
 
 	
 	// add InternalCalls
-	mono_add_internal_call("CSScript.GameConsole::PrintMessage()",
+	mono_add_internal_call("MiyadaikuEngine.GameConsole::PrintMessage()",
 						   &PrintMessage);
-	mono_add_internal_call("CSScript.GameConsole::SetPosition",
+	mono_add_internal_call("MiyadaikuEngine.GameConsole::SetPosition",
 						   &ScriptingAPI_SetPosition);
-	mono_add_internal_call("CSScript.GameConsole::GetKey", &GetKey);
-	mono_add_internal_call("CSScript.GameConsole::DebugOutStringToVS",
+	mono_add_internal_call("MiyadaikuEngine.GameConsole::GetKey", &GetKey);
+	mono_add_internal_call("MiyadaikuEngine.GameConsole::DebugOutStringToVS",
 						   &DebugOutStringToVS);
-	mono_add_internal_call("CSScript.GameConsole::DebugOutStringLineToVS",
+	mono_add_internal_call("MiyadaikuEngine.GameConsole::DebugOutStringLineToVS",
 						   &DebugOutStringLineToVS);
 
+
+	mono_add_internal_call("MiyadaikuEngine.ImGui::Begin",
+						   &ScriptingAPI_ImGui_Begin);
+	mono_add_internal_call("MiyadaikuEngine.ImGui::End",
+						   &ScriptingAPI_ImGui_End);
+	mono_add_internal_call("MiyadaikuEngine.ImGui::Text_Internal",
+						   &ScriptingAPI_ImGui_Text);
 	// read class
 	scriptClassType.name = "Game";
 	scriptClassType.nameSpace = "CSScript";
@@ -267,21 +297,42 @@ void Scripting::Update()
 {
 	//scriptClassType.updateMethod->Invoke(nullptr, nullptr, nullptr);
 	spScriptClassInstance->InvokeUpdateMethod();
+}
+void Scripting::ImGuiUpdate()
+{
+	spScriptClassInstance->InvokeImGuiUpdateMethod();
+	if (ImGui::Begin("C# Scripting Debug"))
 	{
-		float value = 0;
-		auto  fieldInfo = spScriptClassInstance->pClassType->spFieldInfos[0];
-		fieldInfo->GetValue(spScriptClassInstance->pInstance, &value);
-		printf("Type: %s = %f\n", fieldInfo->name.c_str(), value);
-	}
-	{
-		Vector3 value;
-		auto  fieldInfo = spScriptClassInstance->pClassType->spFieldInfos[2];
-		fieldInfo->GetValue(spScriptClassInstance->pInstance, &value);
-		printf("Type: %s = %f, %f, %f\n", fieldInfo->name.c_str(), value.x, value.y, value.z);
-	}
-	printf("=========================================");
-	
+		if (ImGui::Button("Reload script"))
+		{
+		}
 
+		for (auto& fieldInfo : spScriptClassInstance->pClassType->spFieldInfos)
+		{
+			switch (fieldInfo->type)
+			{
+			case ScriptVaueType::Float:
+			{
+				float value = 0;
+				fieldInfo->GetValue(spScriptClassInstance->pInstance, &value);
+				ImGui::Text("field name: %s = %3f\n", fieldInfo->name.c_str(),
+							value);
+				break;
+			}
+			case ScriptVaueType::Vector3:
+			{
+				Vector3 value;
+				fieldInfo->GetValue(spScriptClassInstance->pInstance, &value);
+				ImGui::Text("field name: %s = %3f, %3f, %3f\n",
+							fieldInfo->name.c_str(), value.x, value.y, value.z);
+				break;
+			}
+			default:
+				break;
+			}
+		}
+	}
+	ImGui::End();
 }
 void Scripting::Release()
 {
@@ -442,12 +493,15 @@ bool ScriptClassTypeInfo::ReadClass(MonoImage* _pImage)
 
 	// read methods
 
-	// method：Update
-	updateMethod = std::make_shared<ScriptMethod>(this, "Update");
-	updateMethod->Read();
 	// method：Init
 	initMethod = std::make_shared<ScriptMethod>(this, "Init");
 	initMethod->Read();
+	// method：Update
+	updateMethod = std::make_shared<ScriptMethod>(this, "Update");
+	updateMethod->Read();
+	// method：ImGuiUpdate
+	imguiUpdateMethod = std::make_shared<ScriptMethod>(this, "ImGuiUpdate");
+	imguiUpdateMethod->Read();
 
 	return true;
 }
@@ -522,5 +576,14 @@ bool ScriptClassInstance::InvokeUpdateMethod()
 	}
 
 	return pClassType->updateMethod->Invoke(pInstance, nullptr, nullptr);
+}
+bool ScriptClassInstance::InvokeImGuiUpdateMethod()
+{
+	if (!pInstance || !pClassType || !pClassType->imguiUpdateMethod)
+	{
+		return false;
+	}
+
+	return pClassType->imguiUpdateMethod->Invoke(pInstance, nullptr, nullptr);
 }
 } // namespace Miyadaiku

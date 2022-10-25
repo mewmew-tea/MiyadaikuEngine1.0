@@ -35,9 +35,14 @@ public:
 		return m_subsystemLocator;
 	}
 
+	void* m_editorHWnd = nullptr;
+	int	  m_editorWidth = 1280;
+	int	  m_editorHeight = 720;
+
 private:
 	SubsystemLocator m_subsystemLocator;
 	bool			 m_requestedShutdown = false;
+
 
 private:
 	// コピー禁止

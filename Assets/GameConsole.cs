@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Runtime.CompilerServices;
 
-namespace CSScript
+namespace MiyadaikuEngine
 {
-    internal class GameConsole
+    public  class GameConsole
     {
         [MethodImplAttribute(MethodImplOptions.InternalCall)]
         public extern static void PrintMessage();
@@ -19,5 +19,20 @@ namespace CSScript
         public extern static void SetPosition(float _x, float _y);
         [MethodImplAttribute(MethodImplOptions.InternalCall)]
         public extern static bool GetKey(char c);
+    }
+
+    public class ImGui
+    {
+        [MethodImplAttribute(MethodImplOptions.InternalCall)]
+        public extern static bool Begin(string label);
+        [MethodImplAttribute(MethodImplOptions.InternalCall)]
+        public extern static void End();
+        public static void Text(string format, params object[] ary)
+        {
+            var text = String.Format(format, ary);
+            Text_Internal(text);
+        }
+        [MethodImplAttribute(MethodImplOptions.InternalCall)]
+        public extern static void Text_Internal(string text);
     }
 }

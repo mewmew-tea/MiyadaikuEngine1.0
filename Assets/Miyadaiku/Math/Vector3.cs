@@ -6,7 +6,7 @@ namespace MiyadaikuEngine
     {
         public float x;
         public float y;
-        float z;
+        public float z;
 
         public Vector3(float x, float y, float z)
         {

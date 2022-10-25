@@ -13,8 +13,27 @@
 #include "RHI/D3D11/D3D11_Texture.h"
 #include "RHI/D3D11/D3D11_RenderState.h"
 
+#include <memory>
+
 // TODO: これは取り除く
 #include "../Scripting/Scripting.h"
+
+#include "imgui.h"
+
+#define IMGUI_DEFINE_MATH_OPERATORS
+#define IMGUI_DEFINE_PLACEMENT_NEW
+
+#include "imgui_impl_dx11.h"
+#include "imgui_impl_win32.h"
+#include "imgui_internal.h"
+//#include "imgui_stdlib.h"
+
+//// ImGuizmo
+//#include "ImGuizmo.h"
+//#include "ImSequencer.h"
+//#include "ImZoomSlider.h"
+//#include "ImCurveEdit.h"
+//#include "GraphEditor.h"
 
 
 namespace Miyadaiku
@@ -75,9 +94,61 @@ void Renderer::OnAwake()
 	// Create rasterize state
 	m_spRHIRasterizerState = std::make_shared<D3D11_RasterizerState>(m_spRHIDevice, RS_CullMode::Back, RS_FillMode::Solid);
 
+
+
+	//===================================================================
+	// imgui初期設定
+	//===================================================================
+	// Setup Dear ImGui context
+	IMGUI_CHECKVERSION();
+	ImGui::CreateContext();
+	auto& subsystemLocator = GetEngine()->GetSubsystemLocator();
+	auto mainWindow = std::static_pointer_cast<Window_Windows>(
+		 subsystemLocator.Get<Platform>()->GetMainWindow());
+	auto device = std::static_pointer_cast<D3D11_Device>(
+		m_spRHIDevice);
+
+	ImGuiIO& io = ImGui::GetIO();
+	// Setup Dear ImGui style
+	ImGui::StyleColorsClassic();
+
+	{
+		auto& io = ImGui::GetIO();
+		 io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;           //
+		// Docking有効化 io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;
+		// // マルチビューポート有効化
+	}
+	// Setup Platform/Renderer bindings
+	void* editorHwnd = GetEngine()->m_editorHWnd;
+
+	ImGui_ImplWin32_Init(editorHwnd ? editorHwnd
+									  : mainWindow->GetWindowHandle());
+	ImGui_ImplDX11_Init(device->GetDevice(), device->GetDeviceContext());
+
+	{
+		// 日本語対応
+#include "ja_glyph_ranges.h"
+		ImFontConfig config;
+		//config.MergeMode = true;
+		io.Fonts->AddFontDefault();
+		//std::string fontPath = "c:\\Windows\\Fonts\\msgothic.ttc";
+		//std::string fontPath = "c:\\Windows\\Fonts\\meiryo.ttc";
+		std::string fontPath = ".\\Assets\\EngineResources\\fonts\\GenShinGothic-Monospace-Bold.ttf";
+		// std::string fontPath = ".\\Resources\\Fonts\\ipaexg.ttf";
+		// std::string fontPath = ".\\Resources\\Fonts\\ipag.ttf";
+		auto font = io.Fonts->AddFontFromFileTTF(fontPath.c_str(), 21.0f, &config,
+									 glyphRangesJapanese);
+		io.Fonts->Build();
+		io.FontDefault = font;
+	}
 }
 void Renderer::OnShutdown()
 {
+	// imgui解放
+	ImGui_ImplDX11_Shutdown();
+	ImGui_ImplWin32_Shutdown();
+	ImGui::DestroyContext();
+
 	m_spRHIPixelShader.reset();
 	m_spRHIVertexShader.reset();
 	m_spRHISamplerState.reset();
@@ -235,8 +306,32 @@ void Renderer::Present()
 	//pDevivceContext->ClearDepthStencilView(
 	//	m_spDepthStencilBuffer->DSV(), D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL,
 	//	1, 0);
+	
+	
+    //--------------------------------
+	// ImGui
+	//--------------------------------
+	// begin
+	ImGui_ImplDX11_NewFrame();
+	ImGui_ImplWin32_NewFrame();
+	ImGui::NewFrame();
 
+	// imgui update(script)
+	auto& subsystemLocator = GetEngine()->GetSubsystemLocator();
+	auto  scripting = subsystemLocator.Get<Scripting>();
+	scripting->ImGuiUpdate();
 
+	// ImGui render
+	ImGui::Render();
+	ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
+
+	// Update and Render additional Platform Windows
+	auto& io = ImGui::GetIO();
+	if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
+	{
+		ImGui::UpdatePlatformWindows();
+		ImGui::RenderPlatformWindowsDefault();
+	}
 
 	m_spRHISwapChain->Present();
 }

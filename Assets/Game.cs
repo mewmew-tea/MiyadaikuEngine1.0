@@ -11,7 +11,7 @@ namespace CSScript
 
     }
 
-    public class Game
+    public class Game : MonoBehaviour
     {
         [SerializeField]
         float x = 0f;
@@ -47,6 +47,16 @@ namespace CSScript
             pos.x = x;
             pos.y = y;
             GameConsole.SetPosition(x, y);
+        }
+
+        private void ImGuiUpdate()
+        {
+            if (ImGui.Begin("C# Window"))
+            {
+                ImGui.Text("This is called from C# script.");
+                ImGui.Text($"Pos (Vector3) : {pos.x}, {pos.y}, {pos.z}");
+            }
+            ImGui.End();
         }
     }
 }

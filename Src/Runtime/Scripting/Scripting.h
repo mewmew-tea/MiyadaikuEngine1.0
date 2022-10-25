@@ -5,9 +5,17 @@
 #include <string>
 #include <string_view>
 #include <unordered_map>
+
+
+
+//typedef struct MonoString;
+
 void ScriptingAPI_SetPosition(float _x, float _y);
 float	  ScriptingAPI_GetPositionX();
-float	  ScriptingAPI_GetPositionY();
+float ScriptingAPI_GetPositionY();
+//bool	  ScriptingAPI_ImGui_Begin(MonoString* _label);
+//void	  ScriptingAPI_ImGui_End();
+//void	  ScriptingAPI_ImGui_Text(MonoString* _fmt, ...);
 
 
 
@@ -103,6 +111,7 @@ struct ScriptClassTypeInfo
 
 	std::shared_ptr<ScriptMethod> initMethod;
 	std::shared_ptr<ScriptMethod> updateMethod;
+	std::shared_ptr<ScriptMethod> imguiUpdateMethod;
 };
 
 struct ScriptClassInstance
@@ -113,6 +122,7 @@ struct ScriptClassInstance
 
 	bool InvokeInitMethod();
 	bool InvokeUpdateMethod();
+	bool InvokeImGuiUpdateMethod();
 };
 
 class Scripting final : public Subsystem
@@ -125,7 +135,9 @@ public:
 
 
 	void Update();
+	void ImGuiUpdate();
 	void Release();
+
 
 	void LoadUserAssembly(std::string_view _path);
 

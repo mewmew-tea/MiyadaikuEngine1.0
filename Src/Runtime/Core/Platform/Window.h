@@ -18,7 +18,7 @@ public:
 	}
 
 
-private:
+protected:
 	RectangleI m_rect{0, 0, 1280, 720};
 	bool	   m_isFullscreen = false;
 };

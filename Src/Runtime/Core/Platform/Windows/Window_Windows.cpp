@@ -1,13 +1,26 @@
 ﻿#include "Window_Windows.h"
 #include "../../Engine.h"
 
+#include "imgui.h"
+
+#define IMGUI_DEFINE_MATH_OPERATORS
+#define IMGUI_DEFINE_PLACEMENT_NEW
+// imguiウィンドウメッセージ処理用
+LRESULT ImGui_ImplWin32_WndProcHandler(HWND hWnd, UINT msg, WPARAM wParam,
+									   LPARAM lParam);
+
 #ifdef _WIN32
 
 namespace Miyadaiku
 {
 LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
-
 {
+	// ImGuiにイベント通知
+	if (ImGui_ImplWin32_WndProcHandler(hWnd, message, wParam, lParam))
+	{
+		return true;
+	}
+
 	switch (message)
 	{
 	case WM_COMMAND:
@@ -50,8 +63,30 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	}
 	return 0;
 }
+
+void SetClientSize(int w, int h, HWND _hWnd)
+{
+	RECT rcWnd, rcCli;
+
+	GetWindowRect(_hWnd, &rcWnd);
+	GetClientRect(_hWnd, &rcCli);
+
+	MoveWindow(_hWnd,
+			   rcWnd.left, // X座標
+			   rcWnd.top,  // Y座標
+			   w + (rcWnd.right - rcWnd.left) - (rcCli.right - rcCli.left),
+			   h + (rcWnd.bottom - rcWnd.top) - (rcCli.bottom - rcCli.top),
+			   TRUE);
+}
+
 bool Window_Windows::Create()
 {
+	if (GetEngine()->m_editorHWnd)
+	{
+		m_hWnd = (HWND)GetEngine()->m_editorHWnd;
+		return true;
+	}
+
 
 	m_hInst = (HINSTANCE)::GetModuleHandle(0);
 
@@ -74,8 +109,12 @@ bool Window_Windows::Create()
 
 	m_hWnd =
 		CreateWindow("MiyadaikuEngineApplication", "MiyadaikuEngineApplication",
-					 WS_OVERLAPPEDWINDOW, CW_USEDEFAULT, 0, 1280, 720, nullptr,
+					 WS_OVERLAPPEDWINDOW, CW_USEDEFAULT, 0, m_rect.width,
+					 m_rect.height, nullptr,
 					 nullptr, m_hInst, nullptr);
+
+	// クライアントのサイズを設定
+	SetClientSize(m_rect.width, m_rect.height, m_hWnd);
 
 	ShowWindow(m_hWnd, SW_SHOW);
 

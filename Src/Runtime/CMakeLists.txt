@@ -124,14 +124,36 @@ set(nativeruntime_src
     Scripting/Scripting.cpp
 )
 
+
+set(IMGUI_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/External/imgui)
+set(IMGUI_BACKENDS_DIR ${IMGUI_SOURCE_DIR}/backends)
+set(IMGUI_JA_DIR ${CMAKE_CURRENT_SOURCE_DIR}/External/imgui_ja)
+
+set(imgui_src
+    ${IMGUI_SOURCE_DIR}/imgui_demo.cpp
+    ${IMGUI_SOURCE_DIR}/imgui_draw.cpp
+    ${IMGUI_SOURCE_DIR}/imgui_tables.cpp
+    ${IMGUI_SOURCE_DIR}/imgui.cpp
+    ${IMGUI_SOURCE_DIR}/imgui_widgets.cpp
+    ${IMGUI_BACKENDS_DIR}/imgui_impl_win32.cpp
+    ${IMGUI_BACKENDS_DIR}/imgui_impl_dx11.cpp
+)
+
 # project infos
 add_library(${PROJECT_NAME} STATIC
     ${nativeruntime_h}
     ${nativeruntime_src}
+    ${imgui_src}
 )
 set(files
     ${nativeruntime_h}
     ${nativeruntime_src})
+    
+target_include_directories(${PROJECT_NAME} PRIVATE
+    ${IMGUI_SOURCE_DIR}
+    ${IMGUI_BACKENDS_DIR}
+    ${IMGUI_JA_DIR}
+)
 
 # link external libs
 include_directories(External/mono/Include) 
