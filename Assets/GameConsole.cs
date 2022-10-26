@@ -35,4 +35,15 @@ namespace MiyadaikuEngine
         [MethodImplAttribute(MethodImplOptions.InternalCall)]
         public extern static void Text_Internal(string text);
     }
+
+    public class GuidProvider
+    {
+        public static string NewGuid()
+        {
+            return Guid.NewGuid().ToString("N");
+        }
+
+        
+    }
+
 }

@@ -104,9 +104,11 @@ void ScriptingAPI_ImGui_Text(MonoString* _str)
 
 namespace Miyadaiku
 {
-ScriptClassTypeInfo scriptClassType;
-std::shared_ptr<ScriptClassInstance> spScriptClassInstance;
+std::shared_ptr<ScriptClassTypeInfo> spScriptClassType;
+//std::shared_ptr<ScriptClassInstance> spScriptClassInstance;
 
+ScriptClassTypeInfo guidProviderClassType;
+GameObject			go;
 
 static std::string execute_command(const char* cmd)
 {
@@ -203,17 +205,43 @@ void LoadMonoAssembly()
 	mono_add_internal_call("MiyadaikuEngine.ImGui::Text_Internal",
 						   &ScriptingAPI_ImGui_Text);
 	// read class
-	scriptClassType.name = "Game";
-	scriptClassType.nameSpace = "CSScript";
-	if (scriptClassType.ReadClass(assemblyImage))
+	spScriptClassType = std::make_shared<ScriptClassTypeInfo>();
+	spScriptClassType->name = "Game";
+	spScriptClassType->nameSpace = "CSScript";
+	if (spScriptClassType->ReadClass(assemblyImage))
 	{
-		// create a instance of the class
-		spScriptClassInstance = scriptClassType.CreateInstance(domain);
-		// method：Init
-		spScriptClassInstance->InvokeInitMethod();
-		// method：Update
-		spScriptClassInstance->InvokeUpdateMethod();
+		//// create a instance of the class
+		//spScriptClassInstance = scriptClassType.CreateInstance(domain);
+		//// method：Init
+		//spScriptClassInstance->InvokeInitMethod();
+		//// method：Update
+		//spScriptClassInstance->InvokeUpdateMethod();
+
+		go.AddComponent(spScriptClassType);
+		go.Init();
 	}
+
+	// guid provider
+	guidProviderClassType.name = "GuidProvider";
+	guidProviderClassType.nameSpace = "MiyadaikuEngine";
+	if (guidProviderClassType.ReadClass(assemblyImage))
+	{
+		ScriptMethod guidProviderMethod_NewGuid(&guidProviderClassType, "NewGuid");
+		if (guidProviderMethod_NewGuid.Read())
+		{
+			MonoObject* ret = nullptr;
+			guidProviderMethod_NewGuid.Invoke(nullptr, nullptr, &ret);
+			std::string name = mono_type_get_name(mono_class_get_type(mono_object_get_class(ret)));
+			std::cout << name << std::endl;
+
+
+			MonoString* str = nullptr;
+			str = (MonoString*)ret;
+			std::string guid = mono_string_to_utf8(str);
+			std::cout << guid << std::endl;
+		}
+	}
+
 
 	//
 	// if (rootDomain)
@@ -296,43 +324,44 @@ void Scripting::OnShutdown()
 void Scripting::Update()
 {
 	//scriptClassType.updateMethod->Invoke(nullptr, nullptr, nullptr);
-	spScriptClassInstance->InvokeUpdateMethod();
+	//spScriptClassInstance->InvokeUpdateMethod();
+	go.Update();
 }
 void Scripting::ImGuiUpdate()
 {
-	spScriptClassInstance->InvokeImGuiUpdateMethod();
-	if (ImGui::Begin("C# Scripting Debug"))
-	{
-		if (ImGui::Button("Reload script"))
-		{
-		}
+	go.ImGuiUpdate();
+	//if (ImGui::Begin("C# Scripting Debug"))
+	//{
+	//	if (ImGui::Button("Reload script"))
+	//	{
+	//	}
 
-		for (auto& fieldInfo : spScriptClassInstance->pClassType->spFieldInfos)
-		{
-			switch (fieldInfo->type)
-			{
-			case ScriptVaueType::Float:
-			{
-				float value = 0;
-				fieldInfo->GetValue(spScriptClassInstance->pInstance, &value);
-				ImGui::Text("field name: %s = %3f\n", fieldInfo->name.c_str(),
-							value);
-				break;
-			}
-			case ScriptVaueType::Vector3:
-			{
-				Vector3 value;
-				fieldInfo->GetValue(spScriptClassInstance->pInstance, &value);
-				ImGui::Text("field name: %s = %3f, %3f, %3f\n",
-							fieldInfo->name.c_str(), value.x, value.y, value.z);
-				break;
-			}
-			default:
-				break;
-			}
-		}
-	}
-	ImGui::End();
+	//	for (auto& fieldInfo : spScriptClassInstance->pClassType->spFieldInfos)
+	//	{
+	//		switch (fieldInfo->type)
+	//		{
+	//		case ScriptVaueType::Float:
+	//		{
+	//			float value = 0;
+	//			fieldInfo->GetValue(spScriptClassInstance->pInstance, &value);
+	//			ImGui::Text("field name: %s = %3f\n", fieldInfo->name.c_str(),
+	//						value);
+	//			break;
+	//		}
+	//		case ScriptVaueType::Vector3:
+	//		{
+	//			Vector3 value;
+	//			fieldInfo->GetValue(spScriptClassInstance->pInstance, &value);
+	//			ImGui::Text("field name: %s = %3f, %3f, %3f\n",
+	//						fieldInfo->name.c_str(), value.x, value.y, value.z);
+	//			break;
+	//		}
+	//		default:
+	//			break;
+	//		}
+	//	}
+	//}
+	//ImGui::End();
 }
 void Scripting::Release()
 {
@@ -363,7 +392,7 @@ bool ScriptMethod::Read()
 	pMethodDesc = mono_method_desc_new(methodName.c_str(), false);
 	if (!pMethodDesc)
 	{
-		MessageBoxA(NULL, "", "Faild loading method desc.", MB_OK);
+		//MessageBoxA(NULL, "", "Faild loading method desc.", MB_OK);
 		return false;
 	}
 
@@ -371,7 +400,7 @@ bool ScriptMethod::Read()
 		pMethodDesc, pClassType->pMonoClass);
 	if (!pMethod)
 	{
-		MessageBoxA(NULL, "", "Faild loading method.", MB_OK);
+		//MessageBoxA(NULL, "", "Faild loading method.", MB_OK);
 		return false;
 	}
 
@@ -405,7 +434,7 @@ void ScriptFieldInfo::GetValue(MonoObject* _pInstance, void* _pOutValue)
 	}
 
 	MonoType*	type = mono_field_get_type(pField);
-	mono_field_get_value(spScriptClassInstance->pInstance, pField, _pOutValue);
+	mono_field_get_value(_pInstance, pField, _pOutValue);
 }
 
 //==============================================
@@ -467,6 +496,7 @@ bool ScriptClassTypeInfo::ReadClass(MonoImage* _pImage)
 		{
 			spFieldInfo->type = ScriptVaueType::Other;
 		}
+		
 
 		// get attributes
 		MonoClass*			parentClass = mono_field_get_parent(field);
@@ -541,7 +571,7 @@ bool ScriptMethod::Invoke(void* _instance, void** _params, MonoObject** _ret)
 	{
 		MonoString* exString = mono_object_to_string(ptrExObject, nullptr);
 		const char* exCString = mono_string_to_utf8(exString);
-		MessageBoxA(NULL, exCString, "Mono Invoke issue", MB_OK | MB_ICONERROR);
+		//MessageBoxA(NULL, exCString, "Mono Invoke issue", MB_OK | MB_ICONERROR);
 		return false;
 	}
 
@@ -585,5 +615,42 @@ bool ScriptClassInstance::InvokeImGuiUpdateMethod()
 	}
 
 	return pClassType->imguiUpdateMethod->Invoke(pInstance, nullptr, nullptr);
+}
+void GameObject::AddComponent(std::shared_ptr<ScriptClassTypeInfo>& _spComp)
+{
+	auto spCompInst = _spComp->CreateInstance(domain);
+	if (spCompInst)
+	{
+		m_spComponents.push_back(spCompInst);
+		if (spCompInst->pClassType->initMethod)
+		{
+			m_spInitMethodComponents.push_back(spCompInst);
+		}
+		if (spCompInst->pClassType->updateMethod)
+		{
+			m_spUpdateMethodComponents.push_back(spCompInst);
+		}
+	}
+}
+void GameObject::Init()
+{
+	for (auto spMethod : m_spInitMethodComponents)
+	{
+		spMethod->InvokeInitMethod();
+	}
+}
+void GameObject::Update()
+{
+	for (auto spMethod : m_spUpdateMethodComponents)
+	{
+		spMethod->InvokeUpdateMethod();
+	}
+}
+void GameObject::ImGuiUpdate()
+{
+	for (auto spMethod : m_spUpdateMethodComponents)
+	{
+		spMethod->InvokeImGuiUpdateMethod();
+	}
 }
 } // namespace Miyadaiku

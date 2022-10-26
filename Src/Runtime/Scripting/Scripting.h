@@ -6,21 +6,17 @@
 #include <string_view>
 #include <unordered_map>
 
+// typedef struct MonoString;
 
-
-//typedef struct MonoString;
-
-void ScriptingAPI_SetPosition(float _x, float _y);
-float	  ScriptingAPI_GetPositionX();
+void  ScriptingAPI_SetPosition(float _x, float _y);
+float ScriptingAPI_GetPositionX();
 float ScriptingAPI_GetPositionY();
-//bool	  ScriptingAPI_ImGui_Begin(MonoString* _label);
-//void	  ScriptingAPI_ImGui_End();
-//void	  ScriptingAPI_ImGui_Text(MonoString* _fmt, ...);
+// bool	  ScriptingAPI_ImGui_Begin(MonoString* _label);
+// void	  ScriptingAPI_ImGui_End();
+// void	  ScriptingAPI_ImGui_Text(MonoString* _fmt, ...);
 
-
-
-typedef struct _MonoClass  MonoClass;
-typedef struct _MonoImage  MonoImage;
+typedef struct _MonoClass	  MonoClass;
+typedef struct _MonoImage	  MonoImage;
 typedef struct MonoMethodDesc MonoMethodDesc;
 typedef struct _MonoMethod	  MonoMethod;
 
@@ -29,19 +25,18 @@ typedef struct _MonoObject MonoObject;
 typedef struct _MonoDomain	MonoDomain;
 typedef struct _MonoJitInfo MonoJitInfo;
 
-
 typedef struct MonoVTable MonoVTable;
 
 typedef struct _MonoClassField MonoClassField;
 typedef struct _MonoProperty   MonoProperty;
 typedef struct _MonoEvent	   MonoEvent;
-//struct MonoClass;
-//struct MonoMethodDesc;
-//struct MonoMethod;
+// struct MonoClass;
+// struct MonoMethodDesc;
+// struct MonoMethod;
 //
-//struct MonoDomain;
-//struct MonoAssembly;
-//struct MonoObject;
+// struct MonoDomain;
+// struct MonoAssembly;
+// struct MonoObject;
 
 namespace Miyadaiku
 {
@@ -56,11 +51,11 @@ struct ScriptMethod
 
 	bool Invoke(void* _instance, void** _params, MonoObject** _ret);
 
-	std::string		 name = "";
-	bool			 isRead = false;
+	std::string			 name = "";
+	bool				 isRead = false;
 	ScriptClassTypeInfo* pClassType = nullptr;
-	MonoMethod*		 pMethod = nullptr;
-	MonoMethodDesc*	 pMethodDesc = nullptr;
+	MonoMethod*			 pMethod = nullptr;
+	MonoMethodDesc*		 pMethodDesc = nullptr;
 };
 
 enum class ScriptVaueType : uint16_t
@@ -78,7 +73,6 @@ enum class ScriptVaueType : uint16_t
 	// unsupported types
 	Other = UINT16_MAX,
 };
-
 
 struct ScriptFieldInfo
 {
@@ -98,9 +92,9 @@ struct ScriptFieldInfo
 struct ScriptClassTypeInfo
 {
 	bool ReadClass(MonoImage* _pImage);
-	
+
 	std::shared_ptr<ScriptClassInstance> CreateInstance(MonoDomain* _pDomain);
-	
+
 	std::string name = "";
 	std::string nameSpace = "";
 	bool		isRead = false;
@@ -125,6 +119,37 @@ struct ScriptClassInstance
 	bool InvokeImGuiUpdateMethod();
 };
 
+class GameObject
+{
+public:
+	void AddComponent(std::shared_ptr<ScriptClassTypeInfo>& _spComp);
+	void Init();
+	void Update();
+	void ImGuiUpdate();
+
+private:
+	/**
+	 * @brief components attached this gameobject.
+	 */
+	std::list<std::shared_ptr<ScriptClassInstance>> m_spComponents;
+
+	/**
+	 * @brief Components attached to this gameobjects with an Init method.
+	 */
+	std::list<std::shared_ptr<ScriptClassInstance>> m_spInitMethodComponents;
+
+	/**
+	 * @brief Components attached to this gameobjects with an Update method.
+	 */
+	std::list<std::shared_ptr<ScriptClassInstance>> m_spUpdateMethodComponents;
+
+	/**
+	 * @brief Components attached to this gameobjects with an ImGuiUpdate method.
+	 */
+	std::list<std::shared_ptr<ScriptClassInstance>>
+		m_spImGuiUpdateMethodComponents;
+};
+
 class Scripting final : public Subsystem
 {
 public:
@@ -133,17 +158,15 @@ public:
 	// Subsystem除外時
 	void OnShutdown() override;
 
-
 	void Update();
 	void ImGuiUpdate();
 	void Release();
-
 
 	void LoadUserAssembly(std::string_view _path);
 
 private:
 	std::list<std::shared_ptr<ScriptClassTypeInfo>> m_spScriptClasses;
 
-	//ScriptClassTypeInfo m_serializeFieldAttribute;
+	// ScriptClassTypeInfo m_serializeFieldAttribute;
 };
 } // namespace Miyadaiku
