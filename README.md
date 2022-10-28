@@ -1,4 +1,4 @@
-<!-- ![build and test workflow](https://github.com/mewmew-tea/MiyadaikuEngine1.0/actions/workflows/build.yml/badge.svg) -->
+![build and test workflow](https://github.com/mewmew-tea/MiyadaikuEngine1.0/actions/workflows/build.yml/badge.svg)
 # MiyadaikuEngine1.0
 
 > **Note**
@@ -58,6 +58,8 @@ cmake --build　build/
 # 特徴
 
 - RHI(Render Hardware Interface)層を含む、マルチプラットフォームを見据えたレンダラ設計
+- C#スクリプトシステム（mono）
+- 別プロセスとして分離され、TCP/IPでプロセス間通信をするRuntime(Application)とEditor
 
 # ロードマップ
 
@@ -70,15 +72,16 @@ https://trello.com/b/jDuAlxcO -->
 |  項目名  |  進捗度  | 概要 |
 | ---- | ---- | ---- |
 |  エンジンコア  |  70%  | プラットフォーム機能、ファイルシステムなど  |
-|  算術ライブラリ  |  90%  | C++のNaitiveRuntimeに含まれます。  |
+|  算術ライブラリ(C++)  |  90%  | C++のNaitiveRuntimeに含まれます。  |
+|  算術ライブラリ(C# script)  |  50%  | C#のScript用。  |
 |  D3D11レンダラ  |  20%  | C++(Win32API)  |
 |  D3D12レンダラ  |  0%  | 低優先度。C++(Win32API)で実装予定。  |
-|  C#スクリプトシステム  |  30%  | Monoを用いて実装予定。  |
-|  WPFによるエディタGUI  |  5%  |   |
+|  C#スクリプトシステム  |  35%  | Monoを用いて実装予定。  |
+|  WPFによるエディタGUI  |  10%  |   |
 | アセットシステム | 0% |  |
 | オーディオ(XAudio) | 0% |  |
 |  物理,コリジョン  |  0%  | PhysX採用？  |
-|  Dear ImGui, ImGuizmo  |  0%  | デバッグ、仮のマニピュレータとして使用予定。  |
+|  Dear ImGui, ImGuizmo  |  75%  | ImGui：おもにユーザー用、ImGuizmo：マニピュレータとして使用予定。  |
 | 3Dモデル読み込み | 0% | Assimpを使用予定。|
 
 
