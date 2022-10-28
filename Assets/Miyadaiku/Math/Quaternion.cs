@@ -69,14 +69,6 @@ namespace MiyadaikuEngine
 		// Constants
 		public static readonly Quaternion Identity = new Quaternion(0f, 0f, 0f, 1f);
 
-		// PI
-		private static readonly float PI = 3.141592654f;
-		// PI * 2
-		private static readonly float PI2 = 6.283185307f;
-		// PI / 2
-		private static readonly float PIDiv2 = 0.159154943f;
-
-
 		public Quaternion Invert()
 		{
 
@@ -91,14 +83,14 @@ namespace MiyadaikuEngine
 			if (sx < -0.9999f)
 			{
 				return new Vector3(
-					-PIDiv2, 0.0f,
+					-Mathf.PIDiv2, 0.0f,
 					-(float)Math.Atan2(2.0f * (x * z - w * y), 1.0f - 2.0f * (y * y + z * z))
 						);
 			}
 			if (sx > 0.9999f)
 			{
 				return new Vector3(
-					PIDiv2, 0.0f,
+					Mathf.PIDiv2, 0.0f,
 					(float)Math.Atan2(2.0f * (x * z - w * y), 1.0f - 2.0f * (y * y + z * z)));
 			}
 
