@@ -20,6 +20,8 @@ typedef struct _MonoImage	  MonoImage;
 typedef struct MonoMethodDesc MonoMethodDesc;
 typedef struct _MonoMethod	  MonoMethod;
 
+typedef struct _MonoType MonoType;
+
 typedef struct _MonoObject MonoObject;
 
 typedef struct _MonoDomain	MonoDomain;
@@ -163,6 +165,9 @@ public:
 	void Release();
 
 	void LoadUserAssembly(std::string_view _path);
+
+	// MonoType to ScriptVaueType
+	static ScriptVaueType ConvertTypeMonoToRuntime(MonoType* _pMonoType);
 
 private:
 	std::list<std::shared_ptr<ScriptClassTypeInfo>> m_spScriptClasses;

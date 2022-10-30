@@ -408,6 +408,37 @@ bool ScriptMethod::Read()
 	return true;
 }
 
+ScriptVaueType Scripting::ConvertTypeMonoToRuntime(MonoType* _pMonoType)
+{
+	std::string typeName = mono_type_get_name(_pMonoType);
+	if (typeName == "System.Int32")
+	{
+		return ScriptVaueType::Int;
+	}
+	else if (typeName == "System.Single")
+	{
+		return ScriptVaueType::Float;
+	}
+	else if (typeName == "System.Boolean")
+	{
+		return ScriptVaueType::Bool;
+	}
+	else if (typeName == "System.String")
+	{
+		return ScriptVaueType::String;
+	}
+	else if (typeName == "MiyadaikuEngine.Vector3")
+	{
+		return ScriptVaueType::Vector3;
+	}
+	// unsupported types
+	else
+	{
+		return ScriptVaueType::Other;
+	}
+}
+
+
 //==============================================
 // ScriptFieldInfo
 //==============================================
@@ -470,33 +501,7 @@ bool ScriptClassTypeInfo::ReadClass(MonoImage* _pImage)
 		
 		// jugde type
 		MonoType* pMonoType = mono_field_get_type(field);
-		std::string typeName = mono_type_get_name(pMonoType);
-		if (typeName == "System.Int32")
-		{
-			spFieldInfo->type = ScriptVaueType::Int;
-		}
-		else if (typeName == "System.Single")
-		{
-			spFieldInfo->type = ScriptVaueType::Float;
-		}
-		else if (typeName == "System.Boolean")
-		{
-			spFieldInfo->type = ScriptVaueType::Bool;
-		}
-		else if (typeName == "System.String")
-		{
-			spFieldInfo->type = ScriptVaueType::String;
-		}
-		else if (typeName == "MiyadaikuEngine.Vector3")
-		{
-			spFieldInfo->type = ScriptVaueType::Vector3;
-		}
-		// unsupported types
-		else
-		{
-			spFieldInfo->type = ScriptVaueType::Other;
-		}
-		
+		spFieldInfo->type = Scripting::ConvertTypeMonoToRuntime(pMonoType);
 
 		// get attributes
 		MonoClass*			parentClass = mono_field_get_parent(field);
