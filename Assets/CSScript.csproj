@@ -82,6 +82,7 @@
     <Compile Include="Miyadaiku\Math\Matrix.cs" />
     <Compile Include="Miyadaiku\Math\Quaternion.cs" />
     <Compile Include="Miyadaiku\Math\Vector3.cs" />
+    <Compile Include="Miyadaiku\Transform.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
