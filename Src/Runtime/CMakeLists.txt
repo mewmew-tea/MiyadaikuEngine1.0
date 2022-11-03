@@ -126,7 +126,10 @@ set(nativeruntime_src
     Scripting/Scripting.cpp
 )
 
+# nlohmann json
+set(NLOHMANN_JSON_DIR ${CMAKE_CURRENT_SOURCE_DIR}/External/json/single_include)
 
+# dear imgui
 set(IMGUI_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/External/imgui)
 set(IMGUI_BACKENDS_DIR ${IMGUI_SOURCE_DIR}/backends)
 set(IMGUI_JA_DIR ${CMAKE_CURRENT_SOURCE_DIR}/External/imgui_ja)

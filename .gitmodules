@@ -13,3 +13,6 @@
 [submodule "Src/Runtime/External/ImGuizmo"]
 	path = Src/Runtime/External/ImGuizmo
 	url = https://github.com/CedricGuillemet/ImGuizmo.git
+[submodule "Src/Runtime/External/json"]
+	path = Src/Runtime/External/json
+	url = https://github.com/nlohmann/json.git
