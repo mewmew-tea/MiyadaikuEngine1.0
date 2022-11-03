@@ -34,8 +34,8 @@ public:
 		{
 			return;
 		}
-		spSubsystem->OnAwake();
 		m_subsystems[typeid(T).hash_code()] = spSubsystem;
+		spSubsystem->OnAwake();
 	}
 
 	template <class T> std::shared_ptr<T> Get()

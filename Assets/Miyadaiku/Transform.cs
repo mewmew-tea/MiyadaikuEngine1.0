@@ -7,10 +7,10 @@ using System.Threading.Tasks;
 namespace MiyadaikuEngine
 {
     // TODO this should be Hierarchical
-    public class Transform
+    public class Transform : MonoBehaviour
     {
-        public Vector3 Positon { get { return LocalPositon; } set { LocalPositon = value; } }
-        public Vector3 LocalPositon { get; set; } = new Vector3();
+        public Vector3 Position { get { return LocalPosition; } set { LocalPosition = value; } }
+        public Vector3 LocalPosition { get; set; } = new Vector3();
 
         public Quaternion Rotation { get { return LocalRotation; } set { LocalRotation = value; } }
         public Quaternion LocalRotation { get; set; } = Quaternion.Identity;
@@ -36,7 +36,7 @@ namespace MiyadaikuEngine
                 Matrix m = Matrix.Identity;
                 m *= Matrix.CreateScale(Scale);
                 m *= Matrix.CreateFromQuaternion(Rotation);
-                m *= Matrix.CreateTranslation(Positon);
+                m *= Matrix.CreateTranslation(Position);
                 return m;
             }
             set { WorldMatrix = value; }

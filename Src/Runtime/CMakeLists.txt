@@ -18,6 +18,7 @@ file(GLOB nativeruntime_h
     Core/Engine.h
     Core/Application.h
     Core/Subsystem.h
+    Core/Object/Object.h
     
     # Math
     Core/Math/Math.h
@@ -74,6 +75,7 @@ set(nativeruntime_src
     Core/Engine.cpp
     Core/Application.cpp
     Core/Subsystem.cpp
+    Core/Object/Object.cpp
     # Math
     Core/Math/Math.cpp
 

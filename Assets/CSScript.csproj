@@ -78,10 +78,16 @@
     <Compile Include="Class1.cs" />
     <Compile Include="Game.cs" />
     <Compile Include="GameConsole.cs" />
+    <Compile Include="Miyadaiku\Attributes\SerializeFieldAttribute.cs" />
+    <Compile Include="Miyadaiku\Component.cs" />
+    <Compile Include="Miyadaiku\GameObject.cs" />
     <Compile Include="Miyadaiku\Math\Mathf.cs" />
     <Compile Include="Miyadaiku\Math\Matrix.cs" />
     <Compile Include="Miyadaiku\Math\Quaternion.cs" />
     <Compile Include="Miyadaiku\Math\Vector3.cs" />
+    <Compile Include="Miyadaiku\Object.cs" />
+    <Compile Include="Miyadaiku\Renderable.cs" />
+    <Compile Include="Miyadaiku\Sprite.cs" />
     <Compile Include="Miyadaiku\Transform.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

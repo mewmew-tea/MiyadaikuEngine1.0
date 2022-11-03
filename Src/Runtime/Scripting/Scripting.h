@@ -1,6 +1,7 @@
 ﻿#pragma once
 
 #include "../Core/Subsystem.h"
+#include "../Core/Object/Object.h"
 
 #include <string>
 #include <string_view>
@@ -16,6 +17,7 @@ float ScriptingAPI_GetPositionY();
 // void	  ScriptingAPI_ImGui_Text(MonoString* _fmt, ...);
 
 typedef struct _MonoClass	  MonoClass;
+typedef struct _MonoAssembly  MonoAssembly;
 typedef struct _MonoImage	  MonoImage;
 typedef struct MonoMethodDesc MonoMethodDesc;
 typedef struct _MonoMethod	  MonoMethod;
@@ -43,12 +45,10 @@ typedef struct _MonoEvent	   MonoEvent;
 namespace Miyadaiku
 {
 struct ScriptClassTypeInfo;
-struct ScriptClassInstance;
+class ScriptClassInstance;
 
 struct ScriptMethod
 {
-	ScriptMethod(ScriptClassTypeInfo* _pClassType, std::string_view _name);
-
 	bool Read();
 
 	bool Invoke(void* _instance, void** _params, MonoObject** _ret);
@@ -60,7 +60,7 @@ struct ScriptMethod
 	MonoMethodDesc*		 pMethodDesc = nullptr;
 };
 
-enum class ScriptVaueType : uint16_t
+enum class ScriptValueType : uint16_t
 {
 	// built-in types
 	Int = 0,
@@ -84,7 +84,30 @@ struct ScriptFieldInfo
 
 	MonoClassField* pField = nullptr;
 	// TODO judge the type
-	ScriptVaueType	type = ScriptVaueType::Other;
+	ScriptValueType	type = ScriptValueType::Other;
+	MonoType*		pMonoType = nullptr;
+
+
+	bool IsStatic();
+	void SetValue(MonoObject* _pInstance, void* _pValue);
+	void GetValue(MonoObject* _pInstance, void* _pOutValue);
+};
+
+struct ScriptPropertyInfo
+{
+	std::string name = "";
+
+	bool isSerializeField = false;
+
+	// the class about property
+	MonoProperty*  pProp;
+	// get method of this property
+	MonoMethod*	   pGetMethod = nullptr;
+	// set method of this property
+	MonoMethod*	   pSetMethod = nullptr;
+	// TODO judge the type
+	ScriptValueType type = ScriptValueType::Other;
+	MonoType*	   pMonoType = nullptr;
 
 	bool IsStatic();
 	void SetValue(MonoObject* _pInstance, void* _pValue);
@@ -99,57 +122,41 @@ struct ScriptClassTypeInfo
 
 	std::string name = "";
 	std::string nameSpace = "";
+	//std::string guid = "";
 	bool		isRead = false;
 	bool		isComponent = false;
 	MonoClass*	pMonoClass = nullptr;
 
 	std::vector<std::shared_ptr<ScriptFieldInfo>> spFieldInfos;
+	std::vector<std::shared_ptr<ScriptPropertyInfo>> spPropertyInfos;
 
 	std::shared_ptr<ScriptMethod> initMethod;
 	std::shared_ptr<ScriptMethod> updateMethod;
 	std::shared_ptr<ScriptMethod> imguiUpdateMethod;
 };
 
-struct ScriptClassInstance
+class ScriptClassInstance
 {
+public:
 	ScriptClassInstance(MonoObject* _pInst, ScriptClassTypeInfo* _pClassType);
-	MonoObject*			 pInstance = nullptr;
-	ScriptClassTypeInfo* pClassType = nullptr;
+	MonoObject*			 m_pInstance = nullptr;
+	ScriptClassTypeInfo* m_pClassType = nullptr;
 
 	bool InvokeInitMethod();
 	bool InvokeUpdateMethod();
 	bool InvokeImGuiUpdateMethod();
 };
-
-class GameObject
+class Component : public Object
 {
 public:
-	void AddComponent(std::shared_ptr<ScriptClassTypeInfo>& _spComp);
-	void Init();
-	void Update();
-	void ImGuiUpdate();
+	static void SetUpInternalCall();
 
-private:
-	/**
-	 * @brief components attached this gameobject.
-	 */
-	std::list<std::shared_ptr<ScriptClassInstance>> m_spComponents;
+	std::shared_ptr<GameObject> m_spOwner;
 
-	/**
-	 * @brief Components attached to this gameobjects with an Init method.
-	 */
-	std::list<std::shared_ptr<ScriptClassInstance>> m_spInitMethodComponents;
+	friend GameObject;
+	friend Scripting;
 
-	/**
-	 * @brief Components attached to this gameobjects with an Update method.
-	 */
-	std::list<std::shared_ptr<ScriptClassInstance>> m_spUpdateMethodComponents;
-
-	/**
-	 * @brief Components attached to this gameobjects with an ImGuiUpdate method.
-	 */
-	std::list<std::shared_ptr<ScriptClassInstance>>
-		m_spImGuiUpdateMethodComponents;
+	static MonoObject* Internal_GetGameObject(Component* _chachedPtr);
 };
 
 class Scripting final : public Subsystem
@@ -167,11 +174,44 @@ public:
 	void LoadUserAssembly(std::string_view _path);
 
 	// MonoType to ScriptVaueType
-	static ScriptVaueType ConvertTypeMonoToRuntime(MonoType* _pMonoType);
+	static ScriptValueType ConvertTypeMonoToRuntime(MonoType* _pMonoType);
+
+	static unsigned int GetSizeFromValueType(ScriptValueType _type);
+
+	std::string GenerateGUID();
+
+	MonoDomain* GetMonoDomain();
+
+	std::list<std::shared_ptr<GameObject>>& GetGameObjects();
+	std::shared_ptr<GameObject>				CreateGameObject();
+
+
+	//GameObject			go;
+
 
 private:
 	std::list<std::shared_ptr<ScriptClassTypeInfo>> m_spScriptClasses;
+	std::shared_ptr<ScriptClassTypeInfo>			m_spGameObjectTypeInfo;
+	std::shared_ptr<ScriptClassTypeInfo>			m_spTransformTypeInfo;
+	std::list<std::shared_ptr<GameObject>> m_spGameObjects;
 
+	void LoadMonoAssembly();
+
+	bool DestoryDomainWithAssisisatedAssembly(MonoDomain* domain_to_destroy);
+	void ReleaseMonoAssembly();
+
+	
+
+
+	MonoImage* assemblyImage = nullptr;
+
+	MonoDomain*	  domain = nullptr;
+	MonoDomain*	  rootDomain = nullptr;
+	MonoAssembly* assembly = nullptr;
+
+	
+	ScriptClassTypeInfo guidProviderClassType;
+	ScriptMethod		guidProviderMethod_NewGuid;
 	// ScriptClassTypeInfo m_serializeFieldAttribute;
 };
 } // namespace Miyadaiku

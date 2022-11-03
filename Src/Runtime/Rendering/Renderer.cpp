@@ -14,8 +14,11 @@
 #include "RHI/D3D11/D3D11_RenderState.h"
 
 #include <memory>
+#include <iostream>
 
 // TODO: これは取り除く
+#include <mono/metadata/object.h>
+
 #include "../Scripting/Scripting.h"
 
 #include "imgui.h"
@@ -270,38 +273,61 @@ void Renderer::Present()
 	//vertex.push_back(TestVertex({1, 0, 0}, {1, 1}, 0xFFFFFFFF));
 	//vertex.push_back(TestVertex({1, 1, 0}, {1, 0}, 0xFFFFFFFF));
 
-	Vector2 pos = {ScriptingAPI_GetPositionX(), ScriptingAPI_GetPositionY()};
-	pos /= 4.0f;
+	//Vector3 pos = {ScriptingAPI_GetPositionX(), ScriptingAPI_GetPositionY(), 0};
+	//pos /= 4.0f;
+	//Vector3 pos;
+	auto spScripting = GetEngine()->GetSubsystemLocator().Get<Scripting>();
+	
+	for (auto go : spScripting->GetGameObjects())
+	{
+		Vector3 pos;
+		auto	transform = go->GetTransform();
+		for (auto spProp : transform->GetClassInstance()->m_pClassType->spPropertyInfos)
+		{
+			if (spProp->name == "Position")
+			{
+				Vector3 ret;
+				spProp->GetValue(
+					transform->GetClassInstance()->m_pInstance, &ret);
+				//if (ret != nullptr)
+				{
+					pos = ret;
+					//std::cout << pos.x << ", " << pos.y << std::endl;
+				}
+				break;
+			}
+		}
+		vertex.clear();
+		vertex.push_back(TestVertex({pos.x + 0, pos.y + 0, 0}, {0, 1}, 0xFFFFFFFF));
+		vertex.push_back(TestVertex({pos.x + 0, pos.y + 1, 0}, {0, 0}, 0xFFFFFFFF));
+		vertex.push_back(TestVertex({pos.x + 1, pos.y + 0, 0}, {1, 1}, 0xFFFFFFFF));
+		vertex.push_back(TestVertex({pos.x + 1, pos.y + 1, 0}, {1, 0}, 0xFFFFFFFF));
 
-	vertex.push_back(TestVertex({pos.x + 0, pos.y + 0, 0}, {0, 1}, 0xFFFFFFFF));
-	vertex.push_back(TestVertex({pos.x + 0, pos.y + 1, 0}, {0, 0}, 0xFFFFFFFF));
-	vertex.push_back(TestVertex({pos.x + 1, pos.y + 0, 0}, {1, 1}, 0xFFFFFFFF));
-	vertex.push_back(TestVertex({pos.x + 1, pos.y + 1, 0}, {1, 0}, 0xFFFFFFFF));
 
+		D3D11_BUFFER_DESC desc = {};
+		desc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
+		desc.ByteWidth = sizeof(TestVertex) * (UINT)vertex.size();
+		desc.Usage = D3D11_USAGE_DYNAMIC;
+		desc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
 
-	D3D11_BUFFER_DESC desc = {};
-	desc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
-	desc.ByteWidth = sizeof(TestVertex) * (UINT)vertex.size();
-	desc.Usage = D3D11_USAGE_DYNAMIC;
-	desc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
+		D3D11_SUBRESOURCE_DATA data = {};
+		data.pSysMem = &vertex[0];
 
-	D3D11_SUBRESOURCE_DATA data = {};
-	data.pSysMem = &vertex[0];
+		HRESULT hr =
+			pDevivce->CreateBuffer(&desc, &vertex[0] ? &data : nullptr, &pBuffer);
 
-	HRESULT hr =
-		pDevivce->CreateBuffer(&desc, &vertex[0] ? &data : nullptr, &pBuffer);
+		//// 頂点リストの並び順
+		pDevivceContext->IASetPrimitiveTopology(
+			D3D_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP);
 
-	//// 頂点リストの並び順
-	pDevivceContext->IASetPrimitiveTopology(
-		D3D_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP);
-
-	// GPUへ転送・描画
-	UINT offset = 0;
-	pDevivceContext->IASetVertexBuffers(0, 1, &pBuffer, &oneSize, &offset);
-	//pDevivceContext->Draw((UINT)vertex.size(), 0);
-	//pDevivceContext->DrawInstanced((UINT)vertex.size(), 1, 0, 0);
-	m_spRHIComandList->Draw((uint16_t)vertex.size(), 0);
-	pBuffer->Release();
+		// GPUへ転送・描画
+		UINT offset = 0;
+		pDevivceContext->IASetVertexBuffers(0, 1, &pBuffer, &oneSize, &offset);
+		//pDevivceContext->Draw((UINT)vertex.size(), 0);
+		//pDevivceContext->DrawInstanced((UINT)vertex.size(), 1, 0, 0);
+		m_spRHIComandList->Draw((uint16_t)vertex.size(), 0);
+		pBuffer->Release();
+	}
 
 	//pDevivceContext->ClearDepthStencilView(
 	//	m_spDepthStencilBuffer->DSV(), D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL,

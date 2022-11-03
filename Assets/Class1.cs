@@ -19,10 +19,6 @@ namespace CSScript
 
     }
 
-    public class MonoBehaviour
-    {
-
-    }
 
     public class CSClass : MonoBehaviour
     {
@@ -45,19 +41,19 @@ namespace CSScript
             //DefaultTraceListener.Write("aaaa");
             //System.Diagnostics.Debug.Flush();
 
-            game.Update();
+            //game.Update();
             //GameConsole.DebugOutStringLineToVS("aaaaa Omoshire~~~~~!!!");
             //GameConsole.DebugOutStringLineToVS("じゃぱねせは…？日本語は？");
 
             return;
-            PrintMessage();
-            Console.WriteLine("=======================================");
-            //Encoding e = Encoding.GetEncoding("shift_jis");
+            //PrintMessage();
+            //Console.WriteLine("=======================================");
+            ////Encoding e = Encoding.GetEncoding("shift_jis");
 
-            //var sjis = Encoding.GetEncoding("shift_jis");
-            //Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
-            Console.WriteLine("************ End of a C# script...(;_;) ************");
-            Console.WriteLine("=======================================");
+            ////var sjis = Encoding.GetEncoding("shift_jis");
+            ////Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
+            //Console.WriteLine("************ End of a C# script...(;_;) ************");
+            //Console.WriteLine("=======================================");
         }
 
         public static void PrintMessage()
