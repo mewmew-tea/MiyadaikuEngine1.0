@@ -25,6 +25,11 @@ ScriptClassInstance::ScriptClassInstance(MonoObject*		  _pInst,
 	m_pClassType = _pClassType;
 }
 
+ScriptClassInstance::~ScriptClassInstance()
+{
+	FreeManagedHandle();
+}
+
 bool ScriptClassInstance::InvokeInitMethod()
 {
 	if (!m_pInstance || !m_pClassType || !m_pClassType->initMethod)
@@ -53,6 +58,17 @@ bool ScriptClassInstance::InvokeImGuiUpdateMethod()
 
 	return m_pClassType->imguiUpdateMethod->Invoke(m_pInstance, nullptr,
 												   nullptr);
+}
+
+void ScriptClassInstance::FreeManagedHandle()
+{
+	if (m_managedHandle == 0)
+	{
+		return;
+	}
+
+	mono_gchandle_free(m_managedHandle);
+	m_managedHandle = 0;
 }
 
 void ScriptClassInstance::Serialize(nlohmann::json& _out,

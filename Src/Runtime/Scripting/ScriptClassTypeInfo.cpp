@@ -151,8 +151,13 @@ ScriptClassTypeInfo::CreateInstance(MonoDomain* _pDomain)
 	}
 	MonoObject* pInst;
 	pInst = mono_object_new(_pDomain, pMonoClass);
+	// invoke constructor
 	mono_runtime_object_init(pInst);
 	auto spInst = std::make_shared<ScriptClassInstance>(pInst, this);
+
+	// new GC handle
+	spInst->m_managedHandle = mono_gchandle_new(pInst, false);
+
 	return spInst;
 }
 
