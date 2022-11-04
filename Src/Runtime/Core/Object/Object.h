@@ -109,7 +109,7 @@ private:
 	/**
 	 * Internal call: Get transform owned by gameObject.
 	 * 
-	 * @param _chachedPtr native gameObject that chaching the C# object instance
+	 * @param _chachedPtr native gameObject handling the C# object instance
 	 * @return pointer about transform C# object
 	 */
 	static MonoObject* Internal_GetTransform(GameObject* _chachedPtr);

@@ -1,6 +1,8 @@
 ﻿#include "Object.h"
 #include "../Engine.h"
-#include "../../Scripting/Scripting.h"[
+#include "../../Scripting/Scripting.h"
+#include "../../Scripting/Component.h"
+#include "../../Scripting/ScriptFieldInfo.h"
 
 #include <mono/jit/jit.h>
 

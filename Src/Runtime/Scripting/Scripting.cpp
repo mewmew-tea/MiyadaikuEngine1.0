@@ -18,8 +18,16 @@
 #include <fstream>
 #include <cassert>
 
+#include "../Core/Math/Vector2.h"
 #include "../Core/Math/Vector3.h"
+#include "../Core/Math/Vector4.h"
+#include "../Core/Math/Quaternion.h"
+#include "../Core/Math/Matrix.h"
+
 #include "../Core/Engine.h"
+
+#include "Component.h"
+#include "ScriptFieldInfo.h"
 
 // dear imgui
 #include "imgui.h"
@@ -141,7 +149,7 @@ void Scripting::LoadMonoAssembly()
 {
 
 	static bool isCalled = false;
-
+	
 	// domain = mono_domain_create_appdomain(NULL, NULL);
 	// mono_domain_set(domain, false);
 	if (!isCalled)
@@ -269,6 +277,37 @@ void Scripting::LoadMonoAssembly()
 	go->AddComponent(spScriptClassType);
 	auto go2 = CreateGameObject();
 	go2->AddComponent(spGame2);
+
+	// serialize test
+#include <ostream>
+	{
+		nlohmann::json jsonData;
+		spGame2->Serialize(jsonData);
+		std::ofstream writing_file;
+		std::string	  filename = "typeInfo.json";
+		writing_file.open(filename, std::ios::out);
+		std::string writing_text = jsonData.dump();
+		writing_file << writing_text << std::endl;
+		writing_file.close();
+	}
+	{
+		nlohmann::json jsonData;
+		for (auto& spComp : go2->m_spComponents)
+		{
+			if (spComp->m_spClassInstance->m_pClassType->name == spGame2->name)
+			{
+				spComp->m_spClassInstance->Serialize(jsonData);
+				break;
+			}
+		}
+		std::ofstream writing_file;
+		std::string	  filename = "typeData.json";
+		writing_file.open(filename, std::ios::out);
+		std::string writing_text = jsonData.dump();
+		writing_file << writing_text << std::endl;
+		writing_file.close();
+	}
+
 	for (auto& spGameObject : m_spGameObjects)
 	{
 		spGameObject->Init();
@@ -426,44 +465,6 @@ void Scripting::LoadUserAssembly(std::string_view _path)
 {
 }
 
-//==============================================
-// ScriptMethod
-//==============================================
-//ScriptMethod::ScriptMethod(ScriptClassTypeInfo* _pClassType,
-//						   std::string_view		_name)
-//{
-//	pClassType = _pClassType;
-//	name = _name;
-//}
-
-bool ScriptMethod::Read()
-{
-	if (!pClassType || !pClassType->isRead || name == "")
-	{
-		return false;
-	}
-
-	std::string methodName =
-		pClassType->name + ":" + name;
-	pMethodDesc = mono_method_desc_new(methodName.c_str(), false);
-	if (!pMethodDesc)
-	{
-		//MessageBoxA(NULL, "", "Faild loading method desc.", MB_OK);
-		return false;
-	}
-
-	pMethod = mono_method_desc_search_in_class(
-		pMethodDesc, pClassType->pMonoClass);
-	if (!pMethod)
-	{
-		//MessageBoxA(NULL, "", "Faild loading method.", MB_OK);
-		return false;
-	}
-
-	isRead = true;
-	return true;
-}
-
 ScriptValueType Scripting::ConvertTypeMonoToRuntime(MonoType* _pMonoType)
 {
 	std::string typeName = mono_type_get_name(_pMonoType);
@@ -483,6 +484,10 @@ ScriptValueType Scripting::ConvertTypeMonoToRuntime(MonoType* _pMonoType)
 	{
 		return ScriptValueType::String;
 	}
+	else if (typeName == "System.IntPtr")
+	{
+		return ScriptValueType::IntPtr;
+	}
 	else if (typeName == "MiyadaikuEngine.Vector3")
 	{
 		return ScriptValueType::Vector3;
@@ -496,38 +501,41 @@ ScriptValueType Scripting::ConvertTypeMonoToRuntime(MonoType* _pMonoType)
 unsigned int Scripting::GetSizeFromValueType(ScriptValueType _type)
 {
 	switch (_type)
-		{
-		case Miyadaiku::ScriptValueType::Int:
-			return sizeof(int32_t);
-			break;
-		case Miyadaiku::ScriptValueType::Float:
-			return sizeof(float);
-			break;
-		case Miyadaiku::ScriptValueType::Bool:
-			return sizeof(bool);
-			break;
-		case Miyadaiku::ScriptValueType::String:
-			return 0;
-			break;
-		case Miyadaiku::ScriptValueType::Vector2:
-			return sizeof(float) * 2;
-			break;
-		case Miyadaiku::ScriptValueType::Vector3:
-			return sizeof(float) * 3;
-			break;
-		case Miyadaiku::ScriptValueType::Vector4:
-			return sizeof(float) * 4;
-			break;
-		case Miyadaiku::ScriptValueType::Quaternion:
-			return sizeof(float) * 4;
-			break;
-		case Miyadaiku::ScriptValueType::Other:
-			return 0;
-			break;
-		default:
-			return 0;
-			break;
-		}
+	{
+	case Miyadaiku::ScriptValueType::Int:
+		return sizeof(int32_t);
+		break;
+	case Miyadaiku::ScriptValueType::Float:
+		return sizeof(float);
+		break;
+	case Miyadaiku::ScriptValueType::Bool:
+		return sizeof(bool);
+		break;
+	case Miyadaiku::ScriptValueType::String:
+		return 0;
+		break;
+	case Miyadaiku::ScriptValueType::IntPtr:
+		return sizeof(void*);
+		break;
+	case Miyadaiku::ScriptValueType::Vector2:
+		return sizeof(float) * 2;
+		break;
+	case Miyadaiku::ScriptValueType::Vector3:
+		return sizeof(float) * 3;
+		break;
+	case Miyadaiku::ScriptValueType::Vector4:
+		return sizeof(float) * 4;
+		break;
+	case Miyadaiku::ScriptValueType::Quaternion:
+		return sizeof(float) * 4;
+		break;
+	case Miyadaiku::ScriptValueType::Other:
+		return 0;
+		break;
+	default:
+		return 0;
+		break;
+	}
 }
 
 std::string Scripting::GenerateGUID()
@@ -544,6 +552,11 @@ std::string Scripting::GenerateGUID()
 MonoDomain* Scripting::GetMonoDomain()
 {
 	return domain;
+}
+
+MonoImage* Scripting::GetMonoImage()
+{
+	return assemblyImage;
 }
 
 std::list<std::shared_ptr<GameObject>>& Scripting::GetGameObjects()
@@ -573,363 +586,4 @@ std::shared_ptr<GameObject> Scripting::CreateGameObject()
 	return gameObject;
 }
 
-
-//==============================================
-// ScriptFieldInfo
-//==============================================
-bool ScriptFieldInfo::IsStatic()
-{
-	return (mono_field_get_flags(pField) & MONO_FIELD_ATTR_STATIC) != 0;
-}
-
-void ScriptFieldInfo::SetValue(MonoObject* _pInstance, void* _pValue)
-{
-	if (!_pInstance || !_pValue)
-	{
-		return;
-	}
-	auto spScripting = GetEngine()->GetSubsystemLocator().Get<Scripting>();
-	auto pMonoDomain = spScripting->GetMonoDomain();
-
-	MonoType* pMonoType = mono_field_get_type(pField);
-	if (mono_type_is_reference(pMonoType))
-	{
-		MonoString* str = mono_string_new(pMonoDomain, (char*)_pValue);
-		mono_field_set_value(_pInstance, pField, str);
-	}
-	else
-	{
-		mono_field_set_value(_pInstance, pField, _pValue);		
-	}
-}
-
-void ScriptFieldInfo::GetValue(MonoObject* _pInstance, void* _pOutValue)
-{
-	if (!_pInstance || !_pOutValue)
-	{
-		return;
-	}
-
-	MonoObject*	  ret;
-	pMonoType = mono_field_get_type(pField);
-	mono_field_get_value(_pInstance, pField, _pOutValue);
-
-	//
-	//if (mono_type_is_reference(pMonoType))
-	//{
-	//	if (type == ScriptVaueType::String)
-	//	{
-	//		// stirng:
-	//		_pOutValue = mono_string_to_utf8((MonoString*)ret);
-	//	}
-	//}
-	//else 
-	if (mono_type_is_reference(pMonoType))
-	{
-		assert(0 && "Assertion: Reference types aren't unsupported. Do for each member of the class.");
-	}
-	// value type
-	else
-	{
-		//_pOutValue = ret;
-	}
-}
-
-//==============================================
-// ScriptClassTypeInfo
-//==============================================
-bool ScriptClassTypeInfo::ReadClass(MonoImage* _pImage)
-{
-	if (!_pImage)
-	{
-		return false;
-	}
-	pMonoClass = mono_class_from_name(_pImage, nameSpace.c_str(),
-							 name.c_str());
-	if (!pMonoClass)
-	{
-		//MessageBoxA(NULL, "", "Failed loading mono class.", MB_OK);
-		return false;
-	}
-
-	// get fields
-	{
-		MonoClass* klass = pMonoClass;
-		while (true)
-		{
-			MonoClassField* field;
-			void*			iter = nullptr;
-			spFieldInfos.reserve(spFieldInfos.size()
-								 + mono_class_num_fields(klass));
-			while ((field = mono_class_get_fields(klass, &iter)))
-			{
-				printf("Field: %s, flags 0x%x\n", mono_field_get_name(field),
-					   mono_field_get_flags(field));
-
-				auto spFieldInfo = std::make_shared<ScriptFieldInfo>();
-				spFieldInfo->pField = field;
-				spFieldInfo->name = mono_field_get_name(field);
-
-				// jugde type
-				spFieldInfo->pMonoType = mono_field_get_type(field);
-				spFieldInfo->type =
-					Scripting::ConvertTypeMonoToRuntime(spFieldInfo->pMonoType);
-
-				// get attributes
-				MonoClass*			parentClass = mono_field_get_parent(field);
-				MonoCustomAttrInfo* attrInfo =
-					mono_custom_attrs_from_field(parentClass, field);
-				if (attrInfo != nullptr)
-				{
-					// serach serialize field
-					auto attrClass = mono_class_from_name(
-						_pImage, "MiyadaikuEngine", "SerializeFieldAttribute");
-					MonoObject* foundAttr =
-						mono_custom_attrs_get_attr(attrInfo, attrClass);
-					mono_custom_attrs_free(attrInfo);
-					if (foundAttr)
-					{
-						spFieldInfo->isSerializeField = true;
-						printf("Serialize Field Attribute!!\n");
-					}
-				}
-				spFieldInfos.push_back(spFieldInfo);
-			}
-
-			klass = mono_class_get_parent(klass);
-			if (klass == nullptr)
-			{
-				break;
-			}
-		}
-	}
-
-	
-	// get properties
-	MonoProperty* prop;
-	void*		  iter = nullptr;
-	spPropertyInfos.reserve(mono_class_num_properties(pMonoClass));
-	while ((prop = mono_class_get_properties(pMonoClass, &iter)))
-	{
-		printf("Field: %s, flags 0x%x\n", mono_property_get_name(prop),
-			   mono_property_get_flags(prop));
-
-		auto spPropInfo = std::make_shared<ScriptPropertyInfo>();
-		spPropInfo->pProp = prop;
-		spPropInfo->name = mono_property_get_name(prop);
-
-		// get,set method
-		spPropInfo->pGetMethod = mono_property_get_get_method(prop);
-		spPropInfo->pSetMethod = mono_property_get_set_method(prop);
-
-		// jugde type
-		spPropInfo->pMonoType = mono_signature_get_return_type(
-			mono_method_signature(spPropInfo->pGetMethod));
-		spPropInfo->type =
-			Scripting::ConvertTypeMonoToRuntime(spPropInfo->pMonoType);
-
-		// get attributes
-		MonoClass*			parentClass = mono_property_get_parent(prop);
-		MonoCustomAttrInfo* attrInfo =
-			mono_custom_attrs_from_property(parentClass, prop);
-		if (attrInfo != nullptr)
-		{
-			// serach serialize field
-			auto attrClass = mono_class_from_name(_pImage, "MiyadaikuEngine",
-												  "SerializeFieldAttribute");
-			MonoObject* foundAttr =
-				mono_custom_attrs_get_attr(attrInfo, attrClass);
-			mono_custom_attrs_free(attrInfo);
-			if (foundAttr)
-			{
-				spPropInfo->isSerializeField = true;
-				printf("Serialize Field Attribute!!\n");
-			}
-		}
-		spPropertyInfos.push_back(spPropInfo);
-	}
-
-
-	isRead = true;
-
-	// read methods
-
-	// method：Init
-	initMethod = std::make_shared<ScriptMethod>();
-	initMethod->pClassType = this;
-	initMethod->name = "Init";
-	initMethod->Read();
-	// method：Update
-	updateMethod = std::make_shared<ScriptMethod>();
-	updateMethod->pClassType = this;
-	updateMethod->name = "Update";
-	updateMethod->Read();
-	// method：ImGuiUpdate
-	imguiUpdateMethod = std::make_shared<ScriptMethod>();
-	imguiUpdateMethod->pClassType = this;
-	imguiUpdateMethod->name = "ImGuiUpdate";
-	imguiUpdateMethod->Read();
-
-	return true;
-}
-std::shared_ptr<ScriptClassInstance> ScriptClassTypeInfo::CreateInstance(MonoDomain* _pDomain)
-{
-	if (!pMonoClass)
-	{
-		return nullptr;		
-	}
-    MonoObject* pInst;
-	pInst = mono_object_new(_pDomain, pMonoClass);
-	mono_runtime_object_init(pInst);
-	auto spInst = std::make_shared<ScriptClassInstance>(pInst, this);
-	return spInst;
-}
-
-//==============================================
-// ScriptMethod
-//==============================================
-bool ScriptMethod::Invoke(void* _instance, void** _params, MonoObject** _ret)
-{
-	if (!pMethod)
-	{
-		return false;
-	}
-	MonoObject* ptrExObject = nullptr;
-
-	if (!_ret)
-	{
-		mono_runtime_invoke(pMethod, _instance, _params, &ptrExObject);
-	}
-	else
-	{
-		*_ret = mono_runtime_invoke(pMethod, _instance, _params, &ptrExObject);
-	}
-	// Report exception
-	if (ptrExObject)
-	{
-		MonoString* exString = mono_object_to_string(ptrExObject, nullptr);
-		const char* exCString = mono_string_to_utf8(exString);
-		//MessageBoxA(NULL, exCString, "Mono Invoke issue", MB_OK | MB_ICONERROR);
-		return false;
-	}
-
-	return true;
-}
-
-//==============================================
-// ScriptClassInstance
-//==============================================
-ScriptClassInstance::ScriptClassInstance(MonoObject*			_pInst,
-									   ScriptClassTypeInfo* _pClassType)
-{
-	m_pInstance = _pInst;
-	m_pClassType = _pClassType;
-}
-
-bool ScriptClassInstance::InvokeInitMethod()
-{
-	if (!m_pInstance || !m_pClassType || !m_pClassType->initMethod)
-	{
-		return false;
-	}
-
-	return m_pClassType->initMethod->Invoke(m_pInstance, nullptr, nullptr);
-}
-
-bool ScriptClassInstance::InvokeUpdateMethod()
-{
-	if (!m_pInstance || !m_pClassType || !m_pClassType->updateMethod)
-	{
-		return false;
-	}
-
-	return m_pClassType->updateMethod->Invoke(m_pInstance, nullptr, nullptr);
-}
-bool ScriptClassInstance::InvokeImGuiUpdateMethod()
-{
-	if (!m_pInstance || !m_pClassType || !m_pClassType->imguiUpdateMethod)
-	{
-		return false;
-	}
-
-	return m_pClassType->imguiUpdateMethod->Invoke(m_pInstance, nullptr, nullptr);
-}
-
-bool ScriptPropertyInfo::IsStatic()
-{
-	return false;
-}
-void ScriptPropertyInfo::SetValue(MonoObject* _pInstance, void* _pValue)
-{
-
-	if (!pSetMethod)
-	{
-		return;
-	}
-	MonoObject* ptrExObject = nullptr;
-
-	void* args[1];
-	args[0] = _pValue;
-	mono_runtime_invoke(pSetMethod, _pInstance, args, &ptrExObject);
-	// Report exception
-	if (ptrExObject)
-	{
-		MonoString* exString = mono_object_to_string(ptrExObject, nullptr);
-		const char* exCString = mono_string_to_utf8(exString);
-		// MessageBoxA(NULL, exCString, "Mono Invoke issue", MB_OK |
-		// MB_ICONERROR);
-		return;
-	}
-}
-void ScriptPropertyInfo::GetValue(MonoObject* _pInstance, void* _pOutValue)
-{
-	if (!pGetMethod || !_pOutValue)
-	{
-		return;
-	}
-	MonoObject* ptrExObject = nullptr;
-
-	MonoObject* ret = mono_runtime_invoke(pGetMethod, _pInstance, nullptr,
-								  &ptrExObject);
-
-	// Report exception
-	if (ptrExObject)
-	{
-		MonoString* exString = mono_object_to_string(ptrExObject, nullptr);
-		const char* exCString = mono_string_to_utf8(exString);
-		// MessageBoxA(NULL, exCString, "Mono Invoke issue", MB_OK |
-		// MB_ICONERROR);
-		return;
-	}
-
-	//
-	if (mono_type_is_reference(pMonoType))
-	{
-		if (type == ScriptValueType::String)
-		{
-			// stirng:
-			_pOutValue = mono_string_to_utf8((MonoString*)ret);
-		}
-	}
-	// if it's a valuetype, mono_runtime_invoke() always boxes the return value
-	else
-	{
-		MonoObject* unboxed = nullptr;
-		unboxed = (MonoObject*)mono_object_unbox(ret);
-		int size = 0;
-		size = Scripting::GetSizeFromValueType(type);
-		//size = mono_object_get_size(ret);
-		//printf("size: %d\n", size);
-		std::memcpy(_pOutValue, unboxed, size);
-	}
-}
-void Component::SetUpInternalCall()
-{
-	mono_add_internal_call("MiyadaikuEngine.Component::Internal_GetGameObject",
-						   &Internal_GetGameObject);
-}
-MonoObject* Component::Internal_GetGameObject(Component* _chachedPtr)
-{
-	return _chachedPtr->m_spOwner->GetClassInstance()->m_pInstance;
-}
 } // namespace Miyadaiku

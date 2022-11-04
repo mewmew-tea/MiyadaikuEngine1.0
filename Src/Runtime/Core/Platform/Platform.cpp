@@ -1,5 +1,6 @@
 ﻿#include "Platform.h"
 #include "Windows/Window_Windows.h"
+#include "../Engine.h"
 
 namespace Miyadaiku
 {
@@ -22,7 +23,8 @@ void Platform::OnShutdown()
 }
 void Platform::ProcessSystemEventQueue()
 {
-	if (!m_mainWindow)
+	Engine* e = GetEngine();
+	if (!m_mainWindow || GetEngine()->m_editorHWnd)
 	{
 		return;
 	}

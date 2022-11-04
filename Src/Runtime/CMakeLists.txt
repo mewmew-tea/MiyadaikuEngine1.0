@@ -69,6 +69,13 @@ file(GLOB nativeruntime_h
 
     # Scripting
     Scripting/Scripting.h
+    Scripting/Component.h
+    Scripting/ScriptClassInstance.h
+    Scripting/ScriptClassTypeInfo.h
+    Scripting/ScriptCommon.h
+    Scripting/ScriptFieldInfo.h
+    Scripting/ScriptMethod.h
+    Scripting/ScriptPropertyInfo.h
 )
 # cpp files
 set(nativeruntime_src
@@ -124,6 +131,13 @@ set(nativeruntime_src
 
     # Scripting
     Scripting/Scripting.cpp
+    Scripting/Component.cpp
+    Scripting/ScriptClassInstance.cpp
+    Scripting/ScriptClassTypeInfo.cpp
+    Scripting/ScriptCommon.cpp
+    Scripting/ScriptFieldInfo.cpp
+    Scripting/ScriptMethod.cpp
+    Scripting/ScriptPropertyInfo.cpp
 )
 
 # nlohmann json
@@ -158,6 +172,7 @@ target_include_directories(${PROJECT_NAME} PRIVATE
     ${IMGUI_SOURCE_DIR}
     ${IMGUI_BACKENDS_DIR}
     ${IMGUI_JA_DIR}
+    ${NLOHMANN_JSON_DIR}
 )
 
 # link external libs

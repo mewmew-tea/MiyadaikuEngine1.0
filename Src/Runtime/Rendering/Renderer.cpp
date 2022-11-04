@@ -20,6 +20,8 @@
 #include <mono/metadata/object.h>
 
 #include "../Scripting/Scripting.h"
+#include "../Scripting/Component.h"
+#include "../Scripting/ScriptPropertyInfo.h"
 
 #include "imgui.h"
 

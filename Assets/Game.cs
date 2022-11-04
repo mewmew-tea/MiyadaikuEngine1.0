@@ -40,7 +40,7 @@ namespace CSScript
             pos.y = y;
             GameConsole.SetPosition(x, y);
 
-            transform.LocalPosition = pos;
+            //transform.LocalPosition = pos;
         }
 
         private void ImGuiUpdate()
@@ -50,13 +50,14 @@ namespace CSScript
                 ImGui.Text("This is called from C# script.");
                 ImGui.Text($"Pos (Vector3) : " + pos);
                 ImGui.Text($"chachePtr : " + chachedPtr);
-                ImGui.Text($"transform.LocalPosition : " + transform.LocalPosition);
+                //ImGui.Text($"transform.LocalPosition : " + transform.LocalPosition);
             }
             ImGui.End();
         }
     }
     public class Game2 : MonoBehaviour
-    {[SerializeField]
+    {
+        [SerializeField]
         Vector3 pos = new Vector3(0, 0, 0);
 
         float angle = 0;
@@ -73,7 +74,7 @@ namespace CSScript
             pos.x = (float)Math.Cos(angle) * radius;
             pos.y = (float)Math.Sin(angle) * radius;
 
-            transform.LocalPosition = pos;
+            //transform.LocalPosition = pos;
         }
 
         private void ImGuiUpdate()
@@ -83,7 +84,7 @@ namespace CSScript
                 ImGui.Text("This is called from C# script.");
                 ImGui.Text($"Pos (Vector3) : " + pos);
                 ImGui.Text($"chachePtr : " + chachedPtr);
-                ImGui.Text($"transform.LocalPosition : " + transform.LocalPosition);
+                //ImGui.Text($"transform.LocalPosition : " + transform.LocalPosition);
             }
             ImGui.End();
         }
