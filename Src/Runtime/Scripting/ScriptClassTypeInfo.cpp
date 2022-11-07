@@ -155,8 +155,8 @@ ScriptClassTypeInfo::CreateInstance(MonoDomain* _pDomain)
 	mono_runtime_object_init(pInst);
 	auto spInst = std::make_shared<ScriptClassInstance>(pInst, this);
 
-	// new GC handle
-	spInst->m_managedHandle = mono_gchandle_new(pInst, false);
+	// new GC handle：Pin the object to IntPtr not be broken
+	spInst->m_managedHandle = mono_gchandle_new(pInst, true);
 
 	return spInst;
 }
