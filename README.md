@@ -1,5 +1,5 @@
 ![build and test workflow](https://github.com/mewmew-tea/MiyadaikuEngine1.0/actions/workflows/build.yml/badge.svg)
-# MiyadaikuEngine1.0
+# Miyadaiku Engine 1.0
 
 > **Note**
 > **本リポジトリは、開発の初期段階です。**\
