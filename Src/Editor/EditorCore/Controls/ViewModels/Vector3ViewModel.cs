@@ -13,28 +13,40 @@ namespace Miyadaiku.EditorCore.Controls.ViewModels
             //X = 0f;
             //Y = 0f;
             //Z = 0f;
+
+            ResetCommand = new DelegateCommand(ExecuteTestCommand);
         }
+        public string Name { get; set; } = "YYYYYYYYYYYY";
 
 
-        string _textX = String.Empty;
-        string _textY = String.Empty;
-        string _textZ = String.Empty;
-        public string TextX
+        float _textX = 0f;
+        float _textY = 0f;
+        float _textZ = 0f;
+        public float TextX
         { 
             get { return _textX; }
-            set { SetProperty(ref _textX, value.ToString()); }
+            set { SetProperty(ref _textX, value); }
         }
-        public string TextY
+        public float TextY
         {
             get { return _textY; }
-            set { SetProperty(ref _textY, value.ToString()); }
+            set { SetProperty(ref _textY, value); }
         }
-        public string TextZ
+        public float TextZ
         {
             get { return _textZ; }
-            set { SetProperty(ref _textZ, value.ToString()); }
+            set { SetProperty(ref _textZ, value); }
         }
 
+
+        public DelegateCommand ResetCommand { get; }
+
+        private void ExecuteTestCommand()
+        {
+            TextX = 100f;
+            TextY = 100f;
+            TextZ = 100f;
+        }
         //public float X 
         //{
         //    get { return float.Parse(TextX); } 

@@ -1,0 +1,163 @@
+﻿<UserControl
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:prism="http://prismlibrary.com/"           
+             xmlns:local="clr-namespace:Miyadaiku.Editor.Views"
+             xmlns:av="http://schemas.microsoft.com/expression/blend/2008"
+            xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+            mc:Ignorable="av" 
+            x:Class="Miyadaiku.Editor.Views.InspectorView"
+             HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
+             prism:ViewModelLocator.AutoWireViewModel="True"
+             av:DesignHeight="650" av:DesignWidth="400"
+             >
+    <!--Height="650" Width="400"-->
+    <Grid>
+        <DockPanel VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
+            <Border DockPanel.Dock="Bottom" Panel.ZIndex="1" BorderThickness="0" Margin="0">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="32"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="32"/>
+                    </Grid.RowDefinitions>
+
+                    <Border Grid.Row="0" 
+                    x:Name="HeaderBar"
+                    BorderThickness="0,0,0,1"
+                    Background="LightGray"
+                    Padding="4">
+
+                        <DockPanel LastChildFill="True">
+                            <Image Width="20" Margin="4,0,10,-2" DockPanel.Dock="Left" Source="/EditorResources/Images/info_light.png"
+                                   />
+                            <TextBlock Text="name" Margin="0,0,4,0" FontSize="14"
+                                Foreground="Black"/>
+                            <TextBox DockPanel.Dock="Right" FontSize="16" Text="{Binding TargetObjectName}" 
+                                Foreground="Black"/>
+                        </DockPanel>
+                    </Border>
+
+                    <ScrollViewer Grid.Row="1"
+                          HorizontalScrollBarVisibility="Disabled"
+                          VerticalScrollBarVisibility="Auto"
+                          Background="Transparent">
+                        <ListBox 
+                        ItemsSource="{Binding Components}"
+                        BorderBrush="Transparent"
+                        BorderThickness="0"
+                        Background="Transparent" 
+                        HorizontalContentAlignment="Stretch"
+                        ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                        Padding="0" 
+                        Margin="-1,0,-1,0">
+                            <ListBox.ItemContainerStyle>
+                                <Style TargetType="{x:Type ListBoxItem}">
+                                    <Setter Property="Margin" Value="0" />
+                                    <Setter Property="Padding" Value="0" />
+                                    <Setter Property="Template">
+                                        <Setter.Value>
+                                            <ControlTemplate TargetType="{x:Type ListBoxItem}">
+                                                <ContentPresenter />
+                                            </ControlTemplate>
+                                        </Setter.Value>
+                                    </Setter>
+                                </Style>
+                            </ListBox.ItemContainerStyle>
+
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <local:ComponentView/>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
+                    </ScrollViewer>
+
+                    <Border
+                    x:Name="AddComponent"
+                    BorderThickness="0,0,0,1"
+                    Background="Transparent"
+                    Padding="4"  Grid.Row="2" Width="200">
+                        <ToggleButton Loaded="ToggleButton_Loaded">
+                            <ToggleButton.ContextMenu>
+                                <ContextMenu Width="200">
+                                    <MenuItem Header="PlayerController" Command="{Binding AddPlayerControllerCommand}"/>
+                                    <MenuItem Header="MeshRenderable" Command="{Binding AddMeshRenderableCommand}"/>
+                                    <Separator />
+                                    <MenuItem Header="ThisIsDummy" />
+                                </ContextMenu>
+                            </ToggleButton.ContextMenu>
+                            <WrapPanel Margin="5,0">
+                                <TextBlock Text="Add Component"/>
+                                <Border Width="8"/>
+                                <Path Width="6" Height="4" Stretch="Fill" Fill="Black" />
+                            </WrapPanel>
+                        </ToggleButton>
+                        <!--<Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="32"/>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
+                            <DockPanel Grid.Row="0">
+                                <Button Content="Add Component" Background="LightGray">
+                                    -->
+                        <!--<Button.Style>
+                                    <Style TargetType="{x:Type Button}">
+                                        <Style.Triggers>
+                                            <EventTrigger RoutedEvent="Click">
+                                                <EventTrigger.Actions>
+                                                    <BeginStoryboard>
+                                                        <Storyboard>
+                                                            <BooleanAnimationUsingKeyFrames Storyboard.TargetProperty="ContextMenu.IsOpen">
+                                                                <DiscreteBooleanKeyFrame KeyTime="0:0:0" Value="True"/>
+                                                            </BooleanAnimationUsingKeyFrames>
+                                                        </Storyboard>
+                                                    </BeginStoryboard>
+                                                </EventTrigger.Actions>
+                                            </EventTrigger>
+                                        </Style.Triggers>
+                                        <Setter Property="ContextMenu">
+                                            <Setter.Value>
+                                                <ContextMenu>
+                                                    <MenuItem Header="メニュー１"/>
+                                                    <MenuItem Header="メニュー２"/>
+                                                    <MenuItem Header="メニュー３"/>
+                                                    <MenuItem Header="メニュー４"/>
+                                                </ContextMenu>
+                                            </Setter.Value>
+                                        </Setter>
+                                    </Style>
+                                </Button.Style>-->
+                        <!--<Button.ContextMenu>
+                                    <ContextMenu>
+                                        <MenuItem Header="メニュー１"/>
+                                        <MenuItem Header="メニュー２"/>
+                                        <MenuItem Header="メニュー３"/>
+                                        <MenuItem Header="メニュー４"/>
+                                    </ContextMenu>
+                                </Button.ContextMenu>-->
+                        <!--
+                                </Button>
+                            </DockPanel>
+                            <DockPanel Grid.Row="1">
+                                -->
+                        <!--<Menu>-->
+                        <!--
+                                    <MenuItem Header="ファイル">
+                                        <MenuItem Header="開く"/>
+                                        <MenuItem Header="新規">
+                                            <MenuItem Header="雛形"/>
+                                        </MenuItem>
+                                    </MenuItem>
+                                -->
+                        <!--</Menu>-->
+                        <!--
+                            </DockPanel>
+                        </Grid>-->
+                    </Border>
+                </Grid>
+            </Border>
+        </DockPanel>
+    </Grid>
+</UserControl>
+

@@ -3,15 +3,23 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:avalonDock="https://github.com/Dirkster99/AvalonDock"
         xmlns:prism="http://prismlibrary.com/"
-        xmlns:mydCtrs="clr-namespace:Miyadaiku.EditorCore.Controls.Views;assembly=EditorCore"
+        xmlns:local="clr-namespace:Miyadaiku.Editor.MyViews"
+        xmlns:localView="clr-namespace:Miyadaiku.Editor.Views"
+        xmlns:mydCtrs="clr-namespace:Miyadaiku.EditorCore.Controls.Views;assembly=EditorCore" xmlns:local1="clr-namespace:Miyadaiku.Editor.Views"
         prism:ViewModelLocator.AutoWireViewModel="True"
-        Title="{Binding Title}" Height="700" Width="1200" >
+        Title="{Binding Title}" Height="700" Width="1200"
+        >
+        <!--Icon="../Resources/Images/Logo.ico"-->
     <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="16"/>
+            <RowDefinition Height="32"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
         <ContentControl prism:RegionManager.RegionName="ContentRegion" />
-
-
-        <StackPanel Margin="0 0 0 0" Grid.ColumnSpan="2">
-            <Menu>
+        
+        <!--<Border Margin="0 0 0 0" Grid.Row="0">-->
+            <Menu Grid.Row="0">
                 <MenuItem Header="ファイル">
                     <MenuItem Header="開く"/>
                     <MenuItem Header="新規"/>
@@ -19,34 +27,37 @@
                 <MenuItem Header="編集">
                     <MenuItem Header="元に戻す">
                         <MenuItem.Icon>
-                            <Image Source="../Resources/Images/PauseButton_1.png" />
+                            <Image Source="/EditorResources/Images/PauseButton_1.png" />
                         </MenuItem.Icon>
                     </MenuItem>
                     <MenuItem Header="やり直し"/>
                 </MenuItem>
                 <MenuItem Header="表示"/>
             </Menu>
-            <ToolBar Height="32">
-                <Button>
-                    <Image Source="../Resources/Images/PlayButton_1.png" />
-                </Button>
-                <Button>
-                    <Image Source="../Resources/Images/PauseButton_1.png" />
-                </Button>
-                <Separator/>
-            </ToolBar>
-        </StackPanel>
+        <!--</Border>-->
+        <ToolBar Grid.Row="1">
+            <Button>
+                <Image Source="/EditorResources/Images/PlayButton_1.png" />
+            </Button>
+            <Button>
+                <Image Source="/EditorResources/Images/PauseButton_1.png" />
+            </Button>
+            <Separator/>
+        </ToolBar>
 
-        <avalonDock:DockingManager x:Name="uxDockingManager" AllowMixedOrientation="True" Margin="0,50,0,0">
+        <avalonDock:DockingManager x:Name="uxDockingManager" 
+                AllowMixedOrientation="True" 
+                                   Grid.Row="2">
             <avalonDock:DockingManager.Theme>
-                <avalonDock:Vs2013BlueTheme/>
+                <!--<avalonDock:Vs2013DarkTheme/>-->
+                <avalonDock:Vs2013LightTheme/>
             </avalonDock:DockingManager.Theme>
             <avalonDock:LayoutRoot>
-                <avalonDock:LayoutPanel Orientation="Vertical" >
+                <avalonDock:LayoutPanel Orientation="Vertical">
                     <avalonDock:LayoutPanel Orientation="Horizontal">
 
 
-                        <avalonDock:LayoutDocumentPane x:Name="uxDocumentPane2">
+                        <avalonDock:LayoutDocumentPane x:Name="uxHierarchyPane">
                             <avalonDock:LayoutDocument Title="Hierarchy" ContentId="Hierarchy">
                                 <TreeView FontSize="20">
                                     <TreeViewItem Header="Hoge">
@@ -60,68 +71,26 @@
                             </avalonDock:LayoutDocument>
                         </avalonDock:LayoutDocumentPane>
 
-                        <avalonDock:LayoutDocumentPane x:Name="uxDocumentPane">
-                            <avalonDock:LayoutDocument Title="SceneView" ContentId="SceneView">
-                                <!--<TextBox/>-->
+                        <avalonDock:LayoutDocumentPane x:Name="uxSceneViewPane">
+                            <avalonDock:LayoutDocument Title="SceneView" ContentId="SceneView" FloatingWidth="1280">
+                                <!--<local:SceneViewHost Width="1280" Height="720"/>-->
                             </avalonDock:LayoutDocument>
                         </avalonDock:LayoutDocumentPane>
 
 
-                        <avalonDock:LayoutDocumentPane x:Name="uxDocumentPane3">
+                        <avalonDock:LayoutDocumentPane x:Name="uxInspectorPane3">
                             <avalonDock:LayoutDocument Title="Inspector" ContentId="Inspector">
-
-                                <StackPanel>
-                                    <!--Background="#2f2f34">-->
-
-                                    <Expander Margin="10" IsExpanded="True">
-                                        <Expander.Header>
-                                            
-                                            <StackPanel Orientation="Horizontal">
-                                                <!--<Image Height="16" Source="/Icons/Labels/cube.png"/>-->
-                                                <CheckBox Margin="4,0,0,0" IsChecked="True"/>
-                                                <TextBlock Margin="4,0,0,0" Text="Transform"></TextBlock>
-                                            </StackPanel>
-                                        </Expander.Header>
-                                        <!--<StackPanel Margin="6"  HorizontalAlignment="Left">-->
-                                        <Grid>
-                                            <Grid.ColumnDefinitions>
-                                                <ColumnDefinition Width="3*"/>
-                                                <ColumnDefinition Width="7*"/>
-                                            </Grid.ColumnDefinitions>
-                                            <Grid.RowDefinitions>
-                                                <RowDefinition />
-                                                <RowDefinition />
-                                                <RowDefinition />
-                                            </Grid.RowDefinitions>
-                                            <Label Content="Positon" Grid.Row="0" Grid.Column="0"></Label>
-                                            <mydCtrs:Vector3 Width="Auto" Grid.Row="0" Grid.Column="1"/>
-
-                                            <Label Content="Scale" Grid.Row="1" Grid.Column="0"></Label>
-                                            <mydCtrs:Vector3 TextX="1" TextY="1" TextZ="1" Width="Auto" Grid.Row="1" Grid.Column="1"/>
-                                            
-                                            <Label Content="Rotation" Grid.Row="2" Grid.Column="0"></Label>
-                                            <mydCtrs:Vector3 Width="Auto" Grid.Row="2" Grid.Column="1"/>
-                                            <!--<RadioButton Content="AAA" FontSize="20"/>
-                                            <RadioButton Content="BBB" FontSize="20"/>-->
-                                        </Grid>
-                                        <!--</StackPanel>-->
-                                    </Expander>
-
-                                    <Expander Header="TitleB" Margin="10" IsExpanded="True">
-                                        <StackPanel Margin="6"  HorizontalAlignment="Left" Width="200">
-                                            <RadioButton Content="AAA" FontSize="20"/>
-                                            <RadioButton Content="BBB" FontSize="20"/>
-                                        </StackPanel>
-                                    </Expander>
-                                </StackPanel>
+                                <localView:InspectorView></localView:InspectorView>
                             </avalonDock:LayoutDocument>
                         </avalonDock:LayoutDocumentPane>
 
                     </avalonDock:LayoutPanel>
                     <avalonDock:LayoutAnchorablePane DockHeight="100"  x:Name="uxAnchorablePane2">
-                        <!-- ツールウィンドウ -->
                         <avalonDock:LayoutAnchorable Title="ToolWindow2" ContentId="ToolWindow2">
-                            <TextBox/>
+                            <DockPanel>
+                                <TextBlock Text="{Binding TextData.TestText, Mode=TwoWay }"/>
+                            <Button Content="テストボタン" Command="{Binding TestCommand}"/>
+                            </DockPanel>
                         </avalonDock:LayoutAnchorable>
                     </avalonDock:LayoutAnchorablePane>
                 </avalonDock:LayoutPanel>

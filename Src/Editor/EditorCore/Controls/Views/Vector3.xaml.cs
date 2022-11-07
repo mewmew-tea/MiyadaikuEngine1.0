@@ -71,9 +71,9 @@ namespace Miyadaiku.EditorCore.Controls.Views
             TextBoxZ.LostKeyboardFocus += FloatingPointInputValidator;
 
             // initial values
-            TextBoxX.Text = "0";
-            TextBoxY.Text = "0";
-            TextBoxZ.Text = "0";
+            //TextBoxX.Text = "0";
+            //TextBoxY.Text = "0";
+            //TextBoxZ.Text = "0";
 
             // mouse events
             TextBoxX.PreviewMouseDown += TextBox_MouseDown;
@@ -94,21 +94,6 @@ namespace Miyadaiku.EditorCore.Controls.Views
             parseSucceed = float.TryParse(e.Text, out _) && (e.Text != string.Empty);
 
             e.Handled = parseSucceed;
-        }
-
-        
-
-        public string TextX
-        {
-            get; set;
-        }
-        public string TextY
-        {
-            get; set;
-        }
-        public string TextZ
-        {
-            get; set;
         }
 
         bool isDragging = false;
