@@ -47,10 +47,12 @@ void D3D11_Device::Init()
 	{
 		assert(0 && "D3DDevice作成失敗");
 	}
+#ifdef _DEBUG
 	hr = m_pDevice->QueryInterface(__uuidof(ID3D11Debug),
 								   reinterpret_cast<void**>(&m_pD3DDebug));
 	// 詳細表示
 	hr = m_pD3DDebug->ReportLiveDeviceObjects(D3D11_RLDO_DETAIL);
+#endif // DEBUG
 }
 void D3D11_Device::Release()
 {
