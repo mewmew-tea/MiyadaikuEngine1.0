@@ -1,12 +1,20 @@
 ![build and test workflow](https://github.com/mewmew-tea/MiyadaikuEngine1.0/actions/workflows/build.yml/badge.svg)
 # Miyadaiku Engine 1.0
 
-> **Note**
+> **Note**  
 > **本リポジトリは、開発の初期段階です。**\
+> そのため、現在は実用するためには不足している機能があります。\
 > 機能追加など長期的に開発を進めていく予定です。
+> 
+> **This repository is WIP and eary progress of develop.**\
+> So, this has many lack critical features for now.\
+> I'll develop in long term.
 
 コンポーネントシステムを備えた、自作のゲームエンジンです。(WIP)\
 ポートフォリオを兼ねて開発中です。（２０２２年７月中旬～）
+
+Game engine that can be scripted in C#(mono).\
+Under development for the portfolio. (from July 2022))
 
 # How to build
 
@@ -44,16 +52,15 @@ cmake --build　build/
 現状のアーキテクチャの設計は下図、表の通りです。
 ユーザはScript(C#)を定義します。
 
-![](docs/images/Architecture_20220906.jpg)
+![](docs/images/Architecture_20221110.svg)
 
 |  モジュール  |  概要  |
 | ---- | ---- |
-| Script | ユーザが定義する、コンポーネントスクリプトのアセンブリ。NativeRuntimeによってmono上で呼び出されます。 |
-| Runtime | NativeRuntimeをmono上にラッピングして公開します。エンジン標準のコンポーネントもここで定義されます。 |
-| NativeRuntime | C++で記述されます。各種APIの管理や、入出力、アセット管理などを行います。また、Runtimeとゲームオブジェクトやメモリの情報を共有し、それらをEditorRuntimeへ公開します。 |
-| Application | C++で記述されます。NativeRuntimeを使って、ゲームの起動やゲームループを呼び出す実行ファイルです。 |
-| EditorRuntime | エディタにのみ含まれます。NativeRuntimeのAPIを、 .NET Framework上にラッピングして公開します。NativeRuntimeと通信し、エディタに必要な情報や命令をやり取りします。 |
-| Editor | エディタにのみ含まれます。WPFを用いた、exeファイルとして起動できるエディタです。 |
+| Script | ユーザが定義する、スクリプト（コンポーネント）のアセンブリ。NativeRuntimeによってmono上で呼び出されます。 |
+| NativeRuntime | C++で記述されます。各種APIの管理や、入出力、アセット管理などを行います。また、Scriptを管理し、シーン等の情報を共有します。これらは、EditorRuntimeへプロセス間通信をして公開します。 |
+| Application | C++で記述される実行ファイルです。NativeRuntimeを使って、ゲームの起動やゲームループを呼び出します。 |
+| Editor | WPFを用いた、exeファイルとして起動できるエディタです。NativeRuntieとプロセス間通信をすることで、連携をします。 |
+| EditorCore | エディタの基礎的なコントロールなどです。 |
 
 # 特徴
 
@@ -77,7 +84,7 @@ https://trello.com/b/jDuAlxcO -->
 |  D3D11レンダラ  |  20%  | C++(Win32API)  |
 |  D3D12レンダラ  |  0%  | 低優先度。C++(Win32API)で実装予定。  |
 |  C#スクリプトシステム  |  35%  | Monoを用いて実装予定。  |
-|  WPFによるエディタGUI  |  10%  |   |
+|  WPFによるエディタGUI  |  15%  |   |
 | アセットシステム | 0% |  |
 | オーディオ(XAudio) | 0% |  |
 |  物理,コリジョン  |  0%  | PhysX採用？  |
