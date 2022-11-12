@@ -26,6 +26,9 @@ public:
 		return m_requestedShutdown;
 	}
 
+	void EnableStartUpAsEditor();
+	bool IsEditorMode();
+
 	// void BeginFrame();
 
 	// void EndFrame();
@@ -42,6 +45,8 @@ public:
 private:
 	SubsystemLocator m_subsystemLocator;
 	bool			 m_requestedShutdown = false;
+
+	bool m_isEditorMode = false;
 
 
 private:

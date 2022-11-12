@@ -24,8 +24,14 @@ public:
     // SetUp > Iteration > CleanUpの順で呼びだします。
 	//----------------------------------------------------
 
-    // エンジンを初期化
-    int Setup();
+    /**
+     * @brief エンジンを初期化.
+     * 
+     * @param _isEnableStartUpAsEditor エディタモードとして起動するようにする。
+     *          Allow engine to boot as editor mode.
+     * @return 
+     */
+	int Setup(bool _isEnableStartUpAsEditor);
     
     // メインループを実行
     // 終了のリクエストがあるまで続きます。

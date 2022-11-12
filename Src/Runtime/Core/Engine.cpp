@@ -1,6 +1,8 @@
 ﻿#include "Engine.h"
 #include "Subsystem.h"
 
+#include <stdio.h>
+
 #include "Platform/Platform.h"
 #include "Platform/Window.h"
 
@@ -9,12 +11,19 @@
 
 #include "../Scripting/Scripting.h"
 
+
+#include "../IPC/IPC.h"
+
 #include <iostream>
 #include <assert.h>
 
 #ifdef _WIN32
 #include "Platform/Windows/Window_Windows.h"
 #endif
+
+#include <iostream>
+#include <string>
+
 
 namespace Miyadaiku
 {
@@ -36,6 +45,10 @@ Engine::Engine()
 
 Engine::~Engine()
 {
+	if (IsEditorMode())
+	{
+		m_subsystemLocator.Remove<IPC>();
+	}
 	m_subsystemLocator.Remove<Renderer>();
 	m_subsystemLocator.Remove<Platform>();
 	m_subsystemLocator.Remove<Scripting>();
@@ -43,6 +56,10 @@ Engine::~Engine()
 
 void Engine::SetUp()
 {
+	if (IsEditorMode())
+	{
+		m_subsystemLocator.Add<IPC>();
+	}
 	m_subsystemLocator.Add<Platform>();
 	m_subsystemLocator.Add<Renderer>();
 	m_subsystemLocator.Add<Scripting>();
@@ -50,6 +67,11 @@ void Engine::SetUp()
 
 void Engine::Update()
 {
+	if (IsEditorMode())
+	{
+		m_subsystemLocator.Get<IPC>()->ProcessCommands();
+	}
+
 	m_subsystemLocator.Get<Scripting>()->Update();
 
 	auto os = m_subsystemLocator.Get<Platform>();
@@ -62,5 +84,13 @@ void Engine::Update()
 void Engine::RequestShutdown()
 {
 	m_requestedShutdown = true;
+}
+void Engine::EnableStartUpAsEditor()
+{
+	m_isEditorMode = true;
+}
+bool Engine::IsEditorMode()
+{
+	return m_isEditorMode;
 }
 } // namespace Miyadaiku

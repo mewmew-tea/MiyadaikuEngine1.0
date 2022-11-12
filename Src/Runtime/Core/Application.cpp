@@ -18,12 +18,19 @@ Application::~Application()
 	Cleanup();
 }
 
-int Application::Setup()
+int Application::Setup(bool _isEnableStartUpAsEditor)
 {
 	m_engine = std::make_unique<Miyadaiku::Engine>();
-	if (m_engine)
-		m_engine->SetUp();
-
+	if (!m_engine)
+	{
+		return -1;
+	}
+	
+	if (_isEnableStartUpAsEditor)
+	{
+		m_engine->EnableStartUpAsEditor();
+	}
+	m_engine->SetUp();
 	return 0;
 }
 

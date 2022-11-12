@@ -76,6 +76,12 @@ file(GLOB nativeruntime_h
     Scripting/ScriptFieldInfo.h
     Scripting/ScriptMethod.h
     Scripting/ScriptPropertyInfo.h
+
+    # IPC
+    IPC/IPC.h
+    IPC/IPCSocket.h
+    IPC/Command/IPCCommand.h
+    IPC/Command/IPCCommand_SetUpIPC.h
 )
 # cpp files
 set(nativeruntime_src
@@ -138,6 +144,12 @@ set(nativeruntime_src
     Scripting/ScriptFieldInfo.cpp
     Scripting/ScriptMethod.cpp
     Scripting/ScriptPropertyInfo.cpp
+
+    # IPC
+    IPC/IPC.cpp
+    IPC/IPCSocket.cpp
+    IPC/Command/IPCCommand.h
+    IPC/Command/IPCCommand_SetUpIPC.h
 )
 
 # nlohmann json

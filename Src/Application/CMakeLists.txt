@@ -62,3 +62,48 @@ add_custom_command(TARGET Application POST_BUILD COMMAND ${CMAKE_COMMAND} -E cop
 
 add_custom_command(TARGET Application POST_BUILD COMMAND ${CMAKE_COMMAND} -E make_directory $<TARGET_FILE_DIR:Application>/MonoAssembly/)
 add_custom_command(TARGET Application POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_SOURCE_DIR}/dlls/MonoAssembly/ $<TARGET_FILE_DIR:Application>/MonoAssembly/)
+
+#------------------------
+#	EditorMode
+#------------------------
+
+project(Application_EditorMode CXX)
+
+add_executable(Application_EditorMode ${application_h} ${application_src})
+
+target_compile_definitions(Application_EditorMode PRIVATE "ENABLE_EDITOR_MODE")
+
+# link
+target_link_libraries(Application_EditorMode NativeRuntime)
+target_link_libraries(Application_EditorMode UserAssembly)
+
+# warning levels
+target_compile_options(
+  Application_EditorMode PRIVATE
+   $<$<CXX_COMPILER_ID:MSVC>:/W4>
+)
+# cpp version
+target_compile_features(Application_EditorMode PRIVATE cxx_std_20)
+add_custom_command(TARGET Application_EditorMode POST_BUILD COMMAND ${CMAKE_COMMAND} -E make_directory $<TARGET_FILE_DIR:Application_EditorMode>/Assets/)
+add_custom_command(TARGET Application_EditorMode POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_SOURCE_DIR}/Assets/ $<TARGET_FILE_DIR:Application_EditorMode>/Assets/)
+
+add_custom_command(TARGET Application_EditorMode POST_BUILD COMMAND ${CMAKE_COMMAND} -E make_directory ${PROJECT_BINARY_DIR}/Assets/)
+add_custom_command(TARGET Application_EditorMode POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_SOURCE_DIR}/Assets/ ${PROJECT_BINARY_DIR}/Assets/)
+
+# build CSharp scripts
+add_custom_command(TARGET Application_EditorMode POST_BUILD COMMAND cmd //c ${PROJECT_BINARY_DIR}/Assets/BuildScripts.bat)
+add_custom_command(TARGET Application_EditorMode POST_BUILD COMMAND cmd //c $<TARGET_FILE_DIR:Application_EditorMode>/Assets/BuildScripts.bat)
+
+# copy assemblies
+add_custom_command(TARGET Application_EditorMode POST_BUILD COMMAND ${CMAKE_COMMAND} -E make_directory ${PROJECT_BINARY_DIR}/Assets/Assembly/)
+add_custom_command(TARGET Application_EditorMode POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_directory $<TARGET_FILE_DIR:UserAssembly>/ $<TARGET_FILE_DIR:Application_EditorMode>/Assets/Assembly/)
+
+# copy dll
+add_custom_command(TARGET Application_EditorMode POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_SOURCE_DIR}/dlls/mono-2.0-sgen.dll ${PROJECT_BINARY_DIR})
+add_custom_command(TARGET Application_EditorMode POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_SOURCE_DIR}/dlls/mono-2.0-sgen.dll $<TARGET_FILE_DIR:Application_EditorMode>)
+# MonoAssembly
+add_custom_command(TARGET Application_EditorMode POST_BUILD COMMAND ${CMAKE_COMMAND} -E make_directory ${PROJECT_BINARY_DIR}/MonoAssembly/)
+add_custom_command(TARGET Application_EditorMode POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_SOURCE_DIR}/dlls/MonoAssembly/ ${PROJECT_BINARY_DIR}/MonoAssembly/)
+
+add_custom_command(TARGET Application_EditorMode POST_BUILD COMMAND ${CMAKE_COMMAND} -E make_directory $<TARGET_FILE_DIR:Application_EditorMode>/MonoAssembly/)
+add_custom_command(TARGET Application_EditorMode POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_SOURCE_DIR}/dlls/MonoAssembly/ $<TARGET_FILE_DIR:Application_EditorMode>/MonoAssembly/)
