@@ -29,7 +29,7 @@ public:
 	 */
 	void FreeManagedHandle();
 
-	void Serialize(nlohmann::json& _out, bool _containNonSerialized = true);
+	void Serialize(nlohmann::ordered_json& _out, bool _containNonSerialized = true);
 };
 
 }

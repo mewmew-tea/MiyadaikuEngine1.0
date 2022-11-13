@@ -49,9 +49,9 @@ void DebugOutStringLineToVS(MonoString* str)
 }
 void PrintMessage()
 {
-	OutputDebugStringA(
-		"I am C/C++ Function.こっちは日本語も行けます(;^ω^)\n");
-	printf("I am C/C++ Function.こっちは日本語も行けます(;^ω^)\n");
+	//OutputDebugStringA(
+	//	"I am C/C++ Function.こっちは日本語も行けます(;^ω^)\n");
+	//printf("I am C/C++ Function.こっちは日本語も行けます(;^ω^)\n");
 }
 void PrintMessageWithString(const char* str)
 {
@@ -281,7 +281,7 @@ void Scripting::LoadMonoAssembly()
 	// serialize test
 #include <ostream>
 	{
-		nlohmann::json jsonData;
+		nlohmann::ordered_json jsonData;
 		spGame2->Serialize(jsonData);
 		std::ofstream writing_file;
 		std::string	  filename = "typeInfo.json";
@@ -291,7 +291,7 @@ void Scripting::LoadMonoAssembly()
 		writing_file.close();
 	}
 	{
-		nlohmann::json jsonData;
+		nlohmann::ordered_json jsonData;
 		for (auto& spComp : go2->m_spComponents)
 		{
 			if (spComp->m_spClassInstance->m_pClassType->name == spGame2->name)
@@ -573,7 +573,7 @@ std::shared_ptr<GameObject> Scripting::CreateGameObject()
 	gameObject->m_spTransform = transform;
 
 	// setup instance
-	for (auto field : scriptInst->m_pClassType->spFieldInfos)
+	for (auto& field : scriptInst->m_pClassType->spFieldInfos)
 	{
 		if (field->name == "chachedPtr")
 		{

@@ -161,7 +161,7 @@ ScriptClassTypeInfo::CreateInstance(MonoDomain* _pDomain)
 	return spInst;
 }
 
-void ScriptClassTypeInfo::Serialize(nlohmann::json& _out,
+void ScriptClassTypeInfo::Serialize(nlohmann::ordered_json& _out,
 									bool			_containNonSerialized)
 {
 	// name
@@ -169,7 +169,7 @@ void ScriptClassTypeInfo::Serialize(nlohmann::json& _out,
 	_out["nameSpace"] = nameSpace;
 	_out["containNonSerialized"] = _containNonSerialized;
 	// fields
-	nlohmann::json fields;
+	nlohmann::ordered_json fields;
 	for (auto& spFieldInfo : spFieldInfos)
 	{
 		if (!_containNonSerialized && !spFieldInfo->isSerializeField)

@@ -71,11 +71,11 @@ void ScriptClassInstance::FreeManagedHandle()
 	m_managedHandle = 0;
 }
 
-void ScriptClassInstance::Serialize(nlohmann::json& _out,
+void ScriptClassInstance::Serialize(nlohmann::ordered_json& _out,
 									bool			_containNonSerialized)
 {
 	_out["name"] = m_pClassType->name;
-	nlohmann::json fieldDatas;
+	nlohmann::ordered_json fieldDatas;
 	for (auto& spFieldInfo : m_pClassType->spFieldInfos)
 	{
 		if (!_containNonSerialized && !spFieldInfo->isSerializeField)

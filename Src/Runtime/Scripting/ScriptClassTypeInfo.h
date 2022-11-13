@@ -40,7 +40,8 @@ struct ScriptClassTypeInfo
 	 * @param _out json object for output serialized data
 	 * @param _containNonSerialized contain non-serialized data in serialized data
 	 */
-	void Serialize(nlohmann::json& _out, bool _containNonSerialized = true);
+	void Serialize(nlohmann::ordered_json& _out,
+				   bool					   _containNonSerialized = true);
 	// void Deserialize(const nlohmann::json& _in);
 
 	std::string name = "";
