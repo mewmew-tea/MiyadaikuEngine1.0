@@ -10,7 +10,6 @@ namespace Miyadaiku.Editor.Core.IPC.Command
 {
     internal class SetUpIPCCommand : CommandBase
     {
-        public override string MessageType { get { return "SetUpSystemMessage"; } }
 
         public override string ToJson()
         {
@@ -19,6 +18,9 @@ namespace Miyadaiku.Editor.Core.IPC.Command
 
         public class CommandDataLayout
         {
+            [JsonPropertyName("commandID")]
+            public string commandID { get { return "SetUpIPC"; } }
+
             [JsonPropertyName("hWnd")]
             public long hWnd { get; set; }
             

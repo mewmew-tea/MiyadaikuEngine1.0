@@ -2,9 +2,13 @@
 #include "../Core/Subsystem.h"
 #include "IPCSocket.h"
 #include <memory>
+#include <nlohmann/json.hpp>
+#include <functional>
 
 namespace Miyadaiku
 {
+class IPCCommand;
+
 /**
  * @brief Management for IPC(Inter-Process Communication) between runtime and editor.
  * Runtime acts as a server.
@@ -41,5 +45,11 @@ public:
 
 private:
 	std::unique_ptr<IPCSocket> m_upSocket;
+	using FactoryFunction = std::function<std::unique_ptr<IPCCommand>(const nlohmann::ordered_json&)>;
+
+	std::unordered_map<std::string, FactoryFunction> m_commandNameToGenerateInstanceFunction;
+
+	std::unique_ptr<IPCCommand> CreateCommand(const std::string& _commandID,
+				  const nlohmann::ordered_json& _data) const;
 };
 }
