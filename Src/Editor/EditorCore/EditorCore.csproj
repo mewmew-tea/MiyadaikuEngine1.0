@@ -2,11 +2,11 @@
   <PropertyGroup>
     <TargetFramework>net6.0-windows</TargetFramework>
     <UseWPF>true</UseWPF>
+    <RootNamespace>Miyadaiku.EditorCore</RootNamespace>
   </PropertyGroup>
   <ItemGroup>
+    <PackageReference Include="Prism.Unity" Version="8.1.97" />
     <PackageReference Include="Prism.Wpf" Version="8.1.97" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Controls\Models\" />
+    <PackageReference Include="ReactiveProperty.WPF" Version="8.1.2" />
   </ItemGroup>
 </Project>

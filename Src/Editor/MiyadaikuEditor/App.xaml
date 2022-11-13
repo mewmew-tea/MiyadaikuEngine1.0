@@ -4,6 +4,6 @@
              xmlns:local="clr-namespace:Miyadaiku.Editor"
              xmlns:prism="http://prismlibrary.com/" >
     <Application.Resources>
-         
+        <!--<ResourceDictionary Source="pack://application:,,,/OutLookUI;component/Resources/OutLookStyles.xaml"/>-->
     </Application.Resources>
 </prism:PrismApplication>

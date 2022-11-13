@@ -4,10 +4,11 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using Miyadaiku.EditorCore.Controls.ViewModels;
+using Miyadaiku.Editor.Core.Controls.ViewModels;
 using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 using System.Reactive.Disposables;
+using Miyadaiku.Editor.Core.Controls.Models;
 
 namespace Miyadaiku.Editor.Models
 {
@@ -49,7 +50,6 @@ namespace Miyadaiku.Editor.ViewModels
         public Models.ComponentModel model;
         //public ReactiveProperty<string> Name { get; set; }
 
-        /// <summary>キャラクター名を取得します。</summary>
         public ReactivePropertySlim<string> Name { get; }
         public ObservableCollection<Vector3ViewModel> Fields { get; set; }
 
@@ -69,18 +69,20 @@ namespace Miyadaiku.Editor.ViewModels
             //Name = "TTTTTTTTTTTT";
             Fields = new ObservableCollection<Vector3ViewModel>();
             {
-                var field = new Vector3ViewModel();
+                Vector3Model valueModel = new Vector3Model(0,0,0);
+                var field = new Vector3ViewModel(valueModel);
                 field.Name = "Position";
                 Fields.Add(field);
-                field.TextX = 1.1f;
             }
             {
-                var field = new Vector3ViewModel();
+                Vector3Model valueModel = new Vector3Model(0, 0, 0);
+                var field = new Vector3ViewModel(valueModel);
                 field.Name = "Rotation";
                 Fields.Add(field);
             }
             {
-                var field = new Vector3ViewModel();
+                Vector3Model valueModel = new Vector3Model(1, 1, 1);
+                var field = new Vector3ViewModel(valueModel);
                 field.Name = "Scale";
                 Fields.Add(field);
             }

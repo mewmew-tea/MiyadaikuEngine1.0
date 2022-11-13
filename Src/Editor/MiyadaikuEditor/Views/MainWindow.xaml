@@ -5,9 +5,10 @@
         xmlns:prism="http://prismlibrary.com/"
         xmlns:local="clr-namespace:Miyadaiku.Editor.MyViews"
         xmlns:localView="clr-namespace:Miyadaiku.Editor.Views"
-        xmlns:mydCtrs="clr-namespace:Miyadaiku.EditorCore.Controls.Views;assembly=EditorCore" xmlns:local1="clr-namespace:Miyadaiku.Editor.Views"
+        xmlns:mydCtrs="clr-namespace:Miyadaiku.Editor.Core.Controls.Views" 
+        xmlns:local1="clr-namespace:Miyadaiku.Editor.Views"
         prism:ViewModelLocator.AutoWireViewModel="True"
-        Title="{Binding Title}" Height="700" Width="1200"
+        Title="{Binding Title}" Height="1000" Width="1920"
         >
         <!--Icon="../Resources/Images/Logo.ico"-->
     <Grid>
@@ -44,7 +45,38 @@
             </Button>
             <Separator/>
         </ToolBar>
+        <!--<Border 
+                Panel.ZIndex="1" 
+                BorderThickness="0" Margin="0" Grid.Row="2">
+            <Grid>
 
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="200"/>
+                    <ColumnDefinition Width="1300"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Border Grid.Column="0">
+                    <TreeView FontSize="20">
+                        <TreeViewItem Header="Hoge">
+                            <TreeViewItem Header="HogeChild">
+                                <TreeViewItem Header="HogeGrandchild1"/>
+                                <TreeViewItem Header="HogeGrandchild2"/>
+                                <TreeViewItem Header="HogeGrandchild3"/>
+                            </TreeViewItem>
+                        </TreeViewItem>
+                    </TreeView>
+                </Border>
+
+                <Border Grid.Column="1">
+                    <local:SceneViewHost Width="1280" Height="720"/>
+
+                </Border>
+                
+                <Border Grid.Column="2">
+                    <localView:InspectorView></localView:InspectorView>
+                </Border>
+            </Grid>
+        </Border>-->
         <avalonDock:DockingManager x:Name="uxDockingManager" 
                 AllowMixedOrientation="True" 
                                    Grid.Row="2">
@@ -71,9 +103,9 @@
                             </avalonDock:LayoutDocument>
                         </avalonDock:LayoutDocumentPane>
 
-                        <avalonDock:LayoutDocumentPane x:Name="uxSceneViewPane">
+                        <avalonDock:LayoutDocumentPane x:Name="uxSceneViewPane" DockMinWidth="1300">
                             <avalonDock:LayoutDocument Title="SceneView" ContentId="SceneView" FloatingWidth="1280">
-                                <!--<local:SceneViewHost Width="1280" Height="720"/>-->
+                                <local:SceneViewHost Width="1280" Height="720"/>
                             </avalonDock:LayoutDocument>
                         </avalonDock:LayoutDocumentPane>
 

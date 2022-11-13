@@ -9,19 +9,13 @@ using System.Net.Sockets;   // Socket通信をするための名前空間
 
 using System.Windows.Interop;
 using System.Runtime.InteropServices;
-using Prism.Mvvm;
 using Reactive.Bindings;
+using System.Configuration;
+using Miyadaiku.Editor.Core.IPC;
+using Miyadaiku.Editor.Core.IPC.Command;
 
 namespace Miyadaiku.Editor.MyViews
 {
-    struct Data
-    {
-        public IntPtr hwnd;
-        public int width;
-        public int height;
-    }
-
-
     public class SceneViewHost : HwndHost
     {
         IntPtr app = IntPtr.Zero;
@@ -49,8 +43,6 @@ namespace Miyadaiku.Editor.MyViews
                 (IntPtr)WindowStyle.HOST_ID,
                 IntPtr.Zero,
                 0);
-            // TODO: 本当はここでランタイム初期化をしたいが、ここでウィンドウサイズが取得できない。
-            //       depthBufferやrenderTargetなど、ウィンドウサイズが必要な初期化は分けるべきか？
 
             return new HandleRef(this, hwndHost);
         }
@@ -67,7 +59,7 @@ namespace Miyadaiku.Editor.MyViews
             {
                 if (!isConnected)
                 {
-                    client.Connect("127.0.0.1", 12345);
+                    IPCManager.Instance.SetUp();
                 }
             }
             catch (Exception e)
@@ -99,48 +91,11 @@ namespace Miyadaiku.Editor.MyViews
 
             while (isRequestedEndUpdate == false)
             {
-                try
-                {
-                    // コマンドラインで入力された文字を取得
-                    char[] input = new string("Input!!!").ToCharArray();
-
-                    // 入力された文字をbyteに変換して送信する
-                    NetworkStream stream = client.GetStream();
-                    //byte[] bytes = Encoding.ASCII.GetBytes(input);
-
-                    Data data = new Data();
-                    data.hwnd = hWnd;
-                    data.height = (int)ActualHeight;
-                    data.width = (int)ActualWidth;
-
-                    int size = Marshal.SizeOf(data);
-                    byte[] bytes = new byte[size];
-
-                    //アンマネージメモリからメモリを割り当て
-                    IntPtr ptr = Marshal.AllocHGlobal(size);
-
-                    //マネージオブジェクトからアンマネージメモリにデータをマーシャリング
-                    Marshal.StructureToPtr(data, ptr, false);
-
-                    //アンマネージデータをマネージのbyte[]にコピーする
-                    Marshal.Copy(ptr, bytes, 0, size);
-                    stream.Write(bytes, 0, size);
-
-                    Marshal.FreeHGlobal(ptr);
-
-
-                    // レスポンス取得
-                    byte[] output = new byte[256];
-                    stream.Read(output, 0, output.Length);
-
-                    var ostr = Encoding.ASCII.GetString(output);
-                    Console.WriteLine(ostr);
-                }
-                catch (Exception e)
-                {
-                    //isRequestedEndUpdate = true;
-                    //return;
-                }
+                SetUpIPCCommand command = new SetUpIPCCommand();
+                command.commnadData.hWnd = hWnd.ToInt64();
+                command.commnadData.height = (int)ActualHeight;
+                command.commnadData.width = (int)ActualWidth;
+                IPCManager.Instance.SendAndRecv(command);
             }
 
             isEndUpdate = true;

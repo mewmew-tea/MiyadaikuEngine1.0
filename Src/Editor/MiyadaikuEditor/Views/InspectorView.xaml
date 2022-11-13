@@ -33,7 +33,7 @@
                                    />
                             <TextBlock Text="name" Margin="0,0,4,0" FontSize="14"
                                 Foreground="Black"/>
-                            <TextBox DockPanel.Dock="Right" FontSize="16" Text="{Binding TargetObjectName}" 
+                            <TextBox DockPanel.Dock="Right" FontSize="16" Text="{Binding TargetObjectName, Mode=TwoWay}" 
                                 Foreground="Black"/>
                         </DockPanel>
                     </Border>
@@ -77,7 +77,15 @@
                     x:Name="AddComponent"
                     BorderThickness="0,0,0,1"
                     Background="Transparent"
-                    Padding="4"  Grid.Row="2" Width="200">
+                    Padding="4"  Grid.Row="2" Width="200" RenderTransformOrigin="0.5,0.5">
+                        <Border.RenderTransform>
+                            <TransformGroup>
+                                <ScaleTransform/>
+                                <SkewTransform AngleY="0.512"/>
+                                <RotateTransform/>
+                                <TranslateTransform Y="0.894"/>
+                            </TransformGroup>
+                        </Border.RenderTransform>
                         <ToggleButton Loaded="ToggleButton_Loaded">
                             <ToggleButton.ContextMenu>
                                 <ContextMenu Width="200">

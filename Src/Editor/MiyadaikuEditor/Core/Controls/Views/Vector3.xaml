@@ -5,12 +5,12 @@
              xmlns:av="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="av"
-             x:Class="Miyadaiku.EditorCore.Controls.Views.Vector3"         
-             prism:ViewModelLocator.AutoWireViewModel="True"
+             x:Class="Miyadaiku.Editor.Core.Controls.Views.Vector3"         
              x:Name="root"
              HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
              av:DesignHeight="26" av:DesignWidth="400"
              >
+             <!--prism:ViewModelLocator.AutoWireViewModel="True"-->
     <!--Height="26" Width="400"-->
     <!--xmlns:d="http://schemas.microsoft.com/expression/blend/2008"-->
     <!--d:DesignHeight="26" d:DesignWidth="400"-->
@@ -25,21 +25,21 @@
             <DockPanel>
                 <Label FontSize="15" VerticalContentAlignment="Center" Foreground="White" Background="Red" Content="X"/>
                 <TextBox x:Name="TextBoxX" VerticalContentAlignment="Center"
-                         Text="{Binding TextX, Mode=TwoWay}"/>
+                         Text="{Binding X.Value, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"/>
             </DockPanel>
         </Grid>
         <Grid Grid.Column="1">
             <DockPanel>
                 <Label FontSize="15" VerticalContentAlignment="Center" Foreground="White" Background="ForestGreen" Content="Y"/>
                 <TextBox x:Name="TextBoxY" VerticalContentAlignment="Center" 
-                         Text="{Binding TextY, Mode=TwoWay}"/>
+                         Text="{Binding Y.Value, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"/>
             </DockPanel>
         </Grid>
         <Grid Grid.Column="2">
             <DockPanel>
                 <Label FontSize="15" VerticalContentAlignment="Center" Foreground="White" Background="Blue" Content="Z"/>
                 <TextBox x:Name="TextBoxZ" VerticalContentAlignment="Center"
-                         Text="{Binding TextZ, Mode=TwoWay}"/>
+                         Text="{Binding Z.Value, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"/>
             </DockPanel>
         </Grid>
         <!--<Grid Grid.Column="3">

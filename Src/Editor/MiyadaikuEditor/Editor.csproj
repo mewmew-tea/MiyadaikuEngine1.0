@@ -33,9 +33,6 @@
     <PackageReference Include="ReactiveProperty.WPF" Version="8.1.2" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\EditorCore\EditorCore.csproj" />
-  </ItemGroup>
-  <ItemGroup>
     <Resource Include="EditorResources\Images\Logo.png" />
     <Resource Include="EditorResources\Images\PauseButton_1.png" />
     <Resource Include="EditorResources\Images\PauseButton_2.png" />

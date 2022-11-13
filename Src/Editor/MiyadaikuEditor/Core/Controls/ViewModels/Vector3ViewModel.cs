@@ -3,30 +3,41 @@ using Prism.Mvvm;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Reactive.Bindings;
+using Reactive.Bindings.Extensions;
+using System.Reactive.Disposables;
 
-namespace Miyadaiku.EditorCore.Controls.ViewModels
+namespace Miyadaiku.Editor.Core.Controls.ViewModels
 {
-    public class Vector3ViewModel : BindableBase
+
+    public class Vector3ViewModel : FieldViewModel/*, IDisposable*/
     {
-        public Vector3ViewModel()
+        public Vector3ViewModel(Models.Vector3Model model)
         {
-            //X = 0f;
-            //Y = 0f;
-            //Z = 0f;
+            this.model = model;
+            X = this.model.X
+                .ToReactivePropertySlimAsSynchronized(x => x.Value);
+            Y = this.model.Y
+                .ToReactivePropertySlimAsSynchronized(x => x.Value);
+            Z = this.model.Z
+                .ToReactivePropertySlimAsSynchronized(x => x.Value);
 
             ResetCommand = new DelegateCommand(ExecuteTestCommand);
         }
-        public string Name { get; set; } = "YYYYYYYYYYYY";
 
+        public Models.Vector3Model model;
+        public ReactivePropertySlim<float> X { get; }
+        public ReactivePropertySlim<float> Y { get; }
+        public ReactivePropertySlim<float> Z { get; }
 
-        float _textX = 0f;
+        //float _textX = 0f;
         float _textY = 0f;
         float _textZ = 0f;
-        public float TextX
-        { 
-            get { return _textX; }
-            set { SetProperty(ref _textX, value); }
-        }
+        //public float TextX
+        //{ 
+        //    get { return _textX; }
+        //    set { SetProperty(ref _textX, value); }
+        //}
         public float TextY
         {
             get { return _textY; }
@@ -43,7 +54,7 @@ namespace Miyadaiku.EditorCore.Controls.ViewModels
 
         private void ExecuteTestCommand()
         {
-            TextX = 100f;
+            //TextX = 100f;
             TextY = 100f;
             TextZ = 100f;
         }
