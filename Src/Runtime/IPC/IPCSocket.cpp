@@ -68,9 +68,34 @@ int32_t IPCSocket::Send(void* _data, int32_t _size)
 	return send(m_sockHandle, (const char*)_data, _size, 0);
 }
 
+int32_t IPCSocket::SendResponse(std::string_view _commandStr)
+{
+	uint32_t length = _commandStr.length();
+	Send(&length, sizeof(length));
+	return Send((void*)_commandStr.data(), length);
+}
+
 int32_t IPCSocket::Recv(void* _buffer, int32_t _size)
 {
 	return recv(m_sockHandle, (char*)_buffer, _size, 0);
+}
+
+std::string IPCSocket::RecvCommand()
+{
+	uint32_t messageLength;
+	Recv(&messageLength, sizeof(messageLength));
+	//Send(&messageLength, sizeof(messageLength));
+
+	char* data = (char*)malloc(messageLength);
+	Recv(data, messageLength);
+	std::string commandStr = "";
+	if (data != nullptr)
+	{
+		commandStr = std::string(data, messageLength);
+	}
+	free(data);
+
+	return commandStr;
 }
 
 void IPCSocket::Close()

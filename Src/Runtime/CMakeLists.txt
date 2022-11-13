@@ -148,8 +148,8 @@ set(nativeruntime_src
     # IPC
     IPC/IPC.cpp
     IPC/IPCSocket.cpp
-    IPC/Command/IPCCommand.h
-    IPC/Command/IPCCommand_SetUpIPC.h
+    IPC/Command/IPCCommand.cpp
+    IPC/Command/IPCCommand_SetUpIPC.cpp
 )
 
 # nlohmann json

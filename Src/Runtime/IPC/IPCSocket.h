@@ -37,6 +37,7 @@ public:
 	void WaitForClientConnection();
 
 	int32_t Send(void* data, int32_t size);
+	int32_t SendResponse(std::string_view _commandStr);
 
 	int32_t Recv(void* buffer, int32_t size);
 	/**
@@ -44,7 +45,7 @@ public:
 	 * 
 	 * @return 
 	 */
-	//std::string RecvCommand();
+	std::string RecvCommand();
 
 	bool	IsValid() const
 	{
