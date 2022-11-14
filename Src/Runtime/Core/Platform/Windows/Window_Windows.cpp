@@ -23,23 +23,6 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
 	switch (message)
 	{
-	case WM_COMMAND:
-	{
-		//int wmId = LOWORD(wParam);
-		//switch (wmId)
-		{
-		//default:
-			return DefWindowProc(hWnd, message, wParam, lParam);
-		}
-	}
-	break;
-	case WM_PAINT:
-	{
-		PAINTSTRUCT ps;
-		/*HDC		hdc = */ BeginPaint(hWnd, &ps);
-		EndPaint(hWnd, &ps);
-	}
-	break;
 	case WM_KEYDOWN:
 		switch (wParam)
 		{
@@ -81,16 +64,9 @@ void SetClientSize(int w, int h, HWND _hWnd)
 
 bool Window_Windows::Create()
 {
-	if (GetEngine()->m_editorHWnd)
-	{
-		m_hWnd = (HWND)GetEngine()->m_editorHWnd;
-		return true;
-	}
-
-
 	m_hInst = (HINSTANCE)::GetModuleHandle(0);
 
-	WNDCLASSEX wcex;
+	WNDCLASSEX wcex = {};
 
 	wcex.cbSize = sizeof(WNDCLASSEX);
 
@@ -101,7 +77,8 @@ bool Window_Windows::Create()
 	wcex.hInstance = m_hInst;
 	wcex.hIcon = nullptr;
 	wcex.hCursor = LoadCursor(nullptr, IDC_ARROW);
-	wcex.hbrBackground = (HBRUSH)(COLOR_WINDOW + 1);
+	// wcex.hbrBackground = (HBRUSH)(COLOR_WINDOW + 1);
+	 wcex.hbrBackground = nullptr;
 	wcex.lpszMenuName = nullptr;
 	wcex.lpszClassName = "MiyadaikuEngineApplication";
 	wcex.hIconSm = nullptr;
@@ -113,10 +90,12 @@ bool Window_Windows::Create()
 					 m_rect.height, nullptr,
 					 nullptr, m_hInst, nullptr);
 
-	// クライアントのサイズを設定
-	SetClientSize(m_rect.width, m_rect.height, m_hWnd);
 
-	ShowWindow(m_hWnd, SW_SHOW);
+	if (!GetEngine()->IsEditorMode())
+	{
+		SetClientSize(m_rect.width, m_rect.height, m_hWnd);
+		ShowWindow(m_hWnd, SW_SHOW);
+	}
 
 	return true;
 }
@@ -153,6 +132,22 @@ void Window_Windows::ProcessSystemEventQueue()
 bool Window_Windows::IsCreated() const
 {
 	return (m_hWnd != nullptr);
+}
+
+void Window_Windows::SetParentWindowHandle(HWND _parentHWnd)
+{
+	if (_parentHWnd)
+	{
+		SetWindowLong((HWND)m_hWnd, GWL_STYLE, WS_CHILD);
+
+		SetParent((HWND)m_hWnd, _parentHWnd);
+		SetClientSize(m_rect.width, m_rect.height, m_hWnd);
+	}
+}
+
+void Window_Windows::Show()
+{
+	ShowWindow(m_hWnd, SW_SHOW);
 }
 
 HINSTANCE Window_Windows::GetInstanceHandle() const

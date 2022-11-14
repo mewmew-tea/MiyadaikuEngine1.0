@@ -17,6 +17,6 @@ public:
 	virtual std::string Execute() = 0;
 
 protected:
-	const nlohmann::ordered_json& m_data;
+	const nlohmann::ordered_json m_data;
 };
 } // namespace Miyadaiku

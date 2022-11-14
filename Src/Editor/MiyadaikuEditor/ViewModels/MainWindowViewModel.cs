@@ -13,13 +13,35 @@ using Reactive.Bindings;
 using System.Configuration;
 using Miyadaiku.Editor.Core.IPC;
 using Miyadaiku.Editor.Core.IPC.Command;
+using System.Text.Json;
 
 namespace Miyadaiku.Editor.MyViews
 {
     public class SceneViewHost : HwndHost
     {
-        IntPtr app = IntPtr.Zero;
+        private IntPtr clientHWnd = IntPtr.Zero;
+        protected override HandleRef BuildWindowCore(HandleRef hwndParent)
+        {
+            SetUpIPCCommand command = new SetUpIPCCommand();
+            command.commnadData.hWnd = hwndParent.Handle.ToInt64();
+            command.commnadData.height = (int)ActualHeight;
+            command.commnadData.width = (int)ActualWidth;
 
+            var response = JsonSerializer.Deserialize<SetUpIPCCommand.ResponceDataLayout>(IPCManager.Instance.SendAndRecv(command));
+            clientHWnd = (IntPtr)response.hWnd;
+
+            return new HandleRef(this, clientHWnd);
+        }
+
+
+        protected override void DestroyWindowCore(HandleRef hwnd)
+        {
+            clientHWnd = IntPtr.Zero;
+        }
+
+        //====================================
+        // Win32 APIs
+        //====================================
         [Flags]
         enum WindowStyle : int
         {
@@ -31,94 +53,6 @@ namespace Miyadaiku.Editor.MyViews
             WS_VSCROLL = 0x00200000,
             WS_BORDER = 0x00800000,
         }
-
-        protected override HandleRef BuildWindowCore(HandleRef hwndParent)
-        {
-            IntPtr hwndHost = CreateWindowEx(
-                0, "STATIC", "",
-                WindowStyle.WS_CHILD | WindowStyle.WS_VISIBLE,
-                0, 0,
-                (int)ActualWidth, (int)ActualHeight,
-                hwndParent.Handle,
-                (IntPtr)WindowStyle.HOST_ID,
-                IntPtr.Zero,
-                0);
-
-            return new HandleRef(this, hwndHost);
-        }
-
-        // TcpClientを使ってホストに対し接続を試みる
-        TcpClient client = new TcpClient();
-        bool isConnected = false;
-        IntPtr hWnd;
-        Task updateTask;
-
-        protected override IntPtr WndProc(IntPtr hwnd, int msg, IntPtr wParam, IntPtr lParam, ref bool handled)
-        {
-            try
-            {
-                if (!isConnected)
-                {
-                    IPCManager.Instance.SetUp();
-                }
-            }
-            catch (Exception e)
-            {
-                handled = false;
-                return IntPtr.Zero;
-            }
-
-            if (!isConnected)
-            {
-                isConnected = true;
-                hWnd = hwnd;
-                updateTask = Task.Run(() =>
-                {
-                    UpdateFrame();
-                });
-            }
-            //Render(app);
-            handled = false;
-            return IntPtr.Zero;
-        }
-
-        bool isRequestedEndUpdate = false;
-        bool isEndUpdate = false;
-        void UpdateFrame()
-        {
-            isRequestedEndUpdate = false;
-            isEndUpdate = false;
-
-            while (isRequestedEndUpdate == false)
-            {
-                SetUpIPCCommand command = new SetUpIPCCommand();
-                command.commnadData.hWnd = hWnd.ToInt64();
-                command.commnadData.height = (int)ActualHeight;
-                command.commnadData.width = (int)ActualWidth;
-                IPCManager.Instance.SendAndRecv(command);
-            }
-
-            isEndUpdate = true;
-        }
-
-
-        protected override void DestroyWindowCore(HandleRef hwnd)
-        {
-            isRequestedEndUpdate = true;
-
-            updateTask.Wait();
-
-            DestroyWindow(hwnd.Handle);
-
-            // TcpClientを終了
-            if (isConnected)
-                client.Close();
-            //Dispose(app);
-        }
-
-        //====================================
-        // Win32 APIs
-        //====================================
         [DllImport("user32.dll")]
         static extern IntPtr CreateWindowEx(int dwExStyle,
                                               string lpszClassName,
@@ -132,8 +66,6 @@ namespace Miyadaiku.Editor.MyViews
                                               [MarshalAs(UnmanagedType.AsAny)] object pvParam);
         [DllImport("user32.dll")]
         static extern bool DestroyWindow(IntPtr hwnd);
-
-
     }
 }
 

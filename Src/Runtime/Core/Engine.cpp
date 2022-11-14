@@ -56,13 +56,13 @@ Engine::~Engine()
 
 void Engine::SetUp()
 {
+	m_subsystemLocator.Add<Platform>();
+	m_subsystemLocator.Add<Renderer>();
+	m_subsystemLocator.Add<Scripting>();
 	if (IsEditorMode())
 	{
 		m_subsystemLocator.Add<IPC>();
 	}
-	m_subsystemLocator.Add<Platform>();
-	m_subsystemLocator.Add<Renderer>();
-	m_subsystemLocator.Add<Scripting>();
 }
 
 void Engine::Update()

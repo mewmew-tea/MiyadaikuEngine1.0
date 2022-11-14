@@ -84,6 +84,7 @@ namespace Miyadaiku.Editor.Core.IPC
 
                     data = new byte[responseLength];
                     int bytesRead = networkStream.Read(data, 0, Math.Min(2048, responseLength));
+                    isCompleted = true;
                     return Encoding.ASCII.GetString(data, 0, bytesRead);
                 }
             }

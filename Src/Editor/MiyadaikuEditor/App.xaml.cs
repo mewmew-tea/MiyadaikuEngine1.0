@@ -1,5 +1,7 @@
-﻿using Miyadaiku.Editor.Views;
+﻿using Miyadaiku.Editor.Core.IPC;
+using Miyadaiku.Editor.Views;
 using Prism.Ioc;
+using System;
 using System.Windows;
 
 namespace Miyadaiku.Editor
@@ -9,6 +11,27 @@ namespace Miyadaiku.Editor
     /// </summary>
     public partial class App
     {
+        private void Application_Startup(object sender, StartupEventArgs e)
+        {
+
+
+            while (true)
+            {
+
+                try
+                {
+                    {
+                        IPCManager.Instance.SetUp();
+                        break;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    //handled = false;
+                }
+            }
+            //IPCManager.Instance.SetUp();
+        }
         protected override Window CreateShell()
         {
             return Container.Resolve<MainWindow>();

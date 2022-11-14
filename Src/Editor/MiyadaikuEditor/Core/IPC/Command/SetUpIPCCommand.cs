@@ -32,9 +32,13 @@ namespace Miyadaiku.Editor.Core.IPC.Command
 
         }
 
-        public class ResponceDataLeyout
+        public class ResponceDataLayout
         {
+
+            [JsonPropertyName("result")]
             public bool result { get; set; } = false;
+            [JsonPropertyName("hWnd")]
+            public long hWnd { get; set; }
         }
 
 

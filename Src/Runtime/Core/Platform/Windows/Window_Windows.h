@@ -15,6 +15,9 @@ public:
 	void ProcessSystemEventQueue() override;
 	bool IsCreated() const;
 
+	void SetParentWindowHandle(HWND _parentHWnd);
+	void Show();
+
 	HWND GetWindowHandle() const
 	{
 		return m_hWnd;

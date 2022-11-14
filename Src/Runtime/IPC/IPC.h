@@ -4,6 +4,9 @@
 #include <memory>
 #include <nlohmann/json.hpp>
 #include <functional>
+#include <thread>
+#include <mutex>
+#include <queue>
 
 namespace Miyadaiku
 {
@@ -41,15 +44,29 @@ public:
 
 	void Disconnect();
 
-
-
+	void RecvThread();
+	void ResponseThread();
 private:
 	std::unique_ptr<IPCSocket> m_upSocket;
-	using FactoryFunction = std::function<std::unique_ptr<IPCCommand>(const nlohmann::ordered_json&)>;
 
+	//----------------------
+	// command
+	//----------------------
+	using FactoryFunction = std::function<std::shared_ptr<IPCCommand>(const nlohmann::ordered_json&)>;
 	std::unordered_map<std::string, FactoryFunction> m_commandNameToGenerateInstanceFunction;
 
-	std::unique_ptr<IPCCommand> CreateCommand(const std::string& _commandID,
+	std::shared_ptr<IPCCommand>
+	CreateCommand(const std::string&			_commandID,
 				  const nlohmann::ordered_json& _data) const;
+
+	//-----------------------------------
+	// threading to process command
+	//-----------------------------------
+	std::thread m_recvThread;
+	std::thread m_responseThread;
+	std::mutex	m_mutex;
+
+	std::queue<std::shared_ptr<IPCCommand>> m_commandQueue;
+	std::queue<std::string>					m_responseQueue;
 };
 }

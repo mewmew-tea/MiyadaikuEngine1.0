@@ -124,10 +124,8 @@ void Renderer::OnAwake()
 		// // マルチビューポート有効化
 	}
 	// Setup Platform/Renderer bindings
-	void* editorHwnd = GetEngine()->m_editorHWnd;
 
-	ImGui_ImplWin32_Init(editorHwnd ? editorHwnd
-									  : mainWindow->GetWindowHandle());
+	ImGui_ImplWin32_Init(mainWindow->GetWindowHandle());
 	ImGui_ImplDX11_Init(device->GetDevice(), device->GetDeviceContext());
 
 	{

@@ -23,8 +23,7 @@ void Platform::OnShutdown()
 }
 void Platform::ProcessSystemEventQueue()
 {
-	Engine* e = GetEngine();
-	if (!m_mainWindow || GetEngine()->m_editorHWnd)
+	if (!m_mainWindow)
 	{
 		return;
 	}

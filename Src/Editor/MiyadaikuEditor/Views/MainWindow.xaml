@@ -105,7 +105,8 @@
 
                         <avalonDock:LayoutDocumentPane x:Name="uxSceneViewPane" DockMinWidth="1300">
                             <avalonDock:LayoutDocument Title="SceneView" ContentId="SceneView" FloatingWidth="1280">
-                                <local:SceneViewHost Width="1280" Height="720"/>
+                                <!--<local:SceneViewHost Width="1280" Height="720"/>-->
+                                <localView:RuntimeView></localView:RuntimeView>
                             </avalonDock:LayoutDocument>
                         </avalonDock:LayoutDocumentPane>
 
