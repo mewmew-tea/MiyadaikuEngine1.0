@@ -9,31 +9,8 @@ using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
 using System.Reactive.Disposables;
 using Miyadaiku.Editor.Core.Controls.Models;
+using Miyadaiku.Editor.Models;
 
-namespace Miyadaiku.Editor.Models
-{
-    public interface IModel
-    {
-
-    }
-
-    public class ComponentModel : BindableBase, IDisposable
-    {
-        protected CompositeDisposable disposables = new CompositeDisposable();
-        public ReactivePropertySlim<string> Name { get; }
-
-        public ComponentModel(string name)
-        {
-            Name = new ReactivePropertySlim<string>(/*name*/"Transform")
-                .AddTo(this.disposables);
-        }
-
-        public void Dispose()
-        {
-            disposables.Dispose();
-        }
-    }
-}
 namespace Miyadaiku.Editor.ViewModels
 {
     public class ComponentViewModel : BindableBase, IDisposable

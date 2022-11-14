@@ -177,8 +177,9 @@ void ScriptClassTypeInfo::Serialize(nlohmann::ordered_json& _out,
 			continue;
 		}
 
-		std::tuple<int, std::string> fieldInfo = {(int)spFieldInfo->type,
-												  spFieldInfo->name};
+		nlohmann::ordered_json fieldInfo;
+		fieldInfo["typeID"] = (uint16_t)spFieldInfo->type;
+		fieldInfo["name"] = spFieldInfo->name;
 		fields.push_back(fieldInfo);
 	}
 	_out["fields"] = fields;

@@ -81,6 +81,10 @@ public:
 
 	//GameObject			go;
 
+	const std::list<std::shared_ptr<ScriptClassTypeInfo>>&
+	GetScriptClassTypes();
+
+
 
 private:
 	std::list<std::shared_ptr<ScriptClassTypeInfo>> m_spScriptClasses;

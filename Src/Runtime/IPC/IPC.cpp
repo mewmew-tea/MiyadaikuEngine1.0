@@ -1,5 +1,6 @@
 ﻿#include "IPC.h"
 #include "Command/IPCCommand_SetUpIPC.h"
+#include "Command/IPCCommand_GetComponentTypeInfos.h"
 #include "../Core/Engine.h"
 
 namespace Miyadaiku
@@ -14,6 +15,7 @@ namespace Miyadaiku
 bool IPC::SetUp()
 {
 	REGISTER_COMMAND("SetUpIPC", IPCCommand_SetUpIPC);
+	REGISTER_COMMAND("GetComponentTypeInfos", IPCCommand_GetComponentTypeInfos);
 
 	m_upSocket = std::make_unique<IPCSocket>();
 	if (!m_upSocket->SetUp())

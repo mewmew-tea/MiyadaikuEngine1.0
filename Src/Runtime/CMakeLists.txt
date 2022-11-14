@@ -82,6 +82,7 @@ file(GLOB nativeruntime_h
     IPC/IPCSocket.h
     IPC/Command/IPCCommand.h
     IPC/Command/IPCCommand_SetUpIPC.h
+    IPC/Command/IPCCommand_GetComponentTypeInfos.h
 )
 # cpp files
 set(nativeruntime_src
@@ -150,6 +151,7 @@ set(nativeruntime_src
     IPC/IPCSocket.cpp
     IPC/Command/IPCCommand.cpp
     IPC/Command/IPCCommand_SetUpIPC.cpp
+    IPC/Command/IPCCommand_GetComponentTypeInfos.cpp
 )
 
 # nlohmann json

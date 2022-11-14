@@ -586,4 +586,10 @@ std::shared_ptr<GameObject> Scripting::CreateGameObject()
 	return gameObject;
 }
 
+const std::list<std::shared_ptr<ScriptClassTypeInfo>>&
+Scripting::GetScriptClassTypes()
+{
+	return m_spScriptClasses;
+}
+
 } // namespace Miyadaiku
