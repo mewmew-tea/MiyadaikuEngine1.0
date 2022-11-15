@@ -1,6 +1,7 @@
 ﻿#include "ScriptClassInstance.h"
 #include "ScriptClassTypeInfo.h"
 #include "ScriptFieldInfo.h"
+#include "ScriptPropertyInfo.h"
 #include "ScriptMethod.h"
 
 
@@ -75,10 +76,16 @@ void ScriptClassInstance::Serialize(nlohmann::ordered_json& _out,
 									bool			_containNonSerialized)
 {
 	_out["name"] = m_pClassType->name;
-	nlohmann::ordered_json fieldDatas;
+	nlohmann::ordered_json values;
+	// Fields
 	for (auto& spFieldInfo : m_pClassType->spFieldInfos)
 	{
 		if (!_containNonSerialized && !spFieldInfo->isSerializeField)
+		{
+			continue;
+		}
+		// ignore property's internal fields. (they begin with '<')
+		if (spFieldInfo->name[0] == '<')
 		{
 			continue;
 		}
@@ -89,35 +96,35 @@ void ScriptClassInstance::Serialize(nlohmann::ordered_json& _out,
 		{
 			int data = 0;
 			spFieldInfo->GetValue(m_pInstance, &data);
-			fieldDatas.push_back(data);
+			values.push_back(data);
 		}
 		break;
 		case Miyadaiku::ScriptValueType::Float:
 		{
 			float data = 0.0f;
 			spFieldInfo->GetValue(m_pInstance, &data);
-			fieldDatas.push_back(data);
+			values.push_back(data);
 		}
 		break;
 		case Miyadaiku::ScriptValueType::Bool:
 		{
 			bool data = false;
 			spFieldInfo->GetValue(m_pInstance, &data);
-			fieldDatas.push_back(data);
+			values.push_back(data);
 		}
 		break;
 		case Miyadaiku::ScriptValueType::String:
 		{
 			std::string data = "";
 			spFieldInfo->GetValue(m_pInstance, &data);
-			fieldDatas.push_back(data);
+			values.push_back(data);
 		}
 		break;
 		case Miyadaiku::ScriptValueType::IntPtr:
 		{
 			void* data = nullptr;
 			spFieldInfo->GetValue(m_pInstance, &data);
-			fieldDatas.push_back((int32_t)data);
+			values.push_back((int32_t)data);
 		}
 		break;
 		case Miyadaiku::ScriptValueType::Vector2:
@@ -125,7 +132,7 @@ void ScriptClassInstance::Serialize(nlohmann::ordered_json& _out,
 			Vector2 data;
 			spFieldInfo->GetValue(m_pInstance, &data);
 			nlohmann::json dataArray = {data.x, data.y};
-			fieldDatas.push_back(dataArray);
+			values.push_back(dataArray);
 		}
 		break;
 		case Miyadaiku::ScriptValueType::Vector3:
@@ -133,7 +140,7 @@ void ScriptClassInstance::Serialize(nlohmann::ordered_json& _out,
 			Vector3 data;
 			spFieldInfo->GetValue(m_pInstance, &data);
 			nlohmann::json dataArray = {data.x, data.y, data.z};
-			fieldDatas.push_back(dataArray);
+			values.push_back(dataArray);
 		}
 		break;
 		case Miyadaiku::ScriptValueType::Vector4:
@@ -141,7 +148,7 @@ void ScriptClassInstance::Serialize(nlohmann::ordered_json& _out,
 			Vector4 data;
 			spFieldInfo->GetValue(m_pInstance, &data);
 			nlohmann::json dataArray = {data.x, data.y, data.z, data.w};
-			fieldDatas.push_back(dataArray);
+			values.push_back(dataArray);
 		}
 		break;
 		case Miyadaiku::ScriptValueType::Quaternion:
@@ -149,18 +156,109 @@ void ScriptClassInstance::Serialize(nlohmann::ordered_json& _out,
 			Quaternion data;
 			spFieldInfo->GetValue(m_pInstance, &data);
 			nlohmann::json dataArray = {data.x, data.y, data.z, data.w};
-			fieldDatas.push_back(dataArray);
+			values.push_back(dataArray);
 		}
 		break;
 		case Miyadaiku::ScriptValueType::Other:
-			fieldDatas.push_back(0);
+			values.push_back(0);
 			break;
 		default:
-			fieldDatas.push_back(0);
+			values.push_back(0);
 			break;
 		}
 	}
-	_out["fieldDatas"] = fieldDatas;
+	// props
+	for (auto& spPropertyInfo : m_pClassType->spPropertyInfos)
+	{
+		if (!_containNonSerialized && !spPropertyInfo->isSerializeField)
+		{
+			continue;
+		}
+		// ignore property's internal fields. (they begin with '<')
+		if (spPropertyInfo->name[0] == '<')
+		{
+			continue;
+		}
+
+		switch (spPropertyInfo->type)
+		{
+		case Miyadaiku::ScriptValueType::Int:
+		{
+			int data = 0;
+			spPropertyInfo->GetValue(m_pInstance, &data);
+			values.push_back(data);
+		}
+		break;
+		case Miyadaiku::ScriptValueType::Float:
+		{
+			float data = 0.0f;
+			spPropertyInfo->GetValue(m_pInstance, &data);
+			values.push_back(data);
+		}
+		break;
+		case Miyadaiku::ScriptValueType::Bool:
+		{
+			bool data = false;
+			spPropertyInfo->GetValue(m_pInstance, &data);
+			values.push_back(data);
+		}
+		break;
+		case Miyadaiku::ScriptValueType::String:
+		{
+			std::string data = "";
+			spPropertyInfo->GetValue(m_pInstance, &data);
+			values.push_back(data);
+		}
+		break;
+		case Miyadaiku::ScriptValueType::IntPtr:
+		{
+			void* data = nullptr;
+			spPropertyInfo->GetValue(m_pInstance, &data);
+			values.push_back((int32_t)data);
+		}
+		break;
+		case Miyadaiku::ScriptValueType::Vector2:
+		{
+			Vector2 data;
+			spPropertyInfo->GetValue(m_pInstance, &data);
+			nlohmann::json dataArray = {data.x, data.y};
+			values.push_back(dataArray);
+		}
+		break;
+		case Miyadaiku::ScriptValueType::Vector3:
+		{
+			Vector3 data;
+			spPropertyInfo->GetValue(m_pInstance, &data);
+			nlohmann::json dataArray = {data.x, data.y, data.z};
+			values.push_back(dataArray);
+		}
+		break;
+		case Miyadaiku::ScriptValueType::Vector4:
+		{
+			Vector4 data;
+			spPropertyInfo->GetValue(m_pInstance, &data);
+			nlohmann::json dataArray = {data.x, data.y, data.z, data.w};
+			values.push_back(dataArray);
+		}
+		break;
+		case Miyadaiku::ScriptValueType::Quaternion:
+		{
+			Quaternion data;
+			spPropertyInfo->GetValue(m_pInstance, &data);
+			nlohmann::json dataArray = {data.x, data.y, data.z, data.w};
+			values.push_back(dataArray);
+		}
+		break;
+		case Miyadaiku::ScriptValueType::Other:
+			values.push_back(0);
+			break;
+		default:
+			values.push_back(0);
+			break;
+		}
+	}
+
+	_out["values"] = values;
 }
 
 }

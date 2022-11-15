@@ -176,10 +176,28 @@ void ScriptClassTypeInfo::Serialize(nlohmann::ordered_json& _out,
 		{
 			continue;
 		}
+		// ignore property's internal fields. (they begin with '<')
+		if (spFieldInfo->name[0] == '<')
+		{
+			continue;
+		}
 
 		nlohmann::ordered_json fieldInfo;
 		fieldInfo["typeID"] = (uint16_t)spFieldInfo->type;
 		fieldInfo["name"] = spFieldInfo->name;
+		fields.push_back(fieldInfo);
+	}
+	// props
+	for (auto& spPropInfo : spPropertyInfos)
+	{
+		if (!_containNonSerialized && !spPropInfo->isSerializeField)
+		{
+			continue;
+		}
+
+		nlohmann::ordered_json fieldInfo;
+		fieldInfo["typeID"] = (uint16_t)spPropInfo->type;
+		fieldInfo["name"] = spPropInfo->name;
 		fields.push_back(fieldInfo);
 	}
 	_out["fields"] = fields;
