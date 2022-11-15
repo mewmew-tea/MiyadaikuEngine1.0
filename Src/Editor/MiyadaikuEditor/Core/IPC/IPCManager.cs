@@ -5,8 +5,10 @@ using System.Diagnostics;
 using System.Linq;
 using System.Net.Sockets;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 using Miyadaiku.Editor.Core.IPC.Command;
+using Miyadaiku.Editor.Models;
 
 namespace Miyadaiku.Editor.Core.IPC
 {
@@ -36,6 +38,8 @@ namespace Miyadaiku.Editor.Core.IPC
         TcpClient tcpClient;
         NetworkStream networkStream;
 
+        public ComponentTypeInfo[] TypeInfos { get; set; }
+
         public bool isConnected
         {
             get
@@ -56,6 +60,16 @@ namespace Miyadaiku.Editor.Core.IPC
             tcpClient = new TcpClient();
             tcpClient.Connect(hostname, port);
             networkStream = tcpClient.GetStream();
+
+            // GetTypes
+            GetComponentTypeInfosCommand command = new GetComponentTypeInfosCommand();
+
+            var response = JsonSerializer.Deserialize<GetComponentTypeInfosCommand.ResponseDataLeyout>(IPCManager.Instance.SendAndRecv(command));
+            this.TypeInfos = response.TypeInfos;
+            foreach (var typeInfo in response.TypeInfos)
+            {
+                Debug.Print(typeInfo.name);
+            }
         }
 
         public string SendAndRecv(CommandBase command)
