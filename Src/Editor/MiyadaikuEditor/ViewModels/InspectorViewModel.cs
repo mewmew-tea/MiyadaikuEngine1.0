@@ -10,6 +10,7 @@ using Reactive.Bindings.Extensions;
 using Miyadaiku.Editor.Core.IPC.Command;
 using System.Text.Json;
 using Miyadaiku.Editor.Core.IPC;
+using System.Timers;
 
 namespace Miyadaiku.Editor.ViewModels
 {
@@ -61,6 +62,21 @@ namespace Miyadaiku.Editor.ViewModels
             // Add component
             var comp = new ComponentViewModel(model);
             Components.Add(comp);
+
+            // Update by timer
+            Timer timer = new Timer(500);
+            timer.Elapsed += (sender, e) =>
+            {
+                GetComponentsCommand command = new GetComponentsCommand();
+
+                var response = JsonSerializer.Deserialize<GetComponentsCommand.ResponseDataLayout>(IPCManager.Instance.SendAndRecv(command));
+
+                model.JsonValues = response.Components[0].JsonValues;
+                model.JsonValuesToDynamic();
+                Components[0].model.Values = model.Values;
+                Components[0].UpdateFields();
+            };
+            timer.Start();
 
             AddPlayerControllerCommand = new DelegateCommand(AddPlayerController);
         }
