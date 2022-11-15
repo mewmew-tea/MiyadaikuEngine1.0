@@ -10,9 +10,9 @@ namespace Miyadaiku.Editor.Core.Controls.Views
     /// <summary>
     /// Interaction logic for Vector3
     /// </summary>
-    public partial class Vector3 : UserControl
+    public partial class Vector3View : UserControl
     {
-        public Vector3()
+        public Vector3View()
         {
             InitializeComponent();
 

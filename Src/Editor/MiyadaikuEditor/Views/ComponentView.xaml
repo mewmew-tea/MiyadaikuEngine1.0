@@ -44,7 +44,7 @@
 
                     <ListBox.Resources>
                         <DataTemplate DataType="{x:Type mydCtrsVM:Vector3ViewModel}">
-                            <mydCtrs:Vector3 Width="Auto" Grid.Column="3"/>
+                            <mydCtrs:Vector3View Width="Auto" Grid.Column="3"/>
                         </DataTemplate>
                         <DataTemplate DataType="{x:Type mydCtrsVM:FloatViewModel}">
                             <mydCtrs:FloatView  Width="Auto" Grid.Column="3"/>
