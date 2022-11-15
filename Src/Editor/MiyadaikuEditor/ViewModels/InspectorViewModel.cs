@@ -7,6 +7,9 @@ using System.Linq;
 using System.Configuration;
 using Reactive.Bindings;
 using Reactive.Bindings.Extensions;
+using Miyadaiku.Editor.Core.IPC.Command;
+using System.Text.Json;
+using Miyadaiku.Editor.Core.IPC;
 
 namespace Miyadaiku.Editor.ViewModels
 {
@@ -24,11 +27,39 @@ namespace Miyadaiku.Editor.ViewModels
         {
             TargetObjectName = "GameObject";
             Components = new ReactiveCollection<ComponentViewModel>();
-            Models.ComponentModel model = new Models.ComponentModel("Transform");
-            //model.Name.Value = "Transform";
-            var comp = new ComponentViewModel(model/*"Transform"*/);
-            ////comp.model.Name.Value = "Transform";
-            ////comp.Name = "Transform";
+            Models.ComponentModel model = new Models.ComponentModel();
+
+            // TODO: multi components
+
+            // Get type infos
+            {
+                GetComponentTypeInfosCommand command = new GetComponentTypeInfosCommand();
+
+                var response = JsonSerializer.Deserialize<GetComponentTypeInfosCommand.ResponseDataLeyout>(IPCManager.Instance.SendAndRecv(command));
+
+                foreach (var info in response.TypeInfos)
+                {
+                    if (info.name == "Transform")
+                    {
+                        model.TypeInfo = info;
+                        model.Name.Value = info.name;
+                        break;
+                    }
+                }
+            }
+            // Get components
+            {
+
+                GetComponentsCommand command = new GetComponentsCommand();
+
+                var response = JsonSerializer.Deserialize<GetComponentsCommand.ResponseDataLayout>(IPCManager.Instance.SendAndRecv(command));
+
+                model.JsonValues = response.Components[0].JsonValues;
+                model.JsonValuesToDynamic();
+            }
+
+            // Add component
+            var comp = new ComponentViewModel(model);
             Components.Add(comp);
 
             AddPlayerControllerCommand = new DelegateCommand(AddPlayerController);

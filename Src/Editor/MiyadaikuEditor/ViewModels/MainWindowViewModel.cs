@@ -90,14 +90,14 @@ namespace Miyadaiku.Editor.ViewModels
 
 
         public DelegateCommand TestCommand { get; }
-        public ReactiveCollection<ComponentViewModel> Components { get; set; }
+        //public ReactiveCollection<ComponentViewModel> Components { get; set; }
 
         public MainWindowViewModel()
         {
             TestCommand = new DelegateCommand(ExecuteTestCommand);
             TextData = new Dat();
-            Components = new ReactiveCollection<ComponentViewModel>();
-            Components.Add(new ComponentViewModel(new Models.ComponentModel("AAA")));
+            //Components = new ReactiveCollection<ComponentViewModel>();
+            //Components.Add(new ComponentViewModel(new Models.ComponentModel("AAA")));
         }
 
         public class Dat : BindableBase
