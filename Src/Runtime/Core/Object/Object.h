@@ -43,6 +43,7 @@ public:
 	std::shared_ptr<ScriptClassInstance> GetClassInstance();
 
 protected:
+	std::string							 m_guid;
 	InstanceID							 m_instanceID;
 	std::shared_ptr<ScriptClassInstance> m_spClassInstance;
 };
@@ -62,6 +63,7 @@ public:
 	std::shared_ptr<ScriptClassInstance> GetClassInstance();
 
 	std::shared_ptr<Component> GetTransform();
+	std::list <std::shared_ptr<Component>> GetComponents();
 
 
 	friend Scripting;

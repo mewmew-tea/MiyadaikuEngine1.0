@@ -117,6 +117,11 @@ std::shared_ptr<Component> GameObject::GetTransform()
 	return m_spTransform;
 }
 
+std::list<std::shared_ptr<Component>> GameObject::GetComponents()
+{
+	return m_spComponents;
+}
+
 MonoObject* GameObject::Internal_GetTransform(GameObject* _chachedPtr)
 {
 	return _chachedPtr->m_spTransform->m_spClassInstance->m_pInstance;
