@@ -8,7 +8,7 @@
              x:Name="root"
              HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
              av:DesignHeight="26" av:DesignWidth="400">
-    <Grid  Margin="0, 1, 0, 1">
+    <Grid  Margin="1, 1, 1, 1">
         <TextBox x:Name="TextBoxX" VerticalContentAlignment="Center" Margin="5, 0, 5, 0"
                          Text="{Binding X.Value, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"/>
     </Grid>
