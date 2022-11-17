@@ -9,6 +9,7 @@ namespace Miyadaiku
 {
 class RHI_Device;
 class RHI_PipelineState;
+class RHI_ConstantBuffer;
 
 /**
  * CommandList（D3D11ではDeviceContextと同等の役割をします）。
@@ -30,6 +31,11 @@ public:
 	virtual void SetSamplerState(
 		const std::uint32_t						 _slot,
 		const std::shared_ptr<RHI_SamplerState>& _spSamplerState) = 0;
+
+
+	virtual void SetConstantBuffer(const std::uint32_t _slot,
+						   const std::shared_ptr<RHI_ConstantBuffer>
+							   _pConstantBuffer) = 0;
 
 	// Draw
 	virtual void Draw(uint32_t _indexCount, uint32_t _vertexStart) = 0;
