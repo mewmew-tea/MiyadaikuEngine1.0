@@ -1,5 +1,6 @@
 ﻿#pragma once
 #include "../Core/Subsystem.h"
+#include "./CommonConstantBuffer.h"
 
 namespace Miyadaiku
 {
@@ -11,6 +12,8 @@ class RHI_CommandList;
 
 struct RHI_RasterizerState;
 struct RHI_SamplerState;
+
+class RHI_ConstantBuffer;
 
 class Renderer final : public Subsystem
 {
@@ -45,5 +48,10 @@ private:
 
 	std::shared_ptr<RHI_RasterizerState> m_spRHIRasterizerState = nullptr;
 	std::shared_ptr<RHI_SamplerState> m_spRHISamplerState = nullptr;
+
+	// Constant buffers
+	// TODO: class to combine data and CBs
+	Cb_Camera							m_cbCameraData;
+	std::shared_ptr<RHI_ConstantBuffer> m_spCbCamera = nullptr;
 };
 } // namespace Miyadaiku

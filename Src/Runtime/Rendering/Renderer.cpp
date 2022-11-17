@@ -12,6 +12,8 @@
 #include "RHI/D3D11/D3D11_Shader.h"
 #include "RHI/D3D11/D3D11_Texture.h"
 #include "RHI/D3D11/D3D11_RenderState.h"
+#include "RHI/D3D11/D3D11_ConstantBuffer.h"
+#include "CommonConstantBuffer.h"
 
 #include <memory>
 #include <iostream>
@@ -99,6 +101,15 @@ void Renderer::OnAwake()
 	// Create rasterize state
 	m_spRHIRasterizerState = std::make_shared<D3D11_RasterizerState>(m_spRHIDevice, RS_CullMode::Back, RS_FillMode::Solid);
 
+	// Crete constant buffers
+	m_spCbCamera = std::make_shared<D3D11_ConstantBuffer>(m_spRHIDevice);
+	if (!m_spCbCamera->Create<Cb_Camera>())
+	{
+		assert(0 && "Failed Create constant buffer!");
+	}
+	m_cbCameraData.mView = Matrix::CreateTranslation(0, 0, -1).Invert();
+	m_cbCameraData.mProj = Matrix::CreatePerspectiveFovLH(
+		60.0f * (3.1415926535f / 180.0f), 16.0f / 9.0f, 0.01f, 2000.0f);
 
 
 	//===================================================================
@@ -249,6 +260,16 @@ void Renderer::Present()
 	pDevivceContext->VSSetShader((ID3D11VertexShader*)spVertexShader->GetDataHandle().m_pData, 0,0);
 	pDevivceContext->PSSetShader((ID3D11PixelShader*)spPixelShader->GetDataHandle().m_pData, 0,0);
 	pDevivceContext->IASetInputLayout(spVertexShader->GetInputLayout());
+
+	static float angle = 0.0f;
+	m_cbCameraData.mView =
+		Matrix::CreateRotationY(angle) * Matrix::CreateTranslation(0,0,-2.0f);
+	angle += 0.005f;
+	m_cbCameraData.mView = m_cbCameraData.mView.Invert();
+	
+	m_spRHIComandList->SetConstantBuffer(7, m_spCbCamera);
+	m_spCbCamera->Write(m_cbCameraData);
+	
 
 
 	struct TestVertex
