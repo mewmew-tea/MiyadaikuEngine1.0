@@ -132,7 +132,7 @@ set(nativeruntime_src
     Rendering/RHI/D3D11/D3D11_Shader.cpp
     Rendering/RHI/D3D11/D3D11_InputLayout.cpp
     Rendering/RHI/D3D11/D3D11_VertexBuffer.cpp
-    Rendering/RHI/D3D11/D3D11_ConstantBuffer.h
+    Rendering/RHI/D3D11/D3D11_ConstantBuffer.cpp
     Rendering/RHI/D3D11/D3D11_CommandList.cpp
     Rendering/RHI/D3D11/D3D11_PipelineState.cpp
     Rendering/RHI/D3D11/D3D11_RenderState.cpp
