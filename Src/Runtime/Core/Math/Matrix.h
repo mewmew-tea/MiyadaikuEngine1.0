@@ -239,8 +239,8 @@ inline Matrix Matrix::CreatePerspectiveFovLH(float _fov, float _aspectRatio,
 
 	return Matrix(width, 0, 0, 0,  //
 				  0, height, 0, 0, //
-				  0, 0, range, 0,  //
-				  0, 0, -range * _near, 1);
+				  0, 0, range, 1,  //
+				  0, 0, -range * _near, 0);
 }
 
 inline Matrix Matrix::CreateOrthoLH(float _width, float _height, float _near,
