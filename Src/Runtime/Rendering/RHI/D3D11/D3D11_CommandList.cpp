@@ -6,6 +6,7 @@
 #include "D3D11_Device.h"
 #include "D3D11_Shader.h"
 #include "D3D11_Texture.h"
+#include "D3D11_ConstantBuffer.h"
 
 namespace Miyadaiku
 {
@@ -174,6 +175,23 @@ void D3D11_CommandList::SetSamplerState(
 	pDeviceContext->VSSetSamplers(_slot, 1,
 								  reinterpret_cast<ID3D11SamplerState**>(
 									  &_spSamplerState->GetResourceHandle()));
+}
+void D3D11_CommandList::SetConstantBuffer(
+	const std::uint32_t						  _slot,
+	const std::shared_ptr<RHI_ConstantBuffer> _spConstantBuffer)
+{
+	std::shared_ptr<D3D11_Device> spDevice =
+		std::static_pointer_cast<D3D11_Device>(m_wpRHIDevice.lock());
+
+	ID3D11DeviceContext* pDeviceContext = spDevice->GetDeviceContext();
+
+	ID3D11Buffer* buffer = static_cast<ID3D11Buffer*>(
+		_spConstantBuffer ? _spConstantBuffer->GetResource() : nullptr);
+
+	pDeviceContext->VSSetConstantBuffers(
+		_slot, 1, &buffer);
+	pDeviceContext->PSSetConstantBuffers(
+		_slot, 1, &buffer);
 }
 void D3D11_CommandList::Draw(uint32_t _indexCount, uint32_t _vertexStart)
 {

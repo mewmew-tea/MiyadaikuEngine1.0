@@ -20,6 +20,10 @@ public:
 		const std::uint32_t						 _slot,
 		const std::shared_ptr<RHI_SamplerState>& _spSamplerState) override;
 
+	void SetConstantBuffer(const std::uint32_t _slot,
+						   const std::shared_ptr<RHI_ConstantBuffer>
+							   _pConstantBuffer) override;
+
 	
 	// Draw
 	virtual void Draw(uint32_t _indexCount, uint32_t _vertexStart);
