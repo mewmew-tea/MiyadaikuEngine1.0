@@ -27,7 +27,7 @@ namespace MiyadaikuEngine
         }
 
         public Vector3 Scale { get { return LocalScale; } set { LocalScale = value; } }
-        public Vector3 LocalScale { get; set; } = new Vector3();
+        public Vector3 LocalScale { get; set; } = new Vector3(1,1,1);
 
         public Matrix WorldMatrix
         {
