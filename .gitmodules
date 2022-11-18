@@ -16,3 +16,6 @@
 [submodule "Src/Runtime/External/json"]
 	path = Src/Runtime/External/json
 	url = https://github.com/nlohmann/json.git
+[submodule "Src/Runtime/External/assimp"]
+	path = Src/Runtime/External/assimp
+	url = https://github.com/assimp/assimp.git
