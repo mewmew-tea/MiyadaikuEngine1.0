@@ -22,6 +22,8 @@ public:
 
 	virtual bool Create(RHIResourceHandle_Texture& _srcResource) = 0;
 	virtual bool Create(std::string_view _filePath) = 0;
+	virtual bool CreateDepthStencil(int _w, int _h) = 0;
+
 
 	virtual void Release() = 0;
 

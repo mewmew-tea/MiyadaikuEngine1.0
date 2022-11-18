@@ -203,7 +203,11 @@ void Renderer::Present()
 	ID3D11RenderTargetView* rtvs[] = {rtv};
 
 	pDevivceContext->OMSetRenderTargets(
-		1, rtvs, nullptr /*m_spDepthStencilBuffer->DSV()*/);
+		1, rtvs,
+		reinterpret_cast<ID3D11DepthStencilView*> (m_spRHISwapChain
+			->GetDepthStencilBuffer()
+			->GetDSHandle().m_pData)
+		);
 
 	// 試験的に、バックバッファクリアするたびに色を変化させる。
 	float clearColor[4];
@@ -243,6 +247,11 @@ void Renderer::Present()
 
 
 	pDevivceContext->ClearRenderTargetView(rtv, clearColor);
+	pDevivceContext->ClearDepthStencilView(
+		reinterpret_cast<ID3D11DepthStencilView*>(
+			m_spRHISwapChain->GetDepthStencilBuffer()->GetDSHandle().m_pData),
+		D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL,
+		1, 0);
 
 	static std::shared_ptr<D3D11_Texture> spTex;
 	if (!spTex)

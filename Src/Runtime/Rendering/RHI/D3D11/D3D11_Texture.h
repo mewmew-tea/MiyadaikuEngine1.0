@@ -22,6 +22,8 @@ public:
 
 	bool Create(std::string_view _filePath) override;
 
+	bool CreateDepthStencil(int _w, int _h) override;
+
 	void Release() override;
 
 private:

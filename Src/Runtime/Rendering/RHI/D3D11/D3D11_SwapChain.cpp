@@ -80,6 +80,15 @@ bool D3D11_SwapChain::Init(void*							  _windowHandle,
 
 	D3D11_SafeCastRelease<ID3D11Texture2D>(backBufferHandle.m_pData);
 
+
+	// depth stencil
+	m_spDepthStencilBuffer = std::make_shared<D3D11_Texture>(_device);
+	if (!m_spDepthStencilBuffer->CreateDepthStencil(_width, _height))
+	{
+		assert(0 && "Failed to create depth stencil");
+		return false;
+	}
+
 	return true;
 }
 

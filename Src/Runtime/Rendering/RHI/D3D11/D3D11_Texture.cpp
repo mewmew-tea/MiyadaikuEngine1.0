@@ -242,6 +242,7 @@ bool D3D11_Texture::Create(RHIResourceHandle_Texture& _srcResource)
 	// 必要な情報をコピーしておいたのちに、RTV生成
 	m_textureHandle.m_pData = pSrcTex;
 	pSrcTex->GetDesc(&m_desc);
+
 	return CreateRTV();
 }
 
@@ -287,6 +288,54 @@ bool D3D11_Texture::Create(std::string_view _filePath)
 
 	free(pImageData);
 
+	if (!D3D11_CreateViewsFromTexture2D(
+			texture2D,
+			reinterpret_cast<ID3D11ShaderResourceView**>(
+				m_srvHandle.GetAddress()),
+			reinterpret_cast<ID3D11RenderTargetView**>(m_rtHandle.GetAddress()),
+			reinterpret_cast<ID3D11DepthStencilView**>(m_dsHandle.GetAddress()),
+			spDevice->GetDevice()))
+	{
+		return false;
+	}
+
+	texture2D->Release();
+
+	return true;
+}
+
+bool D3D11_Texture::CreateDepthStencil(int _w, int _h)
+{
+	std::shared_ptr<D3D11_Device> spDevice =
+		std::static_pointer_cast<D3D11_Device>(m_wpRHIDevice.lock());
+	D3D11_TEXTURE2D_DESC desc = {};
+
+	// texture desc
+	desc.Format = DXGI_FORMAT_R24G8_TYPELESS;
+	desc.BindFlags = D3D11_BIND_SHADER_RESOURCE | D3D11_BIND_DEPTH_STENCIL;
+	desc.Width = (UINT)_w;
+	desc.Height = (UINT)_h;
+	// access usages
+	desc.Usage = D3D11_USAGE_DEFAULT;
+	desc.CPUAccessFlags = 0;
+	// misc
+	desc.MipLevels = 1;
+	desc.ArraySize = 1;
+	desc.MiscFlags = 0;
+	desc.SampleDesc.Count = 1;
+	desc.SampleDesc.Quality = 0;
+
+	ID3D11Texture2D* texture2D =
+		reinterpret_cast<ID3D11Texture2D*>(m_textureHandle.m_pData);
+
+	auto hr = spDevice->GetDevice()->CreateTexture2D(&desc, nullptr, &texture2D);
+	if (FAILED(hr))
+	{
+		assert(0 && "Failed to create texture from desc.");
+		return false;
+	}
+
+	// create views
 	if (!D3D11_CreateViewsFromTexture2D(
 			texture2D,
 			reinterpret_cast<ID3D11ShaderResourceView**>(
