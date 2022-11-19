@@ -174,6 +174,10 @@ set(imgui_src
     ${IMGUI_BACKENDS_DIR}/imgui_impl_dx11.cpp
 )
 
+# assimp
+set(ASSIMP_DIR ${CMAKE_CURRENT_SOURCE_DIR}/External/Assimp)
+set(ASSIMP_INCLUDE_DIR ${ASSIMP_DIR}/include)
+
 # project infos
 add_library(${PROJECT_NAME} STATIC
     ${nativeruntime_h}
@@ -189,12 +193,14 @@ target_include_directories(${PROJECT_NAME} PRIVATE
     ${IMGUI_BACKENDS_DIR}
     ${IMGUI_JA_DIR}
     ${NLOHMANN_JSON_DIR}
+    ${ASSIMP_INCLUDE_DIR}
 )
 
 # link external libs
 include_directories(External/mono/Include) 
 #link_directories(${CMAKE_CURRENT_SOURCE_DIR}/External/mono/Lib/)
 target_link_libraries(${PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/External/mono/Lib/mono-2.0-sgen.lib)
+add_dependencies(${PROJECT_NAME} ExternalProject_assimp)
 
     
 # warning levels
