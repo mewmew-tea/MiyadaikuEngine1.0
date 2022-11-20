@@ -7,11 +7,11 @@
 namespace Miyadaiku
 {
 class RHI_Device;
-class RHI_VertexBuffer
+class RHI_IndexBuffer
 {
 public:
-	RHI_VertexBuffer(const std::shared_ptr<RHI_Device>& _spRHIDevice);
-	~RHI_VertexBuffer()
+	RHI_IndexBuffer(const std::shared_ptr<RHI_Device>& _spRHIDevice);
+	~RHI_IndexBuffer()
 	{
 	}
 	template <typename DataType>

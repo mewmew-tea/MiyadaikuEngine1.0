@@ -1,14 +1,14 @@
 ﻿#pragma once
-#include "../RHI_VertexBuffer.h"
+#include "../RHI_IndexBuffer.h"
 
 
 namespace Miyadaiku
 {
-class D3D11_VertexBuffer : public RHI_VertexBuffer
+class D3D11_IndexBuffer : public RHI_IndexBuffer
 {
 public:
-	D3D11_VertexBuffer(const std::shared_ptr<RHI_Device>& _spRHIDevice)
-		: RHI_VertexBuffer(_spRHIDevice)
+	D3D11_IndexBuffer(const std::shared_ptr<RHI_Device>& _spRHIDevice)
+		: RHI_IndexBuffer(_spRHIDevice)
 	{
 	}
 

@@ -24,6 +24,14 @@ public:
 						   const std::shared_ptr<RHI_ConstantBuffer>
 							   _pConstantBuffer) override;
 
+	void SetVertexBuffer(
+		const std::uint32_t						_slot,
+					const std::shared_ptr<RHI_VertexBuffer> _spVertexBuffer,
+					const uint32_t							_offset) override;
+
+	void SetIndexBuffer(const std::uint32_t					   _slot,
+						const std::shared_ptr<RHI_IndexBuffer> _spIndexBuffer,
+						const uint32_t						   _offset) override;
 	
 	// Draw
 	virtual void Draw(uint32_t _indexCount, uint32_t _vertexStart);

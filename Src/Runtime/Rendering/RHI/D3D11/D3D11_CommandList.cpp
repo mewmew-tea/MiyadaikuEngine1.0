@@ -7,6 +7,8 @@
 #include "D3D11_Shader.h"
 #include "D3D11_Texture.h"
 #include "D3D11_ConstantBuffer.h"
+#include "D3D11_VertexBuffer.h"
+#include "D3D11_IndexBuffer.h"
 
 namespace Miyadaiku
 {
@@ -193,12 +195,52 @@ void D3D11_CommandList::SetConstantBuffer(
 	pDeviceContext->PSSetConstantBuffers(
 		_slot, 1, &buffer);
 }
+void D3D11_CommandList::SetVertexBuffer(
+	const std::uint32_t						_slot,
+	const std::shared_ptr<RHI_VertexBuffer> _spVertexBuffer,
+	const uint32_t							_offset)
+{
+	std::shared_ptr<D3D11_Device> spDevice =
+		std::static_pointer_cast<D3D11_Device>(m_wpRHIDevice.lock());
+
+	ID3D11DeviceContext* pDeviceContext = spDevice->GetDeviceContext();
+
+	ID3D11Buffer* buffer = static_cast<ID3D11Buffer*>(
+		_spVertexBuffer ? _spVertexBuffer->GetResource() : nullptr);
+	uint32_t stride = _spVertexBuffer->GetStride();
+
+	pDeviceContext->IASetVertexBuffers(0, 1, &buffer,
+									   &stride,
+									   &_offset);
+}
+
+
+void D3D11_CommandList::SetIndexBuffer(
+	const std::uint32_t					   _slot,
+	const std::shared_ptr<RHI_IndexBuffer> _spIndexBuffer,
+	const uint32_t						   _offset)
+{
+	std::shared_ptr<D3D11_Device> spDevice =
+		std::static_pointer_cast<D3D11_Device>(m_wpRHIDevice.lock());
+
+	ID3D11DeviceContext* pDeviceContext = spDevice->GetDeviceContext();
+
+	ID3D11Buffer* buffer = static_cast<ID3D11Buffer*>(
+		_spIndexBuffer ? _spIndexBuffer->GetResource() : nullptr);
+
+
+	pDeviceContext->IASetIndexBuffer(buffer, DXGI_FORMAT_R32_UINT, 0);
+}
+
+
 void D3D11_CommandList::Draw(uint32_t _indexCount, uint32_t _vertexStart)
 {
 	std::static_pointer_cast<D3D11_Device>(m_wpRHIDevice.lock())
 		->GetDeviceContext()
 		->Draw(static_cast<UINT>(_indexCount), static_cast<UINT>(_vertexStart));
 }
+
+
 void D3D11_CommandList::DrawIndexed(uint32_t _indexCount, uint32_t _indexOffset,
 									uint32_t _vertexOffset)
 {

@@ -1,9 +1,9 @@
-﻿#include "RHI_VertexBuffer.h"
+﻿#include "RHI_IndexBuffer.h"
 
 
 namespace Miyadaiku
 {
-RHI_VertexBuffer::RHI_VertexBuffer(
+RHI_IndexBuffer::RHI_IndexBuffer(
 	const std::shared_ptr<RHI_Device>& _spRHIDevice)
 	: m_wpRHIDevice(_spRHIDevice)
 {

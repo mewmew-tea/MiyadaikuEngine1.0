@@ -9,6 +9,7 @@ class RHI_Device;
 class RHI_SwapChain;
 class RHI_Shader;
 class RHI_CommandList;
+class RHI_Texture;
 
 struct RHI_RasterizerState;
 struct RHI_SamplerState;
@@ -33,10 +34,19 @@ public:
 		return m_spRHIDevice;
 	}
 
+	std::shared_ptr<RHI_Texture> GetWhiteTexture()
+	{
+		return m_spWhiteTexure;
+	}
+	std::shared_ptr<RHI_Texture> GetNormalTexture()
+	{
+		return m_spNormalTexure;
+	}
+
 private:
 	std::shared_ptr<RHI_Device>		 m_spRHIDevice = nullptr;
 	std::shared_ptr<RHI_SwapChain>	 m_spRHISwapChain = nullptr;
-	std::shared_ptr<RHI_CommandList> m_spRHIComandList = nullptr;
+	std::shared_ptr<RHI_CommandList> m_spRHICommandList = nullptr;
 
 	// TODO:
 	// シェーダはどこか（RHI_CommandListとか(RHI_?)RenderingPipelineとか）に移動
@@ -53,5 +63,9 @@ private:
 	// TODO: class to combine data and CBs
 	Cb_Camera							m_cbCameraData;
 	std::shared_ptr<RHI_ConstantBuffer> m_spCbCamera = nullptr;
+
+	// defalut textures
+	std::shared_ptr<RHI_Texture> m_spWhiteTexure = nullptr;
+	std::shared_ptr<RHI_Texture> m_spNormalTexure = nullptr;
 };
 } // namespace Miyadaiku

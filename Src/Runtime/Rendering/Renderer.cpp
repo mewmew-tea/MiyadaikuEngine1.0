@@ -1,4 +1,5 @@
 ﻿#include "Renderer.h"
+
 #include "../Core/Engine.h"
 #include "../Core/Platform/Platform.h"
 #include "../Core/Platform/Windows/Window_Windows.h"
@@ -13,6 +14,7 @@
 #include "RHI/D3D11/D3D11_Texture.h"
 #include "RHI/D3D11/D3D11_RenderState.h"
 #include "RHI/D3D11/D3D11_ConstantBuffer.h"
+#include "RHI/D3D11/D3D11_VertexBuffer.h"
 #include "CommonConstantBuffer.h"
 
 #include <memory>
@@ -24,6 +26,7 @@
 #include "../Scripting/Scripting.h"
 #include "../Scripting/Component.h"
 #include "../Scripting/ScriptPropertyInfo.h"
+
 
 #include "imgui.h"
 
@@ -41,7 +44,6 @@
 //#include "ImZoomSlider.h"
 //#include "ImCurveEdit.h"
 //#include "GraphEditor.h"
-
 
 namespace Miyadaiku
 {
@@ -63,13 +65,13 @@ void Renderer::OnAwake()
 	}
 	
 	// Create command list
-	m_spRHIComandList = std::make_shared<D3D11_CommandList>(m_spRHIDevice);
-	if (m_spRHIComandList)
+	m_spRHICommandList = std::make_shared<D3D11_CommandList>(m_spRHIDevice);
+	if (m_spRHICommandList)
 	{
 		RectangleI rect = window->GetRect();
 		rect.left = 0;
 		rect.top = 0;
-		m_spRHIComandList->SetViewport(rect);
+		m_spRHICommandList->SetViewport(rect);
 	}
 
 	// Create swapchain
@@ -97,7 +99,7 @@ void Renderer::OnAwake()
 
 	// Create sampler states
 	m_spRHISamplerState = std::make_shared<D3D11_SamplerState>(m_spRHIDevice, SS_FilterMode::Aniso, SS_AddressMode::Wrap);
-	m_spRHIComandList->SetSamplerState(0, m_spRHISamplerState);
+	m_spRHICommandList->SetSamplerState(0, m_spRHISamplerState);
 	// Create rasterize state
 	m_spRHIRasterizerState = std::make_shared<D3D11_RasterizerState>(m_spRHIDevice, RS_CullMode::Back, RS_FillMode::Solid);
 
@@ -155,6 +157,8 @@ void Renderer::OnAwake()
 		io.Fonts->Build();
 		io.FontDefault = font;
 	}
+
+
 }
 void Renderer::OnShutdown()
 {
@@ -276,7 +280,7 @@ void Renderer::Present()
 	angle += 0.005f;
 	m_cbCameraData.mView = m_cbCameraData.mView.Invert();
 	
-	m_spRHIComandList->SetConstantBuffer(7, m_spCbCamera);
+	m_spRHICommandList->SetConstantBuffer(7, m_spCbCamera);
 	m_spCbCamera->Write(m_cbCameraData);
 	
 
@@ -295,17 +299,7 @@ void Renderer::Present()
 		UINT			  Color = 0xFFFFFFFF;
 	};
 
-	UINT					oneSize = sizeof(TestVertex);
-	ID3D11Buffer* pBuffer = nullptr;
 	std::vector<TestVertex> vertex;
-	//vertex.push_back(TestVertex({0, 0, 0}, {0, 1}, 0xFFFFFFFF));
-	//vertex.push_back(TestVertex({0, 1, 0}, {0, 0}, 0xFFFFFFFF));
-	//vertex.push_back(TestVertex({1, 0, 0}, {1, 1}, 0xFFFFFFFF));
-	//vertex.push_back(TestVertex({1, 1, 0}, {1, 0}, 0xFFFFFFFF));
-
-	//Vector3 pos = {ScriptingAPI_GetPositionX(), ScriptingAPI_GetPositionY(), 0};
-	//pos /= 4.0f;
-	//Vector3 pos;
 	auto spScripting = GetEngine()->GetSubsystemLocator().Get<Scripting>();
 	
 	for (auto go : spScripting->GetGameObjects())
@@ -333,35 +327,26 @@ void Renderer::Present()
 		vertex.push_back(TestVertex({pos.x + 1, pos.y + 0, 0}, {1, 1}, 0xFFFFFFFF));
 		vertex.push_back(TestVertex({pos.x + 1, pos.y + 1, 0}, {1, 0}, 0xFFFFFFFF));
 
+		std::shared_ptr<RHI_VertexBuffer> vertexBuffer =
+			std::make_shared<D3D11_VertexBuffer>(m_spRHIDevice);
+		if (!vertexBuffer->Create<TestVertex>(vertex.size(), vertex.data()))
+		{
+			assert(0&&"FAILED CRATE VERTEX BUF");
+		}
+			//vertexBuffer.Write(vertex.data(), vertex.size());
 
-		D3D11_BUFFER_DESC desc = {};
-		desc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
-		desc.ByteWidth = sizeof(TestVertex) * (UINT)vertex.size();
-		desc.Usage = D3D11_USAGE_DYNAMIC;
-		desc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
-
-		D3D11_SUBRESOURCE_DATA data = {};
-		data.pSysMem = &vertex[0];
-
-		HRESULT hr =
-			pDevivce->CreateBuffer(&desc, &vertex[0] ? &data : nullptr, &pBuffer);
-
-		//// 頂点リストの並び順
+		// 頂点リストの並び順
 		pDevivceContext->IASetPrimitiveTopology(
 			D3D_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP);
 
-		// GPUへ転送・描画
-		UINT offset = 0;
-		pDevivceContext->IASetVertexBuffers(0, 1, &pBuffer, &oneSize, &offset);
+		m_spRHICommandList->SetVertexBuffer(0, vertexBuffer, 0);
+
+		//m_spRHIComandList
 		//pDevivceContext->Draw((UINT)vertex.size(), 0);
 		//pDevivceContext->DrawInstanced((UINT)vertex.size(), 1, 0, 0);
-		m_spRHIComandList->Draw((uint16_t)vertex.size(), 0);
-		pBuffer->Release();
+		m_spRHICommandList->Draw((uint16_t)vertex.size(), 0);
+		//pBuffer->Release();
 	}
-
-	//pDevivceContext->ClearDepthStencilView(
-	//	m_spDepthStencilBuffer->DSV(), D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL,
-	//	1, 0);
 	
 	
     //--------------------------------

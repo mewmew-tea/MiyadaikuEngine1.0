@@ -10,6 +10,8 @@ namespace Miyadaiku
 class RHI_Device;
 class RHI_PipelineState;
 class RHI_ConstantBuffer;
+class RHI_VertexBuffer;
+class RHI_IndexBuffer;
 
 /**
  * CommandList（D3D11ではDeviceContextと同等の役割をします）。
@@ -33,17 +35,26 @@ public:
 		const std::shared_ptr<RHI_SamplerState>& _spSamplerState) = 0;
 
 
-	virtual void SetConstantBuffer(const std::uint32_t _slot,
-						   const std::shared_ptr<RHI_ConstantBuffer>
-							   _pConstantBuffer) = 0;
+	virtual void SetConstantBuffer(
+		const std::uint32_t						  _slot,
+		const std::shared_ptr<RHI_ConstantBuffer> _spConstantBuffer) = 0;
+
+	virtual void
+	SetVertexBuffer(const std::uint32_t						_slot,
+					const std::shared_ptr<RHI_VertexBuffer> _spVertexBuffer,
+					const uint32_t							_offset) = 0;
+
+	virtual void
+	SetIndexBuffer(const std::uint32_t					  _slot,
+				   const std::shared_ptr<RHI_IndexBuffer> _spIndexBuffer,
+				   const uint32_t						  _offset) = 0;
+
+
 
 	// Draw
 	virtual void Draw(uint32_t _indexCount, uint32_t _vertexStart) = 0;
 	virtual void DrawIndexed(uint32_t _indexCount, uint32_t _indexOffset,
 							 uint32_t _vertexOffset = 0) = 0;
-
-
-	// Vertex
 
 
 protected:

@@ -1,10 +1,10 @@
-﻿#include "D3D11_VertexBuffer.h"
+﻿#include "D3D11_IndexBuffer.h"
 #include "D3D11_Device.h"
 #include <cassert>
 
 namespace Miyadaiku
 {
-void* D3D11_VertexBuffer::Map()
+void* D3D11_IndexBuffer::Map()
 {
 	std::shared_ptr<D3D11_Device> spRHIDevice =
 		std::static_pointer_cast<D3D11_Device>(this->m_wpRHIDevice.lock());
@@ -21,21 +21,21 @@ void* D3D11_VertexBuffer::Map()
 
 	return subRes.pData;
 }
-void D3D11_VertexBuffer::Unmap()
+void D3D11_IndexBuffer::Unmap()
 {
 	std::shared_ptr<D3D11_Device> spRHIDevice =
 		std::static_pointer_cast<D3D11_Device>(this->m_wpRHIDevice.lock());
 	spRHIDevice->GetDeviceContext()->Unmap(
 		static_cast<ID3D11Buffer*>(this->m_pResource), 0);
 }
-bool D3D11_VertexBuffer::Internal_Create(uint32_t	 _bufferSize,
+bool D3D11_IndexBuffer::Internal_Create(uint32_t	_bufferSize,
 										 const void* _pInitData)
 {
 	std::shared_ptr<D3D11_Device> spRHIDevice =
 		std::static_pointer_cast<D3D11_Device>(this->m_wpRHIDevice.lock());
 
 	D3D11_BUFFER_DESC desc = {};
-	desc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
+	desc.BindFlags = D3D11_BIND_INDEX_BUFFER;
 	desc.ByteWidth = m_stride * _bufferSize;
 	desc.Usage = D3D11_USAGE_DYNAMIC;
 	desc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;

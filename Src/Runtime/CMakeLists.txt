@@ -62,6 +62,7 @@ file(GLOB nativeruntime_h
     Rendering/RHI/D3D11/D3D11_Shader.h
     Rendering/RHI/D3D11/D3D11_InputLayout.h
     Rendering/RHI/D3D11/D3D11_VertexBuffer.h
+    Rendering/RHI/D3D11/D3D11_IndexBuffer.h
     Rendering/RHI/D3D11/D3D11_ConstantBuffer.h
     Rendering/RHI/D3D11/D3D11_CommandList.h
     Rendering/RHI/D3D11/D3D11_PipelineState.h
@@ -120,6 +121,7 @@ set(nativeruntime_src
     Rendering/RHI/RHI_Shader.cpp
     Rendering/RHI/RHI_InputLayout.cpp
     Rendering/RHI/RHI_VertexBuffer.cpp
+    Rendering/RHI/RHI_IndexBuffer.cpp
     Rendering/RHI/RHI_ConstantBuffer.cpp
     Rendering/RHI/RHI_CommandList.cpp
     Rendering/RHI/RHI_PipelineState.cpp
@@ -132,6 +134,7 @@ set(nativeruntime_src
     Rendering/RHI/D3D11/D3D11_Shader.cpp
     Rendering/RHI/D3D11/D3D11_InputLayout.cpp
     Rendering/RHI/D3D11/D3D11_VertexBuffer.cpp
+    Rendering/RHI/D3D11/D3D11_IndexBuffer.cpp
     Rendering/RHI/D3D11/D3D11_ConstantBuffer.cpp
     Rendering/RHI/D3D11/D3D11_CommandList.cpp
     Rendering/RHI/D3D11/D3D11_PipelineState.cpp
