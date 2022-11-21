@@ -49,6 +49,7 @@ file(GLOB nativeruntime_h
     Rendering/RHI/RHI_Shader.h
     Rendering/RHI/RHI_InputLayout.h
     Rendering/RHI/RHI_VertexBuffer.h
+    Rendering/RHI/RHI_IndexBuffer.h
     Rendering/RHI/RHI_ConstantBuffer.h
     Rendering/RHI/RHI_CommandList.h
     Rendering/RHI/RHI_PipelineState.h
