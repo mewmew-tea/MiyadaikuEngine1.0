@@ -28,6 +28,10 @@ void D3D11_IndexBuffer::Unmap()
 	spRHIDevice->GetDeviceContext()->Unmap(
 		static_cast<ID3D11Buffer*>(this->m_pResource), 0);
 }
+void D3D11_IndexBuffer::Internal_Release()
+{
+	static_cast<ID3D11Buffer*>(m_pResource)->Release();
+}
 bool D3D11_IndexBuffer::Internal_Create(uint32_t	_bufferSize,
 										 const void* _pInitData)
 {

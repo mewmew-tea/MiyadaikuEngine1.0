@@ -8,4 +8,8 @@ RHI_IndexBuffer::RHI_IndexBuffer(
 	: m_wpRHIDevice(_spRHIDevice)
 {
 }
+RHI_IndexBuffer::~RHI_IndexBuffer()
+{
+	this->Release();
+}
 } // namespace Miyadaiku

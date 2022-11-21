@@ -33,6 +33,11 @@ void D3D11_ConstantBuffer::Unmap()
 }
 
 
+void D3D11_ConstantBuffer::Internal_Release()
+{
+	static_cast<ID3D11Buffer*>(m_pResource)->Release();
+}
+
 bool D3D11_ConstantBuffer::Internal_Create()
 {
 	std::shared_ptr<D3D11_Device> spRHIDevice =

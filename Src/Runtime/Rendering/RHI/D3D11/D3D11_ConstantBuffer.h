@@ -10,12 +10,18 @@ public:
 		: RHI_ConstantBuffer(_spRHIDevice)
 	{
 	}
+	~D3D11_ConstantBuffer()
+	{
+		Internal_Release();
+	}
 
 	void* Map() override;
 	void Unmap() override;
 
+
 private:
 	bool Internal_Create() override;
+	void Internal_Release() override;
 };
 } // namespace Miyadaiku
 

@@ -11,11 +11,17 @@ public:
 		: RHI_VertexBuffer(_spRHIDevice)
 	{
 	}
+	~D3D11_VertexBuffer()
+	{
+		Internal_Release();
+	}
 
 	void* Map() override;
 	void  Unmap() override;
 
+
 private:
 	bool Internal_Create(uint32_t _bufferSize, const void* _pInitData) override;
+	void Internal_Release() override;
 };
 }

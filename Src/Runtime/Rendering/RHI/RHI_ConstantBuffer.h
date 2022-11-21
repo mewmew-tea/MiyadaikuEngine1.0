@@ -10,6 +10,10 @@ class RHI_ConstantBuffer
 {
 public:
 	RHI_ConstantBuffer(const std::shared_ptr<RHI_Device>& _spRHIDevice);
+	~RHI_ConstantBuffer()
+	{
+		Release();
+	}
 	
 	template <typename DataType> 
 	bool Create()
@@ -33,7 +37,12 @@ public:
 
 	virtual void* Map() = 0;
 
-	virtual void  Unmap() = 0;
+	virtual void Unmap() = 0;
+
+	void Release()
+	{
+		Internal_Release();
+	}
 
 	//DataType& GetData()
 	//{
@@ -48,6 +57,7 @@ public:
 
 protected:
 	virtual bool Internal_Create() = 0;
+	virtual void Internal_Release(){};
 
 	//// constant buffer data
 	//DataType m_data = {};

@@ -11,9 +11,7 @@ class RHI_IndexBuffer
 {
 public:
 	RHI_IndexBuffer(const std::shared_ptr<RHI_Device>& _spRHIDevice);
-	~RHI_IndexBuffer()
-	{
-	}
+	virtual ~RHI_IndexBuffer();
 	template <typename DataType>
 	bool Create(uint32_t _bufferSize, const void* _pInitData = nullptr)
 	{
@@ -37,6 +35,11 @@ public:
 
 	virtual void Unmap() = 0;
 
+	void Release()
+	{
+		Internal_Release();
+	}
+
 	void* GetResource()
 	{
 		return m_pResource;
@@ -50,6 +53,7 @@ public:
 protected:
 	virtual bool			  Internal_Create(uint32_t	  _bufferSize,
 											  const void* _pInitData) = 0;
+	virtual void			  Internal_Release(){};
 	// graphics api resource
 	void*					  m_pResource = nullptr;
 	void*					  m_pMappedData = nullptr;
