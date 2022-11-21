@@ -42,6 +42,7 @@ file(GLOB nativeruntime_h
     Rendering/Renderer.h
     Rendering/RenderingResource.h
     Rendering/CommonConstantBuffer.h
+    Rendering/Model.h
 
     Rendering/RHI/RHI_Device.h
     Rendering/RHI/RHI_SwapChain.h
@@ -115,6 +116,7 @@ set(nativeruntime_src
     Rendering/Renderer.cpp
     Rendering/RenderingResource.cpp
     Rendering/CommonConstantBuffer.cpp
+    Rendering/Model.cpp
 
     Rendering/RHI/RHI_Device.cpp
     Rendering/RHI/RHI_SwapChain.cpp
