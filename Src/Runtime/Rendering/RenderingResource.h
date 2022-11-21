@@ -1,5 +1,6 @@
 ﻿#pragma once
 #include <cassert>
+#include <stdint.h>
 
 namespace Miyadaiku
 {
