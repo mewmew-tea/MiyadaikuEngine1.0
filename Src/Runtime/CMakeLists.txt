@@ -224,6 +224,8 @@ set(SrcDir ${CMAKE_CURRENT_LIST_DIR})
 source_group(TREE ${SrcDir} PREFIX ${PrefixDir} FILES ${nativeruntime_h})
 source_group(TREE ${SrcDir} PREFIX ${PrefixDir} FILES ${nativeruntime_src})
 
+add_custom_command(TARGET NativeRuntime PRE_BUILD COMMAND ${CMAKE_COMMAND} -E copy_directory ${ASSIMP_BUILD_DIR}/src/ExternalProject_assimp-build/include/assimp/ ${ASSIMP_INCLUDE_DIR}/assimp/)
+
 # out dirs
 set( 
   CMAKE_ARCHIVE_OUTPUT_DIRECTORY_DEBUG libs/Debug
