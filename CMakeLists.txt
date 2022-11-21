@@ -21,6 +21,8 @@ project(MiyadaikuEngine)
 
 set(CMAKE_CONFIGURATION_TYPES "Debug;Release" )
 
+set(ASSIMP_BUILD_DIR ${CMAKE_CURRENT_BINARY_DIR}/External/Build/assimp)
+
 ExternalProject_Add(ExternalProject_assimp
     SOURCE_DIR      ${CMAKE_CURRENT_SOURCE_DIR}/Src/Runtime/External/assimp
     PREFIX          ${CMAKE_CURRENT_BINARY_DIR}/External/Build/assimp
