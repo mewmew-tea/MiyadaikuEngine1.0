@@ -208,6 +208,11 @@ include_directories(External/mono/Include)
 target_link_libraries(${PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/External/mono/Lib/mono-2.0-sgen.lib)
 add_dependencies(${PROJECT_NAME} ExternalProject_assimp)
 
+target_link_directories(${PROJECT_NAME} PUBLIC ${ASSIMP_BUILD_DIR}/src/ExternalProject_assimp-build/lib/Debug)
+target_link_libraries(${PROJECT_NAME} PUBLIC 
+    debug "${ASSIMP_BUILD_DIR}/src/ExternalProject_assimp-build/lib/Debug/assimp-vc143-mtd.lib" 
+    optimized "${ASSIMP_BUILD_DIR}/src/ExternalProject_assimp-build/lib/Release/assimp-vc143-mt.lib")
+
     
 # warning levels
 # and force source charset utf-8
