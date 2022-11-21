@@ -22,6 +22,11 @@ public:
 
 	bool Create(std::string_view _filePath) override;
 
+	bool Create(uint32_t _w, uint32_t _h,
+				RHI_FORMAT _format = RHI_FORMAT::R8G8B8A8_UNORM,
+				uint32_t _arrayCnt = 1, const void* _pFillData = nullptr,
+				const uint32_t _sysMemPitch = 4) override;
+
 	bool CreateDepthStencil(int _w, int _h) override;
 
 	void Release() override;

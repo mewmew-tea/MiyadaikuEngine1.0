@@ -22,6 +22,11 @@ public:
 
 	virtual bool Create(RHIResourceHandle_Texture& _srcResource) = 0;
 	virtual bool Create(std::string_view _filePath) = 0;
+	virtual bool Create(uint32_t _w, uint32_t _h,
+						RHI_FORMAT _format = RHI_FORMAT::R8G8B8A8_UNORM,
+						uint32_t	   _arrayCnt = 1,
+						const void*	   _pFillData = nullptr,
+						const uint32_t				  _sysMemPitch = 4) = 0;
 	virtual bool CreateDepthStencil(int _w, int _h) = 0;
 
 

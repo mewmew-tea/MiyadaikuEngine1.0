@@ -304,6 +304,60 @@ bool D3D11_Texture::Create(std::string_view _filePath)
 	return true;
 }
 
+bool D3D11_Texture::Create(uint32_t _w, uint32_t _h, RHI_FORMAT _format,
+						   uint32_t _arrayCnt, const void* _pFillData,
+						   const uint32_t _sysMemPitch)
+{
+	std::shared_ptr<D3D11_Device> spDevice =
+		std::static_pointer_cast<D3D11_Device>(m_wpRHIDevice.lock());
+
+	D3D11_SUBRESOURCE_DATA srd;
+	srd.pSysMem = _pFillData;
+	srd.SysMemPitch = _sysMemPitch;
+	srd.SysMemSlicePitch = 0;
+
+	D3D11_TEXTURE2D_DESC desc = {};
+
+	desc.Width = (UINT)_w;
+	desc.Height = (UINT)_h;
+	desc.Format = (DXGI_FORMAT)_format;
+	desc.ArraySize = _arrayCnt;
+	desc.MiscFlags = 0;
+
+	desc.Usage = D3D11_USAGE_DEFAULT;
+	desc.BindFlags = D3D11_BIND_SHADER_RESOURCE;
+	desc.CPUAccessFlags = 0;
+	desc.MipLevels = 1;
+	desc.SampleDesc.Count = 1;
+	desc.SampleDesc.Quality = 0;
+
+	ID3D11Texture2D* texture2D =
+		reinterpret_cast<ID3D11Texture2D*>(m_textureHandle.m_pData);
+
+	auto hr = spDevice->GetDevice()->CreateTexture2D(&desc, &srd, &texture2D);
+	if (FAILED(hr))
+	{
+		assert(0 && "Failed to create texture from desc.");
+		return false;
+	}
+
+	// create views
+	if (!D3D11_CreateViewsFromTexture2D(
+			texture2D,
+			reinterpret_cast<ID3D11ShaderResourceView**>(
+				m_srvHandle.GetAddress()),
+			reinterpret_cast<ID3D11RenderTargetView**>(m_rtHandle.GetAddress()),
+			reinterpret_cast<ID3D11DepthStencilView**>(m_dsHandle.GetAddress()),
+			spDevice->GetDevice()))
+	{
+		return false;
+	}
+
+	texture2D->Release();
+
+	return true;
+}
+
 bool D3D11_Texture::CreateDepthStencil(int _w, int _h)
 {
 	std::shared_ptr<D3D11_Device> spDevice =
