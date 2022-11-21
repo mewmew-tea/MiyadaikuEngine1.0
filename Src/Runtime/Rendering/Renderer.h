@@ -64,7 +64,7 @@ private:
 	Cb_Camera							m_cbCameraData;
 	std::shared_ptr<RHI_ConstantBuffer> m_spCbCamera = nullptr;
 
-	// defalut textures
+	// default textures
 	std::shared_ptr<RHI_Texture> m_spWhiteTexure = nullptr;
 	std::shared_ptr<RHI_Texture> m_spNormalTexure = nullptr;
 };

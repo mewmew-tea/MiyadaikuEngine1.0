@@ -113,6 +113,42 @@ void Renderer::OnAwake()
 	m_cbCameraData.mProj = Matrix::CreatePerspectiveFovLH(
 		60.0f * (3.1415926535f / 180.0f), 16.0f / 9.0f, 0.01f, 2000.0f);
 
+	// Create default texture
+	{
+		// white: 1, 1, 1, 1
+		// 0xAABBGGRR
+		uint32_t col = 0;
+		col |= (uint8_t(UINT8_MAX) << 8 * 0);
+		col |= (uint8_t(UINT8_MAX) << 8 * 1);
+		col |= (uint8_t(UINT8_MAX) << 8 * 2);
+		col |= (uint8_t(UINT8_MAX) << 8 * 3);
+		RHI_FORMAT format = RHI_FORMAT::R8G8B8A8_UNORM;
+
+		m_spWhiteTexure = std::make_shared<D3D11_Texture>(m_spRHIDevice);
+		if (!m_spWhiteTexure->Create(1, 1, RHI_FORMAT::R8G8B8A8_UNORM, 1, &col,
+									 4))
+		{
+			assert(0 && "Failed to default white texture.");
+		}
+	}
+	{
+		// normal: 0.5, 0.5, 1, 1
+		// 0xAABBGGRR
+		uint32_t col = 0;
+		col |= (uint8_t(UINT8_MAX / 2) << 8 * 0);
+		col |= (uint8_t(UINT8_MAX / 2) << 8 * 1);
+		col |= (uint8_t(UINT8_MAX) << 8 * 2);
+		col |= (uint8_t(UINT8_MAX) << 8 * 3);
+		RHI_FORMAT format = RHI_FORMAT::R8G8B8A8_UNORM;
+
+		m_spNormalTexure = std::make_shared<D3D11_Texture>(m_spRHIDevice);
+		if (!m_spNormalTexure->Create(1, 1, RHI_FORMAT::R8G8B8A8_UNORM, 1, &col,
+									 4))
+		{
+			assert(0 && "Failed to default normal texture.");
+		}
+	}
+
 
 	//===================================================================
 	// imgui初期設定
