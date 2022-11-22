@@ -1,0 +1,166 @@
+{
+    "asset" : {
+        "generator" : "Khronos glTF Blender I/O v1.2.75",
+        "version" : "2.0"
+    },
+    "scene" : 0,
+    "scenes" : [
+        {
+            "name" : "Scene",
+            "nodes" : [
+                0
+            ]
+        }
+    ],
+    "nodes" : [
+        {
+            "mesh" : 0,
+            "name" : "Plane"
+        }
+    ],
+    "materials" : [
+        {
+            "doubleSided" : true,
+            "emissiveFactor" : [
+                0,
+                0,
+                0
+            ],
+            "name" : "Material",
+            "normalTexture" : {
+                "index" : 0,
+                "texCoord" : 0
+            },
+            "pbrMetallicRoughness" : {
+                "baseColorTexture" : {
+                    "index" : 1,
+                    "texCoord" : 0
+                },
+                "metallicRoughnessTexture" : {
+                    "index" : 2,
+                    "texCoord" : 0
+                }
+            }
+        }
+    ],
+    "meshes" : [
+        {
+            "name" : "Plane",
+            "primitives" : [
+                {
+                    "attributes" : {
+                        "POSITION" : 0,
+                        "NORMAL" : 1,
+                        "TANGENT" : 2,
+                        "TEXCOORD_0" : 3
+                    },
+                    "indices" : 4,
+                    "material" : 0
+                }
+            ]
+        }
+    ],
+    "textures" : [
+        {
+            "source" : 0
+        },
+        {
+            "source" : 1
+        },
+        {
+            "source" : 2
+        }
+    ],
+    "images" : [
+        {
+            "mimeType" : "image/jpeg",
+            "name" : "wood_cabinet_worn_long_nor_gl_1k",
+            "uri" : "wood_cabinet_worn_long_nor_gl_1k.jpg"
+        },
+        {
+            "mimeType" : "image/jpeg",
+            "name" : "wood_cabinet_worn_long_diff_1k",
+            "uri" : "wood_cabinet_worn_long_diff_1k.jpg"
+        },
+        {
+            "mimeType" : "image/jpeg",
+            "name" : "wood_cabinet_worn_long_rough_1k",
+            "uri" : "wood_cabinet_worn_long_rough_1k.jpg"
+        }
+    ],
+    "accessors" : [
+        {
+            "bufferView" : 0,
+            "componentType" : 5126,
+            "count" : 16368,
+            "max" : [
+                100,
+                0,
+                99.99998474121094
+            ],
+            "min" : [
+                -100,
+                0,
+                -100.00001525878906
+            ],
+            "type" : "VEC3"
+        },
+        {
+            "bufferView" : 1,
+            "componentType" : 5126,
+            "count" : 16368,
+            "type" : "VEC3"
+        },
+        {
+            "bufferView" : 2,
+            "componentType" : 5126,
+            "count" : 16368,
+            "type" : "VEC4"
+        },
+        {
+            "bufferView" : 3,
+            "componentType" : 5126,
+            "count" : 16368,
+            "type" : "VEC2"
+        },
+        {
+            "bufferView" : 4,
+            "componentType" : 5123,
+            "count" : 61206,
+            "type" : "SCALAR"
+        }
+    ],
+    "bufferViews" : [
+        {
+            "buffer" : 0,
+            "byteLength" : 196416,
+            "byteOffset" : 0
+        },
+        {
+            "buffer" : 0,
+            "byteLength" : 196416,
+            "byteOffset" : 196416
+        },
+        {
+            "buffer" : 0,
+            "byteLength" : 261888,
+            "byteOffset" : 392832
+        },
+        {
+            "buffer" : 0,
+            "byteLength" : 130944,
+            "byteOffset" : 654720
+        },
+        {
+            "buffer" : 0,
+            "byteLength" : 122412,
+            "byteOffset" : 785664
+        }
+    ],
+    "buffers" : [
+        {
+            "byteLength" : 908076,
+            "uri" : "ground.bin"
+        }
+    ]
+}
