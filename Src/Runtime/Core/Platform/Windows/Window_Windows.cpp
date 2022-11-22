@@ -141,12 +141,12 @@ void Window_Windows::SetParentWindowHandle(HWND _parentHWnd)
 		SetWindowLong((HWND)m_hWnd, GWL_STYLE, WS_CHILD);
 
 		SetParent((HWND)m_hWnd, _parentHWnd);
-		SetClientSize(m_rect.width, m_rect.height, m_hWnd);
 	}
 }
 
 void Window_Windows::Show()
 {
+	SetClientSize(m_rect.width, m_rect.height, m_hWnd);
 	ShowWindow(m_hWnd, SW_SHOW);
 }
 
