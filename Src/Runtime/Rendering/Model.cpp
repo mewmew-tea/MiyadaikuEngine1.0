@@ -1,5 +1,4 @@
-﻿
-#define NOMINMAX
+﻿#define NOMINMAX
 #include <assimp/Importer.hpp>
 #include <assimp/scene.h>
 #include <assimp/postprocess.h>
@@ -44,6 +43,7 @@ bool Model::LoadByAssimp(const std::string& _filename)
 	flag |= aiProcess_GenUVCoords;
 	flag |= aiProcess_RemoveRedundantMaterials;
 	flag |= aiProcess_OptimizeMeshes;
+	//flag |= aiProcess_ConvertToLeftHanded;
 	const aiScene* pScene = importer.ReadFile(_filename,
 											  /*aiProcess_Triangulate |
 											  aiProcess_SortByPType |
