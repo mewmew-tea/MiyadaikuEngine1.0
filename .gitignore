@@ -1,6 +1,7 @@
 *.suo
 *.user
 *.sln.docstates
+*.blend1
 
 CMakeSettings.json
 
