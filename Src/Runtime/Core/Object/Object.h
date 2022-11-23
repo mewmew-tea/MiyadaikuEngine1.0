@@ -10,6 +10,9 @@
 #define MIYADAIKU_OBJECT_INSTANCE_MAX 8192
 
 typedef struct _MonoObject MonoObject;
+typedef struct _MonoArray MonoArray;
+typedef struct _MonoType MonoType;
+typedef struct _MonoReflectionType MonoReflectionType;
 
 namespace Miyadaiku
 {
@@ -116,6 +119,13 @@ private:
 	 */
 	static MonoObject* Internal_GetTransform(GameObject* _chachedPtr);
 
+	/**
+	 * Internal call: Get components owned by gameObject.
+	 *
+	 * @param _chachedPtr native gameObject handling the C# object instance
+	 * @return pointer about components array C# object
+	 */
+	static MonoArray* Internal_GetComponents(GameObject* _chachedPtr);
 
 };
 }

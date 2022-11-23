@@ -40,6 +40,8 @@ void GameObject::SetUpInternalCall()
 {
 	mono_add_internal_call("MiyadaikuEngine.GameObject::Internal_GetTransform",
 						   &Internal_GetTransform);
+	mono_add_internal_call("MiyadaikuEngine.GameObject::Internal_GetComponents",
+						   &Internal_GetComponents);
 }
 
 std::shared_ptr<Component>
@@ -127,6 +129,33 @@ MonoObject* GameObject::Internal_GetTransform(GameObject* _chachedPtr)
 	return _chachedPtr->m_spTransform->m_spClassInstance->m_pInstance;
 }
 
+MonoArray* GameObject::Internal_GetComponents(GameObject* _chachedPtr)
+{
+	Engine* pEngine = GetEngine();
+	auto	spScripting = pEngine->GetSubsystemLocator().Get<Scripting>();
+	auto	pMonoDomain = spScripting->GetMonoDomain();
+	auto	pMonoImage = spScripting->GetMonoImage();
+
+	auto spComponentType = std::make_shared<ScriptClassTypeInfo>();
+	spComponentType->name = "Component";
+	spComponentType->nameSpace = "MiyadaikuEngine";
+	spComponentType->ReadClass(pMonoImage);
+
+	//std::vector<MonoObject*> monoObjects;
+	//monoObjects.reserve(_chachedPtr->m_spComponents.size());
+	MonoArray* result = mono_array_new(pMonoDomain, spComponentType->pMonoClass,
+									   _chachedPtr->m_spComponents.size());
+
+	int i = 0;
+	for (auto spComp : _chachedPtr->m_spComponents)
+	{
+		mono_array_set(result, MonoObject*, i,
+					   spComp->GetClassInstance()->m_pInstance);
+		++i;
+	}
+
+	return result;
+}
 std::shared_ptr<ScriptClassInstance> Object::GetClassInstance()
 {
 	return m_spClassInstance;

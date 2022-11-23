@@ -18,10 +18,16 @@ namespace MiyadaikuEngine
             }
         }
 
+        public Component[] GetComponents()
+        {
+            return Internal_GetComponents(chachedPtr);
+        }
 
         [MethodImpl(MethodImplOptions.InternalCall)]
         private static extern Transform Internal_GetTransform(IntPtr nativeInstance);
 
+        [MethodImpl(MethodImplOptions.InternalCall)]
+        private static extern Component[] Internal_GetComponents(IntPtr nativeInstance);
 
     }
 }
