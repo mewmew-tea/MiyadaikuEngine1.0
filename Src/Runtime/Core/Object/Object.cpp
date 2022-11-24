@@ -83,6 +83,10 @@ GameObject::AddComponent(std::shared_ptr<ScriptClassTypeInfo>& _spCompType)
 		{
 			m_spUpdateMethodComponents.push_back(spComponent);
 		}
+		if (spClassInst->m_pClassType->imguiUpdateMethod)
+		{
+			m_spImGuiUpdateMethodComponents.push_back(spComponent);
+		}
 		return spComponent;
 	}
 	return nullptr;
@@ -103,7 +107,7 @@ void GameObject::Update()
 }
 void GameObject::ImGuiUpdate()
 {
-	for (auto spMethod : m_spUpdateMethodComponents)
+	for (auto spMethod : m_spImGuiUpdateMethodComponents)
 	{
 		spMethod->m_spClassInstance->InvokeImGuiUpdateMethod();
 	}

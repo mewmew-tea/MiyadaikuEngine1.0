@@ -128,17 +128,26 @@ bool ScriptClassTypeInfo::ReadClass(MonoImage* _pImage)
 	initMethod = std::make_shared<ScriptMethod>();
 	initMethod->pClassType = this;
 	initMethod->name = "Init";
-	initMethod->Read();
+	if (!initMethod->Read())
+	{
+		initMethod = nullptr;
+	}
 	// method：Update
 	updateMethod = std::make_shared<ScriptMethod>();
 	updateMethod->pClassType = this;
 	updateMethod->name = "Update";
-	updateMethod->Read();
+	if (!updateMethod->Read())
+	{
+		updateMethod = nullptr;
+	}
 	// method：ImGuiUpdate
 	imguiUpdateMethod = std::make_shared<ScriptMethod>();
 	imguiUpdateMethod->pClassType = this;
 	imguiUpdateMethod->name = "ImGuiUpdate";
-	imguiUpdateMethod->Read();
+	if (!imguiUpdateMethod->Read())
+	{
+		imguiUpdateMethod = nullptr;
+	}
 
 	return true;
 }
