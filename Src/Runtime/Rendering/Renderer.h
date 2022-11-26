@@ -11,6 +11,12 @@ class RHI_Shader;
 class RHI_CommandList;
 class RHI_Texture;
 
+class Model;
+class ModelWork;
+class Node;
+class Material;
+class Subset;
+
 struct RHI_RasterizerState;
 struct RHI_SamplerState;
 
@@ -44,6 +50,13 @@ public:
 	}
 
 private:
+	void DrawModelsInScene();
+
+	void DrawModel(const ModelWork* _pModel, const Matrix& _mWorld);
+	void DrawMesh(const Node* _pNode, const std::vector<Material>& _materials);
+
+	void DrawSubset(const Node* _pNode, const Material& _material,
+					const Subset& _subset);
 	std::shared_ptr<RHI_Device>		 m_spRHIDevice = nullptr;
 	std::shared_ptr<RHI_SwapChain>	 m_spRHISwapChain = nullptr;
 	std::shared_ptr<RHI_CommandList> m_spRHICommandList = nullptr;
@@ -63,6 +76,10 @@ private:
 	// TODO: class to combine data and CBs
 	Cb_Camera							m_cbCameraData;
 	std::shared_ptr<RHI_ConstantBuffer> m_spCbCamera = nullptr;
+	Cb_Uber								m_cbUberData;
+	std::shared_ptr<RHI_ConstantBuffer> m_spCbUber = nullptr;
+	Cb_Material							m_cbMaterialData;
+	std::shared_ptr<RHI_ConstantBuffer> m_spCbMaterial = nullptr;
 
 	// default textures
 	std::shared_ptr<RHI_Texture> m_spWhiteTexure = nullptr;

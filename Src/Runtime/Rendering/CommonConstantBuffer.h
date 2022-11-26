@@ -15,7 +15,7 @@ struct Cb_Camera
 
 struct Cb_Uber
 {
-
+	Matrix mWorld; // world matrix
 };
 
 struct Cb_Light
@@ -25,7 +25,7 @@ struct Cb_Light
 
 struct Cb_Material
 {
-
+	Vector4 baseColor = {1, 1, 1, 1};
 };
 
 } // namespace Miyadaiku

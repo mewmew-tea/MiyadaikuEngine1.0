@@ -7,6 +7,8 @@
 #include "../Core/Math/Vector2.h"
 #include "../Core/Math/Vector3.h"
 
+#include "Model.h"
+
 #include "RHI/D3D11/D3D11_Device.h"
 #include "RHI/D3D11/D3D11_SwapChain.h"
 #include "RHI/D3D11/D3D11_CommandList.h"
@@ -15,6 +17,7 @@
 #include "RHI/D3D11/D3D11_RenderState.h"
 #include "RHI/D3D11/D3D11_ConstantBuffer.h"
 #include "RHI/D3D11/D3D11_VertexBuffer.h"
+#include "RHI/D3D11/D3D11_IndexBuffer.h"
 #include "CommonConstantBuffer.h"
 
 #include <memory>
@@ -104,14 +107,31 @@ void Renderer::OnAwake()
 	m_spRHIRasterizerState = std::make_shared<D3D11_RasterizerState>(m_spRHIDevice, RS_CullMode::Back, RS_FillMode::Solid);
 
 	// Crete constant buffers
+	// camera
 	m_spCbCamera = std::make_shared<D3D11_ConstantBuffer>(m_spRHIDevice);
 	if (!m_spCbCamera->Create<Cb_Camera>())
 	{
 		assert(0 && "Failed Create constant buffer!");
 	}
-	m_cbCameraData.mView = Matrix::CreateTranslation(0, 0, -1).Invert();
+	m_cbCameraData.mView =
+		Matrix::CreateRotationZ(30.0f * (3.1415926535f / 180.0f))
+		* Matrix::CreateTranslation(0, 0.7, -1);
+	m_cbCameraData.mView.Invert();
 	m_cbCameraData.mProj = Matrix::CreatePerspectiveFovLH(
 		60.0f * (3.1415926535f / 180.0f), 16.0f / 9.0f, 0.01f, 2000.0f);
+	// uber
+	m_spCbUber = std::make_shared<D3D11_ConstantBuffer>(m_spRHIDevice);
+	if (!m_spCbUber->Create<Cb_Uber>())
+	{
+		assert(0 && "Failed Create constant buffer!");
+	}
+	// material
+	m_spCbMaterial = std::make_shared<D3D11_ConstantBuffer>(m_spRHIDevice);
+	if (!m_spCbMaterial->Create<Cb_Material>())
+	{
+		assert(0 && "Failed Create constant buffer!");
+	}
+
 
 	// Create default texture
 	{
@@ -311,13 +331,28 @@ void Renderer::Present()
 	pDevivceContext->IASetInputLayout(spVertexShader->GetInputLayout());
 
 	static float angle = 0.0f;
-	m_cbCameraData.mView =
-		Matrix::CreateRotationY(angle) * Matrix::CreateTranslation(0,0,-2.0f);
-	angle += 0.005f;
+	//m_cbCameraData.mView =
+	//	Matrix::CreateRotationY(angle) * Matrix::CreateTranslation(0,0,-2.0f);
+	m_cbCameraData.mView = Matrix::CreateFromYawPitchRoll(
+							   angle, 10.0f * (3.1415926535f / 180.0f), 0.0f)
+		* Matrix::CreateTranslation(0, 0.3, -3);
+	m_cbCameraData.mView.Invert();
+	// angle += 0.005f;
+	if (GetAsyncKeyState('Q'))
+	{
+		angle += 0.005f;
+	}
+	if (GetAsyncKeyState('E'))
+	{
+		angle -= 0.005f;
+	}
+
 	m_cbCameraData.mView = m_cbCameraData.mView.Invert();
 	
 	m_spRHICommandList->SetConstantBuffer(7, m_spCbCamera);
 	m_spCbCamera->Write(m_cbCameraData);
+
+	m_spRHICommandList->SetConstantBuffer(1, m_spCbMaterial);
 	
 
 
@@ -335,55 +370,86 @@ void Renderer::Present()
 		UINT			  Color = 0xFFFFFFFF;
 	};
 
-	std::vector<TestVertex> vertex;
-	auto spScripting = GetEngine()->GetSubsystemLocator().Get<Scripting>();
+	//std::vector<TestVertex> vertex;
+	//auto spScripting = GetEngine()->GetSubsystemLocator().Get<Scripting>();
+
+	//m_cbUberData.mWorld = Matrix::Identity;
+	//m_spRHICommandList->SetConstantBuffer(8, m_spCbUber);
+	//m_spCbUber->Write<Cb_Uber>(m_cbUberData);
+
+	//for (auto go : spScripting->GetGameObjects())
+	//{
+	//	Vector3 pos;
+	//	auto	transform = go->GetTransform();
+	//	for (auto spProp : transform->GetClassInstance()->m_pClassType->spPropertyInfos)
+	//	{
+	//		if (spProp->name == "Position")
+	//		{
+	//			Vector3 ret;
+	//			spProp->GetValue(
+	//				transform->GetClassInstance()->m_pInstance, &ret);
+	//			//if (ret != nullptr)
+	//			{
+	//				pos = ret;
+	//				//std::cout << pos.x << ", " << pos.y << std::endl;
+	//			}
+	//			break;
+	//		}
+	//	}
+
+	//	static std::shared_ptr<Model> drumcanModel = nullptr;
+
+	//	if (!drumcanModel)
+	//	{
+
+	//		drumcanModel = std::make_shared<Model>();
+	//		if (!drumcanModel->LoadByAssimp(
+	//				"Assets/Models/DrumCan/DrumCan.gltf"))
+	//		{
+	//			assert(0 && "Model load failed...");
+	//		}
+	//	}
+
+	//	ID3D11DeviceContext* pDevivceContext =
+	//		std::static_pointer_cast<D3D11_Device>(m_spRHIDevice)
+	//			->GetDeviceContext();
+	//	pDevivceContext->IASetPrimitiveTopology(
+	//		D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+
+	//	{
+	//		ModelWork modelWork;
+	//		modelWork.Set(drumcanModel);
+	//		DrawModel(&modelWork, Matrix::CreateTranslation(pos));
+	//	}
+
+	//	//vertex.clear();
+	//	//vertex.push_back(TestVertex({pos.x + 0, pos.y + 0, 0}, {0, 1}, 0xFFFFFFFF));
+	//	//vertex.push_back(TestVertex({pos.x + 0, pos.y + 1, 0}, {0, 0}, 0xFFFFFFFF));
+	//	//vertex.push_back(TestVertex({pos.x + 1, pos.y + 0, 0}, {1, 1}, 0xFFFFFFFF));
+	//	//vertex.push_back(TestVertex({pos.x + 1, pos.y + 1, 0}, {1, 0}, 0xFFFFFFFF));
+
+	//	//std::shared_ptr<RHI_VertexBuffer> vertexBuffer =
+	//	//	std::make_shared<D3D11_VertexBuffer>(m_spRHIDevice);
+	//	//if (!vertexBuffer->Create<TestVertex>(vertex.size(), vertex.data()))
+	//	//{
+	//	//	assert(0&&"FAILED CRATE VERTEX BUF");
+	//	//}
+	//	//	//vertexBuffer.Write(vertex.data(), vertex.size());
+
+	//	//// 頂点リストの並び順
+	//	//pDevivceContext->IASetPrimitiveTopology(
+	//	//	D3D_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP);
+
+	//	//m_spRHICommandList->SetVertexBuffer(0, vertexBuffer, 0);
+
+	//	////m_spRHIComandList
+	//	////pDevivceContext->Draw((UINT)vertex.size(), 0);
+	//	////pDevivceContext->DrawInstanced((UINT)vertex.size(), 1, 0, 0);
+	//	//m_spRHICommandList->Draw((uint16_t)vertex.size(), 0);
+	//	//pBuffer->Release();
+	//}
 	
-	for (auto go : spScripting->GetGameObjects())
-	{
-		Vector3 pos;
-		auto	transform = go->GetTransform();
-		for (auto spProp : transform->GetClassInstance()->m_pClassType->spPropertyInfos)
-		{
-			if (spProp->name == "Position")
-			{
-				Vector3 ret;
-				spProp->GetValue(
-					transform->GetClassInstance()->m_pInstance, &ret);
-				//if (ret != nullptr)
-				{
-					pos = ret;
-					//std::cout << pos.x << ", " << pos.y << std::endl;
-				}
-				break;
-			}
-		}
-		vertex.clear();
-		vertex.push_back(TestVertex({pos.x + 0, pos.y + 0, 0}, {0, 1}, 0xFFFFFFFF));
-		vertex.push_back(TestVertex({pos.x + 0, pos.y + 1, 0}, {0, 0}, 0xFFFFFFFF));
-		vertex.push_back(TestVertex({pos.x + 1, pos.y + 0, 0}, {1, 1}, 0xFFFFFFFF));
-		vertex.push_back(TestVertex({pos.x + 1, pos.y + 1, 0}, {1, 0}, 0xFFFFFFFF));
-
-		std::shared_ptr<RHI_VertexBuffer> vertexBuffer =
-			std::make_shared<D3D11_VertexBuffer>(m_spRHIDevice);
-		if (!vertexBuffer->Create<TestVertex>(vertex.size(), vertex.data()))
-		{
-			assert(0&&"FAILED CRATE VERTEX BUF");
-		}
-			//vertexBuffer.Write(vertex.data(), vertex.size());
-
-		// 頂点リストの並び順
-		pDevivceContext->IASetPrimitiveTopology(
-			D3D_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP);
-
-		m_spRHICommandList->SetVertexBuffer(0, vertexBuffer, 0);
-
-		//m_spRHIComandList
-		//pDevivceContext->Draw((UINT)vertex.size(), 0);
-		//pDevivceContext->DrawInstanced((UINT)vertex.size(), 1, 0, 0);
-		m_spRHICommandList->Draw((uint16_t)vertex.size(), 0);
-		//pBuffer->Release();
-	}
-	
+	DrawModelsInScene();
 	
     //--------------------------------
 	// ImGui
@@ -411,5 +477,208 @@ void Renderer::Present()
 	}
 
 	m_spRHISwapChain->Present();
+}
+
+void Renderer::DrawSubset(const Node* _pNode, const Material& _material,
+							  const Subset& _subset)
+{
+	// マテリアル書き込み
+	m_cbMaterialData.baseColor = _material.BaseColor;
+	m_spCbMaterial->Write<Cb_Material>(m_cbMaterialData);
+
+	ID3D11DeviceContext* pDevivceContext =
+		std::static_pointer_cast<D3D11_Device>(m_spRHIDevice)
+			->GetDeviceContext();
+
+	D3D11_Texture* baseColTex =
+		static_cast<D3D11_Texture*>( _material.spBaseColorTexture
+						? _material.spBaseColorTexture.get()
+						: GetWhiteTexture().get());
+
+	pDevivceContext->PSSetShaderResources(
+		0, 1,
+		(ID3D11ShaderResourceView**)&(baseColTex->GetSRVHandle().m_pData));
+
+	// D3DDevice::GetInstance().GetDrawState()->SetTexture(D3DDevice::GetInstance().GetWhiteTex().get(),
+	// 0, true);
+
+	m_spRHICommandList->DrawIndexed(_subset.faceCount * 3,
+									_subset.faceStartIdx * 3, 0);
+
+	//static_pointer_cast<D3D11_Device>(m_spRHIDevice)->GetDeviceContext()->DrawIndexed(
+	//	_subset.faceCount * 3, _subset.faceStartIdx * 3, 0);
+}
+
+void Renderer::DrawModel(const ModelWork* _pModel, const Matrix& _mWorld)
+{
+	if (!_pModel)
+	{
+		return;
+	}
+	for (auto&& node : _pModel->GetNodes())
+	{
+		m_cbUberData.mWorld = node.m_worldTransform * _mWorld;
+		m_spCbUber->Write<Cb_Uber>(m_cbUberData);
+		DrawMesh(&node, _pModel->GetModelData()->GetMaterials());
+	}
+}
+
+void Renderer::DrawMesh(const Node*					 _pNode,
+						const std::vector<Material>& _materials)
+{
+
+	if (!_pNode->IsMesh)
+	{
+		return;
+	}
+	// if (_pNode->Name != "Head") return;
+
+	struct EffectVertex
+	{
+
+		EffectVertex(const Vector3& _pos, const Vector2& _uv, UINT _color)
+		{
+			Pos = _pos;
+			UV = _uv;
+			Color = _color;
+		}
+		Vector3 Pos = {};
+		Vector2 UV = {};
+		UINT	Color = 0xFFFFFFFF;
+	};
+	std::vector<EffectVertex> vertices;
+	for (auto&& v : _pNode->Verteces)
+	{
+		vertices.push_back(EffectVertex(v.Pos, v.UV, v.Color));
+	}
+
+	// 頂点バッファ
+	std::shared_ptr<RHI_VertexBuffer> vertexBuffer =
+		std::make_shared<D3D11_VertexBuffer>(m_spRHIDevice);
+	vertexBuffer->Create<EffectVertex>(_pNode->Verteces.size(), &vertices[0]);
+
+	UINT offset = 0;
+	m_spRHICommandList->SetVertexBuffer(0, vertexBuffer, 0);
+	//D3DDevice::GetInstance().GetDeviceContext()->IASetVertexBuffers(
+	//	0, 1, vertexBuffer.GetAddress(), &oneSize, &offset);
+
+	// インデックスバッファ
+	//Buffer							  indexBuffer;
+	std::shared_ptr<RHI_IndexBuffer> indexBuffer =
+		std::make_shared<D3D11_IndexBuffer>(m_spRHIDevice);
+	indexBuffer->Create<ModelFace>(_pNode->Faces.size(), &_pNode->Faces[0]);
+	m_spRHICommandList->SetIndexBuffer(0, indexBuffer, 0);
+
+	//D3DDevice::GetInstance().GetDeviceContext()->IASetIndexBuffer(
+	//	indexBuffer.Get(), DXGI_FORMAT_R32_UINT, 0);
+
+	// 描画
+	/*D3DDevice::GetInstance().GetDeviceContext()->DrawIndexed(UINT(_pNode->Faces.size())
+	* 3, 0, 0); return;*/
+	for (auto&& subset : _pNode->Subsets)
+	{
+		DrawSubset(_pNode, _materials[subset.materialIdx], subset);
+	}
+}
+std::shared_ptr<Model> skyModel = nullptr;
+std::shared_ptr<Model> planeModel = nullptr;
+
+void Renderer::DrawModelsInScene()
+{
+	auto spScripting = GetEngine()->GetSubsystemLocator().Get<Scripting>();
+
+	m_cbUberData.mWorld = Matrix::Identity;
+	m_spRHICommandList->SetConstantBuffer(8, m_spCbUber);
+	m_spCbUber->Write<Cb_Uber>(m_cbUberData);
+
+	static std::shared_ptr<Model> drumcanModel = nullptr;
+
+	if (!drumcanModel)
+	{
+
+		drumcanModel = std::make_shared<Model>();
+		if (!drumcanModel->LoadByAssimp("Assets/Models/DrumCan/DrumCan.gltf"))
+		{
+			assert(0 && "Model load failed...");
+		}
+	}
+
+	if (!skyModel)
+	{
+		skyModel = std::make_shared<Model>();
+		if (!skyModel->LoadByAssimp("Assets/Models/Sky/Sky.gltf"))
+		{
+			assert(0 && "Model load failed...");
+		}
+	}
+
+	if (!planeModel)
+	{
+		planeModel = std::make_shared<Model>();
+		//if (!planeModel->LoadByAssimp("Assets/Models/Plane/plane_100x100_stone.gltf"))
+		if (!planeModel->LoadByAssimp("Assets/Models/Ground/ground.gltf"))
+		{
+			assert(0 && "Model load failed...");
+		}
+	}
+
+	ID3D11DeviceContext* pDevivceContext =
+		std::static_pointer_cast<D3D11_Device>(m_spRHIDevice)
+			->GetDeviceContext();
+	pDevivceContext->IASetPrimitiveTopology(
+		D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+
+	// render ground
+	{
+		ModelWork modelWork;
+		modelWork.Set(planeModel);
+		DrawModel(&modelWork, Matrix::CreateTranslation(0, -0.5,0));
+	}
+	// render sky
+	{
+		ModelWork modelWork;
+		modelWork.Set(skyModel);
+		DrawModel(&modelWork, Matrix::CreateScale(1, 1, 1));
+	}
+
+	// render gameobjects
+	for (auto go : spScripting->GetGameObjects())
+	{
+		if (!go->GetEnabled())
+		{
+			continue;
+		}
+
+		Vector3 pos;
+		auto	transform = go->GetTransform();
+		for (auto spProp :
+			 transform->GetClassInstance()->m_pClassType->spPropertyInfos)
+		{
+			if (spProp->name == "Position")
+			{
+				Vector3 ret;
+				spProp->GetValue(transform->GetClassInstance()->m_pInstance,
+								 &ret);
+				// if (ret != nullptr)
+				{
+					pos = ret;
+					// std::cout << pos.x << ", " << pos.y << std::endl;
+				}
+				break;
+			}
+		}
+
+		ID3D11DeviceContext* pDevivceContext =
+			std::static_pointer_cast<D3D11_Device>(m_spRHIDevice)
+				->GetDeviceContext();
+		pDevivceContext->IASetPrimitiveTopology(
+			D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+
+		{
+			ModelWork modelWork;
+			modelWork.Set(drumcanModel);
+			DrawModel(&modelWork, Matrix::CreateTranslation(pos));
+		}
+	}
 }
 } // namespace Miyadaiku
