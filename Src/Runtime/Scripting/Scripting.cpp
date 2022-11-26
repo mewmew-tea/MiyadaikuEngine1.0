@@ -248,19 +248,19 @@ void Scripting::LoadMonoAssembly()
 		// spScriptClassInstance->InvokeUpdateMethod();
 	}
 
-	auto spGame2= std::make_shared<ScriptClassTypeInfo>();
-	spGame2->name = "Game2";
-	spGame2->nameSpace = "CSScript";
-	if (spGame2->ReadClass(assemblyImage))
-	{
-		m_spScriptClasses.push_back(spGame2);
-		//// create a instance of the class
-		// spScriptClassInstance = scriptClassType.CreateInstance(domain);
-		//// method：Init
-		// spScriptClassInstance->InvokeInitMethod();
-		//// method：Update
-		// spScriptClassInstance->InvokeUpdateMethod();
-	}
+	//auto spGame2= std::make_shared<ScriptClassTypeInfo>();
+	//spGame2->name = "Game2";
+	//spGame2->nameSpace = "CSScript";
+	//if (spGame2->ReadClass(assemblyImage))
+	//{
+	//	m_spScriptClasses.push_back(spGame2);
+	//	//// create a instance of the class
+	//	// spScriptClassInstance = scriptClassType.CreateInstance(domain);
+	//	//// method：Init
+	//	// spScriptClassInstance->InvokeInitMethod();
+	//	//// method：Update
+	//	// spScriptClassInstance->InvokeUpdateMethod();
+	//}
 
 
 	// guid provider
@@ -274,42 +274,80 @@ void Scripting::LoadMonoAssembly()
 		{
 		}
 	}
+	auto spEnemyController = std::make_shared<ScriptClassTypeInfo>();
+	spEnemyController->name = "EnemyController";
+	spEnemyController->nameSpace = "CSScript";
+	if (spEnemyController->ReadClass(assemblyImage))
+	{
+		m_spScriptClasses.push_back(spEnemyController);
+	}
+	auto spPlayerController = std::make_shared<ScriptClassTypeInfo>();
+	spPlayerController->name = "PlayerController";
+	spPlayerController->nameSpace = "CSScript";
+	if (spPlayerController->ReadClass(assemblyImage))
+	{
+		m_spScriptClasses.push_back(spPlayerController);
+	}
+	auto spBulletController = std::make_shared<ScriptClassTypeInfo>();
+	spBulletController->name = "BulletController";
+	spBulletController->nameSpace = "CSScript";
+	if (spBulletController->ReadClass(assemblyImage))
+	{
+		m_spScriptClasses.push_back(spBulletController);
+	}
 
+	{
+		auto go = CreateGameObject();
+		go->AddComponent(spPlayerController);
+	}
+	{
+		auto go = CreateGameObject();
+		go->AddComponent(spEnemyController);
+	}
 
-	auto go = CreateGameObject();
-	go->AddComponent(spScriptClassType);
-	auto go2 = CreateGameObject();
-	go2->AddComponent(spGame2);
+	{
+		for (int i = 0; i < 5; ++i)
+		{
+			auto go = CreateGameObject();
+			go->AddComponent(spBulletController);
+			go->m_enabled = false;
+		}
+	}
+	//auto go = CreateGameObject();
+	//go->AddComponent(spScriptClassType);
+	//auto go2 = CreateGameObject();
+	//go2->AddComponent(spGame2);
 
 	// serialize test
 #include <ostream>
-	{
-		nlohmann::ordered_json jsonData;
-		spGame2->Serialize(jsonData);
-		std::ofstream writing_file;
-		std::string	  filename = "typeInfo.json";
-		writing_file.open(filename, std::ios::out);
-		std::string writing_text = jsonData.dump();
-		writing_file << writing_text << std::endl;
-		writing_file.close();
-	}
-	{
-		nlohmann::ordered_json jsonData;
-		for (auto& spComp : go2->m_spComponents)
-		{
-			if (spComp->m_spClassInstance->m_pClassType->name == spGame2->name)
-			{
-				spComp->m_spClassInstance->Serialize(jsonData);
-				break;
-			}
-		}
-		std::ofstream writing_file;
-		std::string	  filename = "typeData.json";
-		writing_file.open(filename, std::ios::out);
-		std::string writing_text = jsonData.dump();
-		writing_file << writing_text << std::endl;
-		writing_file.close();
-	}
+	//{
+	//	nlohmann::ordered_json jsonData;
+	//	spTransformType->Serialize(jsonData);
+	//	std::ofstream writing_file;
+	//	std::string	  filename = "typeInfo.json";
+	//	writing_file.open(filename, std::ios::out);
+	//	std::string writing_text = jsonData.dump();
+	//	writing_file << writing_text << std::endl;
+	//	writing_file.close();
+	//}
+	//{
+	//	nlohmann::ordered_json jsonData;
+	//	//for (auto& spComp : go2->m_spComponents)
+	//	//{
+	//	//	if (spComp->m_spClassInstance->m_pClassType->name == spGame2->name)
+	//	//	{
+	//	//		spComp->m_spClassInstance->Serialize(jsonData);
+	//	//		break;
+	//	//	}
+	//	//}
+	//	go->GetTransform()->GetClassInstance()->Serialize(jsonData);
+	//	std::ofstream writing_file;
+	//	std::string	  filename = "typeData.json";
+	//	writing_file.open(filename, std::ios::out);
+	//	std::string writing_text = jsonData.dump();
+	//	writing_file << writing_text << std::endl;
+	//	writing_file.close();
+	//}
 
 	for (auto& spGameObject : m_spGameObjects)
 	{
@@ -401,7 +439,10 @@ void Scripting::Update()
 
 	for (auto& spGameObject : m_spGameObjects)
 	{
-		spGameObject->Update();
+		if (spGameObject->m_enabled)
+		{
+			spGameObject->Update();
+		}
 	}
 }
 void Scripting::ImGuiUpdate()
@@ -409,7 +450,7 @@ void Scripting::ImGuiUpdate()
 
 	for (auto& spGameObject : m_spGameObjects)
 	{
-		spGameObject->ImGuiUpdate();
+		//spGameObject->ImGuiUpdate();
 	}
 
 
@@ -431,6 +472,15 @@ void Scripting::ImGuiUpdate()
 				{
 					switch (fieldInfo->type)
 					{
+					case ScriptValueType::Int:
+					{
+						int32_t value;
+						fieldInfo->GetValue(spClassInstance->m_pInstance,
+											&value);
+						ImGui::Text("field name: %s = %d\n",
+									fieldInfo->name.c_str(), value);
+						break;
+					}
 					case ScriptValueType::Float:
 					{
 						float value = 0;
@@ -457,6 +507,7 @@ void Scripting::ImGuiUpdate()
 					}
 				}
 			}
+			ImGui::Separator();
 		}
 	}
 	ImGui::End();

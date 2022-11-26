@@ -90,6 +90,7 @@ private:
 	std::list<std::shared_ptr<ScriptClassTypeInfo>> m_spScriptClasses;
 	std::shared_ptr<ScriptClassTypeInfo>			m_spGameObjectTypeInfo;
 	std::shared_ptr<ScriptClassTypeInfo>			m_spTransformTypeInfo;
+	//std::shared_ptr<ScriptClassTypeInfo>			m_spComponentTypeInfo;
 	std::list<std::shared_ptr<GameObject>> m_spGameObjects;
 
 	void LoadMonoAssembly();
