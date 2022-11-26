@@ -20,37 +20,50 @@ namespace CSScript
         {
             // キーボード入力＆移動
             float speed = 0.05f;
-            if (GameConsole.GetKey('W'))
+            if (Runtime.GetKey('W'))
             {
                 y += speed;
             }
-            if (GameConsole.GetKey('S'))
+            if (Runtime.GetKey('S'))
             {
                 y -= speed;
             }
-            if (GameConsole.GetKey('A'))
+            if (Runtime.GetKey('A'))
             {
                 x -= speed;
             }
-            if (GameConsole.GetKey('D'))
+            if (Runtime.GetKey('D'))
             {
                 x += speed;
             }
             pos.x = x;
             pos.y = y;
-            GameConsole.SetPosition(x, y);
+            Runtime.SetPosition(x, y);
 
-            //transform.LocalPosition = pos;
+            transform.LocalPosition = pos;
         }
 
         private void ImGuiUpdate()
         {
-            if (ImGui.Begin("C# Window"))
+            if (ImGui.Begin("C# Windowwwwwwwwwwwww"))
             {
                 ImGui.Text("This is called from C# script.");
                 ImGui.Text($"Pos (Vector3) : " + pos);
                 ImGui.Text($"chachePtr : " + chachedPtr);
-                //ImGui.Text($"transform.LocalPosition : " + transform.LocalPosition);
+                ImGui.Text($"transform.LocalPosition : " + transform.LocalPosition);
+
+                ImGui.Text("【Components】");
+                //foreach (var c in gameObject.GetComponents())
+                //{
+                //    if (c.GetType() == typeof(Transform))
+                //        ImGui.Text(c.GetType().Name);
+                //}
+                ImGui.Text("【GameObjects】");
+                foreach (var c in gameObject.GetAll())
+                {
+                        ImGui.Text(c.GetType().Name);
+                }
+
             }
             ImGui.End();
         }
@@ -74,7 +87,7 @@ namespace CSScript
             pos.x = (float)Math.Cos(angle) * radius;
             pos.y = (float)Math.Sin(angle) * radius;
 
-            //transform.LocalPosition = pos;
+            transform.LocalPosition = pos;
         }
 
         private void ImGuiUpdate()
@@ -84,7 +97,7 @@ namespace CSScript
                 ImGui.Text("This is called from C# script.");
                 ImGui.Text($"Pos (Vector3) : " + pos);
                 ImGui.Text($"chachePtr : " + chachedPtr);
-                //ImGui.Text($"transform.LocalPosition : " + transform.LocalPosition);
+                ImGui.Text($"transform.LocalPosition : " + transform.LocalPosition);
             }
             ImGui.End();
         }

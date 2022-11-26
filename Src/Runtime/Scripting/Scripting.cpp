@@ -82,6 +82,9 @@ float ScriptingAPI_GetPositionY()
 	return y;
 }
 
+//-----------------------------------
+// dear ImGui
+//-----------------------------------
 bool ScriptingAPI_ImGui_Begin(MonoString* _label)
 {
 	return ImGui::Begin(mono_string_to_utf8(_label));
@@ -184,14 +187,14 @@ void Scripting::LoadMonoAssembly()
 
 	
 	// add InternalCalls
-	mono_add_internal_call("MiyadaikuEngine.GameConsole::PrintMessage()",
+	mono_add_internal_call("MiyadaikuEngine.Runtime::PrintMessage()",
 						   &PrintMessage);
-	mono_add_internal_call("MiyadaikuEngine.GameConsole::SetPosition",
+	mono_add_internal_call("MiyadaikuEngine.Runtime::SetPosition",
 						   &ScriptingAPI_SetPosition);
-	mono_add_internal_call("MiyadaikuEngine.GameConsole::GetKey", &GetKey);
-	mono_add_internal_call("MiyadaikuEngine.GameConsole::DebugOutStringToVS",
+	mono_add_internal_call("MiyadaikuEngine.Runtime::GetKey", &GetKey);
+	mono_add_internal_call("MiyadaikuEngine.Runtime::DebugOutStringToVS",
 						   &DebugOutStringToVS);
-	mono_add_internal_call("MiyadaikuEngine.GameConsole::DebugOutStringLineToVS",
+	mono_add_internal_call("MiyadaikuEngine.Runtime::DebugOutStringLineToVS",
 						   &DebugOutStringLineToVS);
 
 	mono_add_internal_call("MiyadaikuEngine.ImGui::Begin",

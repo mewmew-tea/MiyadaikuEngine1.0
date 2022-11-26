@@ -3,7 +3,7 @@ using System.Runtime.CompilerServices;
 
 namespace MiyadaikuEngine
 {
-    public  class GameConsole
+    public class Runtime
     {
         [MethodImplAttribute(MethodImplOptions.InternalCall)]
         public extern static void PrintMessage();

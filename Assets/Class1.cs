@@ -33,7 +33,7 @@ namespace CSScript
 
         public static void Init()
         {
-            GameConsole.DebugOutStringLineToVS("Init");
+            Runtime.DebugOutStringLineToVS("Init");
         }
 
         public static void Update()
@@ -75,8 +75,8 @@ namespace CSScript
 
 
             Console.WriteLine("************ Call C++ function from C# Test ************");
-            GameConsole.PrintMessage();
-            GameConsole.SetPosition(20, 100);
+            Runtime.PrintMessage();
+            Runtime.SetPosition(20, 100);
             
         }
 
