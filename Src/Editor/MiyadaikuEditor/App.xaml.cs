@@ -1,8 +1,12 @@
 ﻿using Miyadaiku.Editor.Core.IPC;
+using Miyadaiku.Editor.Core.IPC.Command;
 using Miyadaiku.Editor.Views;
 using Prism.Ioc;
 using System;
+using System.Text.Json;
+using System.Collections.Generic;
 using System.Windows;
+using System.Diagnostics;
 
 namespace Miyadaiku.Editor
 {

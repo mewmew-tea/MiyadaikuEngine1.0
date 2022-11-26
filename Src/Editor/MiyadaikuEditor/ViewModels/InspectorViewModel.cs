@@ -64,9 +64,10 @@ namespace Miyadaiku.Editor.ViewModels
             Components.Add(comp);
 
             // Update by timer
-            Timer timer = new Timer(500);
+            Timer timer = new Timer(300);
             timer.Elapsed += (sender, e) =>
             {
+                timer.Stop();
                 GetComponentsCommand command = new GetComponentsCommand();
 
                 var response = JsonSerializer.Deserialize<GetComponentsCommand.ResponseDataLayout>(IPCManager.Instance.SendAndRecv(command));
@@ -75,6 +76,8 @@ namespace Miyadaiku.Editor.ViewModels
                 model.JsonValuesToDynamic();
                 Components[0].model.Values = model.Values;
                 Components[0].UpdateFields();
+
+                timer.Start();
             };
             timer.Start();
 

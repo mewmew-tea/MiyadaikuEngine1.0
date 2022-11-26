@@ -86,7 +86,7 @@
             </avalonDock:DockingManager.Theme>
             <avalonDock:LayoutRoot>
                 <avalonDock:LayoutPanel Orientation="Vertical">
-                    <avalonDock:LayoutPanel Orientation="Horizontal">
+                    <avalonDock:LayoutPanel Orientation="Horizontal" DockHeight="720">
 
 
                         <avalonDock:LayoutDocumentPane x:Name="uxHierarchyPane">
@@ -103,8 +103,8 @@
                             </avalonDock:LayoutDocument>
                         </avalonDock:LayoutDocumentPane>
 
-                        <avalonDock:LayoutDocumentPane x:Name="uxSceneViewPane" DockMinWidth="1300">
-                            <avalonDock:LayoutDocument Title="SceneView" ContentId="SceneView" FloatingWidth="1280">
+                        <avalonDock:LayoutDocumentPane x:Name="uxSceneViewPane" DockMinWidth="1280" DockMinHeight="720">
+                            <avalonDock:LayoutDocument Title="SceneView" ContentId="SceneView" FloatingWidth="1280" FloatingHeight="720">
                                 <!--<local:SceneViewHost Width="1280" Height="720"/>-->
                                 <localView:RuntimeView></localView:RuntimeView>
                             </avalonDock:LayoutDocument>
