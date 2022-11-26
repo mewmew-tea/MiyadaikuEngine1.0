@@ -68,10 +68,16 @@ public:
 	std::shared_ptr<Component> GetTransform();
 	std::list <std::shared_ptr<Component>> GetComponents();
 
+	bool GetEnabled()
+	{
+		return m_enabled;
+	}
 
 	friend Scripting;
 
 private:
+
+	bool m_enabled = true;
 
 	//------------------------
 	// Components
@@ -127,5 +133,16 @@ private:
 	 */
 	static MonoArray* Internal_GetComponents(GameObject* _chachedPtr);
 
+	/**
+	 * Internal call: Get components owned by gameObject.
+	 *
+	 * @param _chachedPtr native gameObject handling the C# object instance
+	 * @return pointer about components array C# object
+	 */
+	static MonoArray* Internal_GetAll(GameObject* _chachedPtr);
+
+
+	static bool Internal_GetEnabled(GameObject* _chachedPtr);
+	static void Internal_SetEnabled(GameObject* _chachedPtr, bool _enabled);
 };
 }
