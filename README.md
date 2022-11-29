@@ -14,7 +14,7 @@
 ポートフォリオを兼ねて開発中です。（２０２２年７月中旬～）
 
 Game engine that can be scripted in C#(mono).\
-Under development for the portfolio. (from July 2022))
+Under development for the portfolio. (from July 2022)
 
 # How to build
 
@@ -25,15 +25,18 @@ Under development for the portfolio. (from July 2022))
 - git
 - Visual Studio 2022 or later
 - cmake 3.22 or later
+- git-lfs
 
 ## Clone and generate projects
 
-リポジトリをClone、Submoduleを取得してください。
+リポジトリをClone、初期化してください。
 
 ```
 git clone https://github.com/mewmew-tea/MiyadaikuEngine1.0
 cd MiyadaikuEngine1.0
 git submodule update --init
+git lfs install
+git lfs pull
 ```
 
 テストを含まない場合： `Script/GenerateProjects.bat`をクリックしてください。\
@@ -81,14 +84,14 @@ https://trello.com/b/jDuAlxcO -->
 |  エンジンコア  |  70%  | プラットフォーム機能、ファイルシステムなど  |
 |  算術ライブラリ(C++)  |  90%  | C++のNaitiveRuntimeに含まれます。  |
 |  算術ライブラリ(C# script)  |  50%  | C#のScript用。  |
-|  D3D11レンダラ  |  20%  | C++(Win32API)  |
+|  D3D11レンダラ  |  30%  | C++(Win32API)  |
 |  D3D12レンダラ  |  0%  | 低優先度。C++(Win32API)で実装予定。  |
-|  C#スクリプトシステム  |  35%  | Monoを用いて実装予定。  |
+|  C#スクリプトシステム  |  50%  | Monoを用いて実装予定。  |
 |  WPFによるエディタGUI  |  15%  |   |
 | アセットシステム | 0% |  |
 | オーディオ(XAudio) | 0% |  |
 |  物理,コリジョン  |  0%  | PhysX採用？  |
 |  Dear ImGui, ImGuizmo  |  75%  | ImGui：おもにユーザー用、ImGuizmo：マニピュレータとして使用予定。  |
-| 3Dモデル読み込み | 0% | Assimpを使用予定。|
+| 3Dモデル読み込み | 75% | Assimpを使用予定。|
 
 
