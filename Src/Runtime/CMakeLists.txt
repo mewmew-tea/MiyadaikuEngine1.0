@@ -241,6 +241,8 @@ set(
   CMAKE_ARCHIVE_OUTPUT_DIRECTORY_RELEASE libs/Release
 )
 
+add_subdirectory(External)
+
 if (ENABLE_TEST)
     add_subdirectory(Test)
 endif()
