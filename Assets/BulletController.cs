@@ -43,10 +43,10 @@ namespace CSScript
                 }
 
                 float distance = (float)Math.Sqrt(
-                    (transform.Position.x - enemy.transform.Position.x) 
-                    + (transform.Position.y - enemy.transform.Position.y)
-                    + (transform.Position.z - enemy.transform.Position.z));
-                if (distance < 0.2f)
+                    (transform.Position.x - enemy.transform.Position.x) * (transform.Position.x - enemy.transform.Position.x) +
+                    + (transform.Position.y - enemy.transform.Position.y) * (transform.Position.y - enemy.transform.Position.y)
+                    + (transform.Position.z - enemy.transform.Position.z) * (transform.Position.z - enemy.transform.Position.z));
+                if (distance < 0.5f)
                 {
                     Destroy();
                     enemy.Enabled = false;
