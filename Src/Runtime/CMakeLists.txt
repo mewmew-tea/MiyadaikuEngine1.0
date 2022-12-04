@@ -37,6 +37,9 @@ file(GLOB nativeruntime_h
     Core/Platform/Platform.h
     Core/Platform/Window.h
     Core/Platform/Windows/Window_Windows.h
+    
+    # Timer
+    Core/Timer/Timer.h
 
     # Rendering
     Rendering/Renderer.h
@@ -111,6 +114,10 @@ set(nativeruntime_src
     Core/Platform/Platform.cpp
     Core/Platform/Window.cpp
     Core/Platform/Windows/Window_Windows.cpp
+
+    # Timer
+    Core/Timer/Timer.cpp
+
 
     # Rendering
     Rendering/Renderer.cpp

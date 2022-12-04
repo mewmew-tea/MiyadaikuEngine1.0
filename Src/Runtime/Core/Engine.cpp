@@ -6,6 +6,8 @@
 #include "Platform/Platform.h"
 #include "Platform/Window.h"
 
+#include "Timer/Timer.h"
+
 #include "../Rendering/Renderer.h"
 #include "../Rendering/RenderingResource.h"
 
@@ -52,10 +54,12 @@ Engine::~Engine()
 	m_subsystemLocator.Remove<Renderer>();
 	m_subsystemLocator.Remove<Platform>();
 	m_subsystemLocator.Remove<Scripting>();
+	m_subsystemLocator.Remove<Timer>();
 }
 
 void Engine::SetUp()
 {
+	m_subsystemLocator.Add<Timer>();
 	m_subsystemLocator.Add<Platform>();
 	m_subsystemLocator.Add<Renderer>();
 	m_subsystemLocator.Add<Scripting>();
@@ -79,6 +83,10 @@ void Engine::Update()
 
 	auto renderer = m_subsystemLocator.Get<Renderer>();
 	renderer->Present();
+
+	
+	auto timer = m_subsystemLocator.Get<Timer>();
+	timer->Tick();
 }
 
 void Engine::RequestShutdown()
