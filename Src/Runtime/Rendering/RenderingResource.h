@@ -1,5 +1,9 @@
 ﻿#pragma once
 #include <cassert>
+#include <array>
+#include "../Core/Math/Vector2.h"
+#include "../Core/Math/Vector3.h"
+#include "../Core/Math/Vector4.h"
 #include <stdint.h>
 
 namespace Miyadaiku
@@ -18,6 +22,17 @@ namespace Miyadaiku
 //
 //     None,
 // };
+
+struct RHIVertex_Standard
+{
+	Vector3 Pos = {};
+	Vector3 Normal;
+	Vector3 Tangent;
+	Vector2 UV = {};
+	unsigned int		 Color = 0xFFFFFFFF;
+	std::array<short, 4> SkinIndexList;	 // skinning Indexes
+	std::array<float, 4> SkinWeightList; // skinning weights
+};
 
 enum class RHI_FORMAT : uint32_t
 {

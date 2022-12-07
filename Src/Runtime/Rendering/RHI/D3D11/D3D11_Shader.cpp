@@ -101,6 +101,10 @@ bool D3D11_Shader::Load(std::string_view _filePath, ShaderType _type,
 					 D3D11_INPUT_PER_VERTEX_DATA, 0},
 					{"COLOR", 0, DXGI_FORMAT_R8G8B8A8_UNORM, 0, 20,
 					 D3D11_INPUT_PER_VERTEX_DATA, 0},
+					{"NORMAL", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 24,
+					 D3D11_INPUT_PER_VERTEX_DATA, 0},
+					{"TANGENT", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 36,
+					 D3D11_INPUT_PER_VERTEX_DATA, 0},
 				};
 
 				if (FAILED(spDevice->GetDevice()->CreateInputLayout(

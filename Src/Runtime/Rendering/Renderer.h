@@ -49,6 +49,15 @@ public:
 		return m_spNormalTexure;
 	}
 
+	const Matrix& GetViewMatrix()
+	{
+		return m_cbCameraData.mView;
+	}
+	const Matrix& GetProjectionMatrix()
+	{
+		return m_cbCameraData.mProj;
+	}
+
 private:
 	void DrawModelsInScene();
 
@@ -80,6 +89,8 @@ private:
 	std::shared_ptr<RHI_ConstantBuffer> m_spCbUber = nullptr;
 	Cb_Material							m_cbMaterialData;
 	std::shared_ptr<RHI_ConstantBuffer> m_spCbMaterial = nullptr;
+	Cb_Light							m_cbLightData;
+	std::shared_ptr<RHI_ConstantBuffer> m_spCbLight = nullptr;
 
 	// default textures
 	std::shared_ptr<RHI_Texture> m_spWhiteTexure = nullptr;

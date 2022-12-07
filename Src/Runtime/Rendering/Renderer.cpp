@@ -131,6 +131,12 @@ void Renderer::OnAwake()
 	{
 		assert(0 && "Failed Create constant buffer!");
 	}
+	// light
+	m_spCbLight = std::make_shared<D3D11_ConstantBuffer>(m_spRHIDevice);
+	if (!m_spCbLight->Create<Cb_Light>())
+	{
+		assert(0 && "Failed Create constant buffer!");
+	}
 
 
 	// Create default texture
@@ -353,6 +359,11 @@ void Renderer::Present()
 	m_spCbCamera->Write(m_cbCameraData);
 
 	m_spRHICommandList->SetConstantBuffer(1, m_spCbMaterial);
+
+	m_cbLightData.directionalLightDir = {0, 1, 0};
+	//m_cbLightData.directionalLightColor = {0.7, 1, 0.7};
+	m_spRHICommandList->SetConstantBuffer(2, m_spCbLight);
+	m_spCbLight->Write(m_cbLightData);
 	
 
 
@@ -533,29 +544,33 @@ void Renderer::DrawMesh(const Node*					 _pNode,
 	}
 	// if (_pNode->Name != "Head") return;
 
-	struct EffectVertex
+	struct ModelVertex
 	{
-
-		EffectVertex(const Vector3& _pos, const Vector2& _uv, UINT _color)
+		ModelVertex(const Vector3& _pos, const Vector2& _uv, UINT _color,
+					 Vector3 _normal, Vector3 _tangent)
 		{
 			Pos = _pos;
 			UV = _uv;
 			Color = _color;
+			Normal = _normal;
+			Tangent = _tangent;
 		}
 		Vector3 Pos = {};
 		Vector2 UV = {};
 		UINT	Color = 0xFFFFFFFF;
+		Vector3 Normal;
+		Vector3 Tangent;
 	};
-	std::vector<EffectVertex> vertices;
+	std::vector<ModelVertex> vertices;
 	for (auto&& v : _pNode->Verteces)
 	{
-		vertices.push_back(EffectVertex(v.Pos, v.UV, v.Color));
+		vertices.push_back(ModelVertex(v.Pos, v.UV, v.Color, v.Normal, v.Tangent));
 	}
 
 	// 頂点バッファ
 	std::shared_ptr<RHI_VertexBuffer> vertexBuffer =
 		std::make_shared<D3D11_VertexBuffer>(m_spRHIDevice);
-	vertexBuffer->Create<EffectVertex>(_pNode->Verteces.size(), &vertices[0]);
+	vertexBuffer->Create<ModelVertex>(_pNode->Verteces.size(), &vertices[0]);
 
 	UINT offset = 0;
 	m_spRHICommandList->SetVertexBuffer(0, vertexBuffer, 0);
@@ -632,7 +647,7 @@ void Renderer::DrawModelsInScene()
 	{
 		ModelWork modelWork;
 		modelWork.Set(planeModel);
-		DrawModel(&modelWork, Matrix::CreateTranslation(0, -0.5,0));
+		DrawModel(&modelWork, Matrix::CreateTranslation(0, -1,0));
 	}
 	// render sky
 	{

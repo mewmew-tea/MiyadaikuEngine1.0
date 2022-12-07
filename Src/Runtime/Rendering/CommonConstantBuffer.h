@@ -20,7 +20,12 @@ struct Cb_Uber
 
 struct Cb_Light
 {
-	Vector4 color;
+	Vector3 AmbientLight = {0.3f, 0.3f, 0.3f};
+	float	blank1;
+	Vector3 directionalLightColor = {1, 1, 1};
+	float	directionalLightIntensity = 1.0f;
+	Vector3 directionalLightDir = {1, 1, 1};
+	float	blank2;
 };
 
 struct Cb_Material
