@@ -79,6 +79,7 @@
     <Compile Include="Class1.cs" />
     <Compile Include="EnemyController.cs" />
     <Compile Include="Game.cs" />
+    <Compile Include="Miyadaiku\EffekseerEmitter.cs" />
     <Compile Include="Miyadaiku\Runtime.cs" />
     <Compile Include="Miyadaiku\Attributes\SerializeFieldAttribute.cs" />
     <Compile Include="Miyadaiku\Component.cs" />

@@ -66,6 +66,9 @@ private:
 
 	void DrawSubset(const Node* _pNode, const Material& _material,
 					const Subset& _subset);
+
+	void DrawTexture(const RHI_Texture* _pTexture, const Matrix& _mWorld);
+
 	std::shared_ptr<RHI_Device>		 m_spRHIDevice = nullptr;
 	std::shared_ptr<RHI_SwapChain>	 m_spRHISwapChain = nullptr;
 	std::shared_ptr<RHI_CommandList> m_spRHICommandList = nullptr;

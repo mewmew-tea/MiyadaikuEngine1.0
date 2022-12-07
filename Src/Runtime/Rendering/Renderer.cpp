@@ -1,6 +1,9 @@
 ﻿#include "Renderer.h"
 
 #include "../Core/Engine.h"
+
+#include "../Effect/Effect.h"
+
 #include "../Core/Platform/Platform.h"
 #include "../Core/Platform/Windows/Window_Windows.h"
 
@@ -29,7 +32,6 @@
 #include "../Scripting/Scripting.h"
 #include "../Scripting/Component.h"
 #include "../Scripting/ScriptPropertyInfo.h"
-
 
 #include "imgui.h"
 
@@ -219,8 +221,6 @@ void Renderer::OnAwake()
 		io.Fonts->Build();
 		io.FontDefault = font;
 	}
-
-
 }
 void Renderer::OnShutdown()
 {
@@ -462,7 +462,19 @@ void Renderer::Present()
 	
 	DrawModelsInScene();
 	
-    //--------------------------------
+	
+	//--------------------------------
+	// Effekseer
+	//--------------------------------
+	auto effect = GetEngine()->GetSubsystemLocator().Get<Effect>();
+	if (effect)
+	{
+		effect->SetProjectionMatrix(m_cbCameraData.mProj);
+		effect->SetCameraMatrix(m_cbCameraData.mView);
+		effect->OnRender();
+	}
+
+	//--------------------------------
 	// ImGui
 	//--------------------------------
 	// begin
@@ -486,6 +498,8 @@ void Renderer::Present()
 		ImGui::UpdatePlatformWindows();
 		ImGui::RenderPlatformWindowsDefault();
 	}
+
+
 
 	m_spRHISwapChain->Present();
 }

@@ -48,8 +48,13 @@ namespace CSScript
                     + (transform.Position.z - enemy.transform.Position.z) * (transform.Position.z - enemy.transform.Position.z));
                 if (distance < 0.5f)
                 {
-                    Destroy();
                     enemy.Enabled = false;
+                    var emitter = (EffekseerEmitter)gameObject.GetComponent<EffekseerEmitter>();
+                    if (emitter != null)
+                    {
+                        emitter.Play();
+                    }
+                    Destroy();
                 }
             }
             transform.Position += new Vector3(0f, 0f, speed);

@@ -3,6 +3,8 @@
 
 #include <stdio.h>
 
+#include "../Effect/Effect.h"
+
 #include "Platform/Platform.h"
 #include "Platform/Window.h"
 
@@ -51,6 +53,7 @@ Engine::~Engine()
 	{
 		m_subsystemLocator.Remove<IPC>();
 	}
+	m_subsystemLocator.Remove<Effect>();
 	m_subsystemLocator.Remove<Renderer>();
 	m_subsystemLocator.Remove<Platform>();
 	m_subsystemLocator.Remove<Scripting>();
@@ -62,6 +65,7 @@ void Engine::SetUp()
 	m_subsystemLocator.Add<Timer>();
 	m_subsystemLocator.Add<Platform>();
 	m_subsystemLocator.Add<Renderer>();
+	m_subsystemLocator.Add<Effect>();
 	m_subsystemLocator.Add<Scripting>();
 	if (IsEditorMode())
 	{

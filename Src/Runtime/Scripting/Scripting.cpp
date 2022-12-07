@@ -295,6 +295,14 @@ void Scripting::LoadMonoAssembly()
 	{
 		m_spScriptClasses.push_back(spBulletController);
 	}
+	auto spEffekseerEmitter = std::make_shared<ScriptClassTypeInfo>();
+	spEffekseerEmitter->name = "EffekseerEmitter";
+	spEffekseerEmitter->nameSpace = "MiyadaikuEngine";
+	if (spEffekseerEmitter->ReadClass(assemblyImage))
+	{
+		m_spScriptClasses.push_back(spEffekseerEmitter);
+	}
+
 
 	{
 		auto go = CreateGameObject();
@@ -310,6 +318,7 @@ void Scripting::LoadMonoAssembly()
 		{
 			auto go = CreateGameObject();
 			go->AddComponent(spBulletController);
+			go->AddComponent(spEffekseerEmitter);
 			go->m_enabled = false;
 		}
 	}

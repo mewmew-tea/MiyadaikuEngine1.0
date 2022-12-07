@@ -3,6 +3,7 @@
 // struct HINSTANCE;
 // struct HWND;
 #ifdef _WIN32
+#define _WINSOCKAPI_
 #include <Windows.h>
 
 namespace Miyadaiku

@@ -72,6 +72,10 @@ file(GLOB nativeruntime_h
     Rendering/RHI/D3D11/D3D11_CommandList.h
     Rendering/RHI/D3D11/D3D11_PipelineState.h
     Rendering/RHI/D3D11/D3D11_RenderState.h
+    
+    # effect
+    Effect/Effect.h
+    Effect/EffekseerEffect.h
 
     # Scripting
     Scripting/Scripting.h
@@ -150,6 +154,10 @@ set(nativeruntime_src
     Rendering/RHI/D3D11/D3D11_PipelineState.cpp
     Rendering/RHI/D3D11/D3D11_RenderState.cpp
 
+    #effect
+    Effect/Effect.cpp
+    Effect/EffekseerEffect.cpp
+
     # Scripting
     Scripting/Scripting.cpp
     Scripting/Component.cpp
@@ -191,6 +199,9 @@ set(imgui_src
 set(ASSIMP_DIR ${CMAKE_CURRENT_SOURCE_DIR}/External/Assimp)
 set(ASSIMP_INCLUDE_DIR ${ASSIMP_DIR}/include)
 
+# effekseer
+set(EFFEKSEER_DIR ${CMAKE_CURRENT_SOURCE_DIR}/External/Effekseer)
+
 # project infos
 add_library(${PROJECT_NAME} STATIC
     ${nativeruntime_h}
@@ -207,18 +218,27 @@ target_include_directories(${PROJECT_NAME} PRIVATE
     ${IMGUI_JA_DIR}
     ${NLOHMANN_JSON_DIR}
     ${ASSIMP_INCLUDE_DIR}
+    ${EFFEKSEER_DIR}/Dev/Cpp/Effekseer/
+    ${EFFEKSEER_DIR}/Dev/Cpp/EffekseerRendererDX11/
+    ${EFFEKSEER_DIR}/Dev/Cpp/EffekseerSoundXAudio2/
 )
 
 # link external libs
 include_directories(External/mono/Include) 
 #link_directories(${CMAKE_CURRENT_SOURCE_DIR}/External/mono/Lib/)
 target_link_libraries(${PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/External/mono/Lib/mono-2.0-sgen.lib)
-add_dependencies(${PROJECT_NAME} ExternalProject_assimp)
 
+add_dependencies(${PROJECT_NAME} ExternalProject_assimp)
 target_link_directories(${PROJECT_NAME} PUBLIC ${ASSIMP_BUILD_DIR}/src/ExternalProject_assimp-build/lib/Debug)
 target_link_libraries(${PROJECT_NAME} PUBLIC 
     debug "${ASSIMP_BUILD_DIR}/src/ExternalProject_assimp-build/lib/Debug/assimp-vc143-mtd.lib" 
     optimized "${ASSIMP_BUILD_DIR}/src/ExternalProject_assimp-build/lib/Release/assimp-vc143-mt.lib")
+
+# effekseer
+add_dependencies(${PROJECT_NAME} Effekseer)
+add_dependencies(${PROJECT_NAME} EffekseerRendererDX11)
+target_link_libraries(${PROJECT_NAME} PUBLIC Effekseer)
+target_link_libraries(${PROJECT_NAME} PUBLIC EffekseerRendererDX11)
 
     
 # warning levels
