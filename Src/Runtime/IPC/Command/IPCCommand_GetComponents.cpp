@@ -8,7 +8,12 @@ namespace Miyadaiku
 {
 std::string IPCCommand_GetComponents::Execute()
 {
-	Engine* pEngine = GetEngine();
+	Engine* pEngine = nullptr;
+	if (pEngine)
+	{
+		assert(0 && "IPCCommand_GetComponents: There is not instance of Engine.");
+	}
+	pEngine = GetEngine();
 
 	// Response
 	nlohmann::ordered_json	   response;

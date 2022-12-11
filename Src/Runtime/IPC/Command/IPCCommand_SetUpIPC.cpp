@@ -8,7 +8,13 @@ namespace Miyadaiku
 {
 std::string IPCCommand_SetUpIPC::Execute()
 {
-	Engine* pEngine = GetEngine();
+	Engine* pEngine = nullptr;
+	if (pEngine)
+	{
+		assert(0
+			   && "IPCCommand_GetComponents: There is not instance of Engine.");
+	}
+	pEngine = GetEngine();
 
 	std::shared_ptr<Window_Windows> window =
 		static_pointer_cast<Window_Windows>(GetEngine()
