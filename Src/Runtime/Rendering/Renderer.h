@@ -13,9 +13,9 @@ class RHI_Texture;
 
 class Model;
 class ModelWork;
-class Node;
-class Material;
-class Subset;
+struct Node;
+struct Material;
+struct Subset;
 
 struct RHI_RasterizerState;
 struct RHI_SamplerState;
