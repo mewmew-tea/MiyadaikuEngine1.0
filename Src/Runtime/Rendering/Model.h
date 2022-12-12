@@ -11,8 +11,8 @@
 #include "../Core/Math/Matrix.h"
 #include "../Core/Math/Quaternion.h"
 
-class aiScene;
-class aiNode;
+struct aiScene;
+struct aiNode;
 namespace Miyadaiku
 {
 class RHI_Texture;

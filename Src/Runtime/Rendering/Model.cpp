@@ -1,7 +1,11 @@
-﻿#define NOMINMAX
+﻿#pragma warning(push)
+#pragma warning(disable : 4100)
+#pragma warning(disable : 26495)
+#define NOMINMAX
 #include <assimp/Importer.hpp>
 #include <assimp/scene.h>
 #include <assimp/postprocess.h>
+#pragma warning(pop)
 
 #include "Model.h"
 
@@ -64,7 +68,7 @@ bool Model::LoadByAssimp(const std::string& _filename)
 }
 
 // 最新のバージョン
-std::uint16_t MDM_CURRENT_VERSION = 1;
+std::uint8_t MDM_CURRENT_VERSION = 1;
 
 // ヘッダ部分
 struct MDMHeader
@@ -481,8 +485,8 @@ bool Model::SaveToMDM(const std::string& _filepath)
 	header.fileType[1] = 'D';
 	header.fileType[2] = 'M';
 	header.version = MDM_CURRENT_VERSION;
-	header.numNodes = m_nodes.size();
-	header.numMaterials = m_materials.size();
+	header.numNodes = (uint16_t)m_nodes.size();
+	header.numMaterials = (uint16_t)m_materials.size();
 	if (!fs.write((char*)&header, sizeof(MDMHeader)))
 	{
 		assert(0 && "MDMヘッダ書き込み失敗");
@@ -491,7 +495,7 @@ bool Model::SaveToMDM(const std::string& _filepath)
 	}
 
 	// ノード
-	const uint32_t numNodes = m_nodes.size();
+	//const uint32_t numNodes = (uint32_t)m_nodes.size();
 	for (auto&& node : m_nodes)
 	{
 		// ノードヘッダ
@@ -572,14 +576,14 @@ bool Model::SaveToMDM(const std::string& _filepath)
 			faces.push_back(static_cast<std::uint32_t>(face.idx[1]));
 			faces.push_back(static_cast<std::uint32_t>(face.idx[2]));
 		}
-		int s = sizeof(std::uint32_t) * faces.size();
+		//int s = sizeof(std::uint32_t) * (uint32_t)faces.size();
 		if (faces.size() > 0)
 		{
 			/*if (fwrite(&faces[0], sizeof(std::uint32_t) * faces.size(), 1, fp)
 			!= 1) { fclose(fp); return false;
 			}*/
 
-			std::uint32_t* address = &faces[0];
+			//std::uint32_t* address = &faces[0];
 			for (int f = 0; f < faces.size(); ++f)
 			{
 
@@ -639,7 +643,7 @@ bool Model::SaveToMDM(const std::string& _filepath)
 		children.reserve(node.m_children.size());
 		for (auto&& child : node.m_children)
 		{
-			children.push_back(child);
+			children.push_back((uint16_t)child);
 		}
 		if (children.size() > 0)
 		{
@@ -680,8 +684,6 @@ bool Model::SaveToMDM(const std::string& _filepath)
 			fs.close();
 			return false;
 		}
-
-		int a = sizeof(MDMMaterialValue);
 
 		MDMMaterialValue matValue = {};
 		// ベースカラー
@@ -799,7 +801,7 @@ bool Model::SaveMeshFace(const std::string& _filepath)
 		return false;
 	}
 	// ノード
-	std::uint16_t numNodes = m_nodes.size();
+	std::uint16_t numNodes = (uint16_t)m_nodes.size();
 	if (!fs.write((char*)&numNodes, sizeof(numNodes)))
 	{
 		fs.close();
@@ -824,11 +826,11 @@ bool Model::SaveMeshFace(const std::string& _filepath)
 			faces.push_back(static_cast<std::uint32_t>(face.idx[1]));
 			faces.push_back(static_cast<std::uint32_t>(face.idx[2]));
 		}
-		int s = sizeof(std::uint32_t) * faces.size();
+		//int s = sizeof(std::uint32_t) * faces.size();
 		if (faces.size() > 0)
 		{
 
-			std::uint32_t* address = &faces[0];
+			//std::uint32_t* address = &faces[0];
 			for (int f = 0; f < faces.size(); ++f)
 			{
 				if (!fs.write((char*)&faces[f], sizeof(std::uint32_t)))
@@ -1172,12 +1174,12 @@ void Model::ProcessNode(aiNode* _pNode, const aiScene* _pScene)
 		if (_pNode->mNumMeshes > 0)
 		{
 			// Subset(aiMesh)ごとの情報を取得
-			for (int i = 0; i < _pNode->mNumMeshes; ++i)
+			for (unsigned int i = 0; i < _pNode->mNumMeshes; ++i)
 			{
 				auto mSrc = _pScene->mMeshes[_pNode->mMeshes[i]];
 
 				// 頂点情報
-				for (int j = 0; j < mSrc->mNumVertices; ++j)
+				for (unsigned int j = 0; j < mSrc->mNumVertices; ++j)
 				{
 					auto		vSrc = mSrc->mVertices[j];
 					ModelVertex vDest = {};
@@ -1211,10 +1213,10 @@ void Model::ProcessNode(aiNode* _pNode, const aiScene* _pScene)
 				}
 
 				// 面情報
-				const int faceStartIdx = newNode.Faces.size();
-				for (uint32_t i = 0; i < mSrc->mNumFaces; i++)
+				const int faceStartIdx = (int)newNode.Faces.size();
+				for (uint32_t j = 0; j < mSrc->mNumFaces; j++)
 				{
-					aiFace fSrc = mSrc->mFaces[i];
+					aiFace fSrc = mSrc->mFaces[j];
 
 					ModelFace fDest = {};
 					fDest.idx[0] = fSrc.mIndices[0];
@@ -1252,7 +1254,7 @@ void ModelWork::Set(std::shared_ptr<Model>& _pModel)
 	}
 	m_spModelData = _pModel;
 
-	const uint32_t nodeSize = m_spModelData->GetNodes().size();
+	const uint32_t nodeSize = (uint32_t)m_spModelData->GetNodes().size();
 	m_coppiedNodes.resize(nodeSize);
 
 	auto& orgNodes = _pModel->GetNodes();
