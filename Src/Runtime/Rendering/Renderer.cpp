@@ -33,6 +33,11 @@
 #include "../Scripting/Component.h"
 #include "../Scripting/ScriptPropertyInfo.h"
 
+#pragma warning(push)
+#pragma warning(disable : 6011)
+#pragma warning(disable : 6387)
+#pragma warning(disable : 28182)
+#pragma warning(disable : 33010) 
 #include "imgui.h"
 
 #define IMGUI_DEFINE_MATH_OPERATORS
@@ -49,6 +54,7 @@
 //#include "ImZoomSlider.h"
 //#include "ImCurveEdit.h"
 //#include "GraphEditor.h"
+#pragma warning(pop)
 
 namespace Miyadaiku
 {
@@ -117,7 +123,7 @@ void Renderer::OnAwake()
 	}
 	m_cbCameraData.mView =
 		Matrix::CreateRotationZ(30.0f * (3.1415926535f / 180.0f))
-		* Matrix::CreateTranslation(0, 0.7, -1);
+		* Matrix::CreateTranslation(0.0f, 0.7f, -1.0f);
 	m_cbCameraData.mView.Invert();
 	m_cbCameraData.mProj = Matrix::CreatePerspectiveFovLH(
 		60.0f * (3.1415926535f / 180.0f), 16.0f / 9.0f, 0.01f, 2000.0f);
@@ -149,8 +155,7 @@ void Renderer::OnAwake()
 		col |= (uint8_t(UINT8_MAX) << 8 * 0);
 		col |= (uint8_t(UINT8_MAX) << 8 * 1);
 		col |= (uint8_t(UINT8_MAX) << 8 * 2);
-		col |= (uint8_t(UINT8_MAX) << 8 * 3);
-		RHI_FORMAT format = RHI_FORMAT::R8G8B8A8_UNORM;
+		col |= (uint8_t(UINT8_MAX) << 8 * 3);;
 
 		m_spWhiteTexure = std::make_shared<D3D11_Texture>(m_spRHIDevice);
 		if (!m_spWhiteTexure->Create(1, 1, RHI_FORMAT::R8G8B8A8_UNORM, 1, &col,
@@ -167,7 +172,6 @@ void Renderer::OnAwake()
 		col |= (uint8_t(UINT8_MAX / 2) << 8 * 1);
 		col |= (uint8_t(UINT8_MAX) << 8 * 2);
 		col |= (uint8_t(UINT8_MAX) << 8 * 3);
-		RHI_FORMAT format = RHI_FORMAT::R8G8B8A8_UNORM;
 
 		m_spNormalTexure = std::make_shared<D3D11_Texture>(m_spRHIDevice);
 		if (!m_spNormalTexure->Create(1, 1, RHI_FORMAT::R8G8B8A8_UNORM, 1, &col,
@@ -190,7 +194,6 @@ void Renderer::OnAwake()
 	auto device = std::static_pointer_cast<D3D11_Device>(
 		m_spRHIDevice);
 
-	ImGuiIO& io = ImGui::GetIO();
 	// Setup Dear ImGui style
 	ImGui::StyleColorsClassic();
 
@@ -209,7 +212,8 @@ void Renderer::OnAwake()
 		// 日本語対応
 #include "ja_glyph_ranges.h"
 		ImFontConfig config;
-		//config.MergeMode = true;
+		auto&		 io = ImGui::GetIO();
+		// config.MergeMode = true;
 		io.Fonts->AddFontDefault();
 		//std::string fontPath = "c:\\Windows\\Fonts\\msgothic.ttc";
 		//std::string fontPath = "c:\\Windows\\Fonts\\meiryo.ttc";
@@ -341,7 +345,7 @@ void Renderer::Present()
 	//	Matrix::CreateRotationY(angle) * Matrix::CreateTranslation(0,0,-2.0f);
 	m_cbCameraData.mView = Matrix::CreateFromYawPitchRoll(
 							   angle, 10.0f * (3.1415926535f / 180.0f), 0.0f)
-		* Matrix::CreateTranslation(0, 0.3, -3);
+		* Matrix::CreateTranslation(0.0f, 0.3f, -3.0f);
 	m_cbCameraData.mView.Invert();
 	// angle += 0.005f;
 	if (GetAsyncKeyState('Q'))
