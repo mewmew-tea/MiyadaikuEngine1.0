@@ -64,7 +64,7 @@ namespace Miyadaiku.Editor.ViewModels
             Components.Add(comp);
 
             // Update by timer
-            Timer timer = new Timer(300);
+            Timer timer = new Timer(500);
             timer.Elapsed += (sender, e) =>
             {
                 timer.Stop();
