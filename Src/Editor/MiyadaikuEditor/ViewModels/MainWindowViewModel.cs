@@ -81,75 +81,9 @@ namespace Miyadaiku.Editor.ViewModels
             set { SetProperty(ref _title, value); }
         }
 
-        private float testText;
-        public float TestText
-        {
-            get { return testText; }
-            set { SetProperty(ref testText, value); }
-        }
-
-
-        public DelegateCommand TestCommand { get; }
-        //public ReactiveCollection<ComponentViewModel> Components { get; set; }
-
         public MainWindowViewModel()
         {
-            TestCommand = new DelegateCommand(ExecuteTestCommand);
-            TextData = new Dat();
-            //Components = new ReactiveCollection<ComponentViewModel>();
-            //Components.Add(new ComponentViewModel(new Models.ComponentModel("AAA")));
         }
-
-        public class Dat : BindableBase
-        {
-            float testText = 0;
-            public float TestText
-            {
-                get { return testText; }
-                set { SetProperty(ref testText, value); }
-            }
-        }
-        public Dat TextData;
-        //public Dat TextData
-        //{
-        //    get { return textData; }
-        //    set { SetProperty(ref textData, value); }
-        //}
-
-        private void ExecuteTestCommand()
-        {
-            Title = "MUZUIIIIIIIIIIII";
-            TextData.TestText = 100;
-            //ClientTest(new string[] { "" });
-        }
-
-        int ClientTest(string[] args)
-        {
-            //// TcpClientを使ってホストに対し接続を試みる
-            //TcpClient client = new TcpClient();
-            //client.Connect("127.0.0.1", 12345);
-
-            //// コマンドラインで入力された文字を取得
-            //char[] input = new string("Input!!!").ToCharArray();
-
-            //// 入力された文字をbyteに変換して送信する
-            //NetworkStream stream = client.GetStream();
-            //byte[] bytes = Encoding.ASCII.GetBytes(input);
-            //stream.Write(bytes, 0, bytes.Length);
-
-            //byte[] output = new byte[256];
-            //stream.Read(output, 0, output.Length);
-
-            //var ostr = Encoding.ASCII.GetString(output);
-            //Console.WriteLine(ostr);
-
-            //Title = ostr;
-
-            //// TcpClientを終了
-            //client.Close();
-            return 0;
-        }
-
     }
 
 }

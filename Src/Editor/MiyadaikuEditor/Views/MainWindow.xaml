@@ -121,8 +121,6 @@
                     <avalonDock:LayoutAnchorablePane DockHeight="100"  x:Name="uxAnchorablePane2">
                         <avalonDock:LayoutAnchorable Title="ToolWindow2" ContentId="ToolWindow2">
                             <DockPanel>
-                                <TextBlock Text="{Binding TextData.TestText, Mode=TwoWay }"/>
-                            <Button Content="テストボタン" Command="{Binding TestCommand}"/>
                             </DockPanel>
                         </avalonDock:LayoutAnchorable>
                     </avalonDock:LayoutAnchorablePane>
