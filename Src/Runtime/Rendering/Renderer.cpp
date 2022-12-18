@@ -256,13 +256,21 @@ void Renderer::Present()
 												->GetMainWindow());
 
 
-	ID3D11DeviceContext* pDevivceContext =
-		std::static_pointer_cast<D3D11_Device>(m_spRHIDevice)
+	ID3D11DeviceContext* pDeviceContext = nullptr;
+	pDeviceContext = std::static_pointer_cast<D3D11_Device>(m_spRHIDevice)
 			->GetDeviceContext();
+	if (!pDeviceContext)
+	{
+		return;
+	}
 
-	ID3D11Device* pDevivce =
-		std::static_pointer_cast<D3D11_Device>(m_spRHIDevice)
-			->GetDevice();
+	//ID3D11Device* pDevice = nullptr;
+	//pDevice = std::static_pointer_cast<D3D11_Device>(m_spRHIDevice)
+	//		->GetDevice();
+	//if (!pDevice)
+	//{
+	//	return;
+	//}
 
 	// std::shared_ptr<D3D11_SwapChain> spRHISwapChain =
 	//	std::static_pointer_cast<D3D11_SwapChain>(m_spRHISwapChain);
@@ -272,7 +280,7 @@ void Renderer::Present()
 
 	ID3D11RenderTargetView* rtvs[] = {rtv};
 
-	pDevivceContext->OMSetRenderTargets(
+	pDeviceContext->OMSetRenderTargets(
 		1, rtvs,
 		reinterpret_cast<ID3D11DepthStencilView*> (m_spRHISwapChain
 			->GetDepthStencilBuffer()
@@ -316,8 +324,8 @@ void Renderer::Present()
 	}
 
 
-	pDevivceContext->ClearRenderTargetView(rtv, clearColor);
-	pDevivceContext->ClearDepthStencilView(
+	pDeviceContext->ClearRenderTargetView(rtv, clearColor);
+	pDeviceContext->ClearDepthStencilView(
 		reinterpret_cast<ID3D11DepthStencilView*>(
 			m_spRHISwapChain->GetDepthStencilBuffer()->GetDSHandle().m_pData),
 		D3D11_CLEAR_DEPTH | D3D11_CLEAR_STENCIL,
@@ -329,16 +337,16 @@ void Renderer::Present()
 		spTex= std::make_shared<D3D11_Texture>(m_spRHIDevice);
 		spTex->Create("Assets/Textures/4.png");
 	}
-	pDevivceContext->PSSetShaderResources(0, 1, (ID3D11ShaderResourceView**)&(spTex->GetSRVHandle().m_pData));
+	pDeviceContext->PSSetShaderResources(0, 1, (ID3D11ShaderResourceView**)&(spTex->GetSRVHandle().m_pData));
 
 	std::shared_ptr<D3D11_Shader> spPixelShader =
 		std::static_pointer_cast<D3D11_Shader>(m_spRHIPixelShader);
 	std::shared_ptr<D3D11_Shader> spVertexShader =
 		std::static_pointer_cast<D3D11_Shader>(m_spRHIVertexShader);
 
-	pDevivceContext->VSSetShader((ID3D11VertexShader*)spVertexShader->GetDataHandle().m_pData, 0,0);
-	pDevivceContext->PSSetShader((ID3D11PixelShader*)spPixelShader->GetDataHandle().m_pData, 0,0);
-	pDevivceContext->IASetInputLayout(spVertexShader->GetInputLayout());
+	pDeviceContext->VSSetShader((ID3D11VertexShader*)spVertexShader->GetDataHandle().m_pData, 0,0);
+	pDeviceContext->PSSetShader((ID3D11PixelShader*)spPixelShader->GetDataHandle().m_pData, 0,0);
+	pDeviceContext->IASetInputLayout(spVertexShader->GetInputLayout());
 
 	static float angle = 0.0f;
 	//m_cbCameraData.mView =
@@ -368,101 +376,6 @@ void Renderer::Present()
 	//m_cbLightData.directionalLightColor = {0.7, 1, 0.7};
 	m_spRHICommandList->SetConstantBuffer(2, m_spCbLight);
 	m_spCbLight->Write(m_cbLightData);
-	
-
-
-	struct TestVertex
-	{
-
-		TestVertex(const Vector3& _pos, const Vector2& _uv, UINT _color)
-		{
-			Pos = _pos;
-			UV = _uv;
-			Color = _color;
-		}
-		Vector3 Pos = {};
-		Vector2 UV = {};
-		UINT			  Color = 0xFFFFFFFF;
-	};
-
-	//std::vector<TestVertex> vertex;
-	//auto spScripting = GetEngine()->GetSubsystemLocator().Get<Scripting>();
-
-	//m_cbUberData.mWorld = Matrix::Identity;
-	//m_spRHICommandList->SetConstantBuffer(8, m_spCbUber);
-	//m_spCbUber->Write<Cb_Uber>(m_cbUberData);
-
-	//for (auto go : spScripting->GetGameObjects())
-	//{
-	//	Vector3 pos;
-	//	auto	transform = go->GetTransform();
-	//	for (auto spProp : transform->GetClassInstance()->m_pClassType->spPropertyInfos)
-	//	{
-	//		if (spProp->name == "Position")
-	//		{
-	//			Vector3 ret;
-	//			spProp->GetValue(
-	//				transform->GetClassInstance()->m_pInstance, &ret);
-	//			//if (ret != nullptr)
-	//			{
-	//				pos = ret;
-	//				//std::cout << pos.x << ", " << pos.y << std::endl;
-	//			}
-	//			break;
-	//		}
-	//	}
-
-	//	static std::shared_ptr<Model> drumcanModel = nullptr;
-
-	//	if (!drumcanModel)
-	//	{
-
-	//		drumcanModel = std::make_shared<Model>();
-	//		if (!drumcanModel->LoadByAssimp(
-	//				"Assets/Models/DrumCan/DrumCan.gltf"))
-	//		{
-	//			assert(0 && "Model load failed...");
-	//		}
-	//	}
-
-	//	ID3D11DeviceContext* pDevivceContext =
-	//		std::static_pointer_cast<D3D11_Device>(m_spRHIDevice)
-	//			->GetDeviceContext();
-	//	pDevivceContext->IASetPrimitiveTopology(
-	//		D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-
-	//	{
-	//		ModelWork modelWork;
-	//		modelWork.Set(drumcanModel);
-	//		DrawModel(&modelWork, Matrix::CreateTranslation(pos));
-	//	}
-
-	//	//vertex.clear();
-	//	//vertex.push_back(TestVertex({pos.x + 0, pos.y + 0, 0}, {0, 1}, 0xFFFFFFFF));
-	//	//vertex.push_back(TestVertex({pos.x + 0, pos.y + 1, 0}, {0, 0}, 0xFFFFFFFF));
-	//	//vertex.push_back(TestVertex({pos.x + 1, pos.y + 0, 0}, {1, 1}, 0xFFFFFFFF));
-	//	//vertex.push_back(TestVertex({pos.x + 1, pos.y + 1, 0}, {1, 0}, 0xFFFFFFFF));
-
-	//	//std::shared_ptr<RHI_VertexBuffer> vertexBuffer =
-	//	//	std::make_shared<D3D11_VertexBuffer>(m_spRHIDevice);
-	//	//if (!vertexBuffer->Create<TestVertex>(vertex.size(), vertex.data()))
-	//	//{
-	//	//	assert(0&&"FAILED CRATE VERTEX BUF");
-	//	//}
-	//	//	//vertexBuffer.Write(vertex.data(), vertex.size());
-
-	//	//// 頂点リストの並び順
-	//	//pDevivceContext->IASetPrimitiveTopology(
-	//	//	D3D_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP);
-
-	//	//m_spRHICommandList->SetVertexBuffer(0, vertexBuffer, 0);
-
-	//	////m_spRHIComandList
-	//	////pDevivceContext->Draw((UINT)vertex.size(), 0);
-	//	////pDevivceContext->DrawInstanced((UINT)vertex.size(), 1, 0, 0);
-	//	//m_spRHICommandList->Draw((uint16_t)vertex.size(), 0);
-	//	//pBuffer->Release();
-	//}
 	
 	DrawModelsInScene();
 	
@@ -511,6 +424,11 @@ void Renderer::Present()
 void Renderer::DrawSubset(const Node* _pNode, const Material& _material,
 							  const Subset& _subset)
 {
+	if (!_pNode)
+	{
+		return;
+	}
+
 	// マテリアル書き込み
 	m_cbMaterialData.baseColor = _material.BaseColor;
 	m_spCbMaterial->Write<Cb_Material>(m_cbMaterialData);
@@ -560,7 +478,6 @@ void Renderer::DrawMesh(const Node*					 _pNode,
 	{
 		return;
 	}
-	// if (_pNode->Name != "Head") return;
 
 	struct ModelVertex
 	{
@@ -588,9 +505,8 @@ void Renderer::DrawMesh(const Node*					 _pNode,
 	// 頂点バッファ
 	std::shared_ptr<RHI_VertexBuffer> vertexBuffer =
 		std::make_shared<D3D11_VertexBuffer>(m_spRHIDevice);
-	vertexBuffer->Create<ModelVertex>(_pNode->Verteces.size(), &vertices[0]);
+	vertexBuffer->Create<ModelVertex>((uint32_t) _pNode->Verteces.size(), &vertices[0]);
 
-	UINT offset = 0;
 	m_spRHICommandList->SetVertexBuffer(0, vertexBuffer, 0);
 	//D3DDevice::GetInstance().GetDeviceContext()->IASetVertexBuffers(
 	//	0, 1, vertexBuffer.GetAddress(), &oneSize, &offset);
@@ -599,7 +515,8 @@ void Renderer::DrawMesh(const Node*					 _pNode,
 	//Buffer							  indexBuffer;
 	std::shared_ptr<RHI_IndexBuffer> indexBuffer =
 		std::make_shared<D3D11_IndexBuffer>(m_spRHIDevice);
-	indexBuffer->Create<ModelFace>(_pNode->Faces.size(), &_pNode->Faces[0]);
+	indexBuffer->Create<ModelFace>((uint32_t)_pNode->Faces.size(),
+								   &_pNode->Faces[0]);
 	m_spRHICommandList->SetIndexBuffer(0, indexBuffer, 0);
 
 	//D3DDevice::GetInstance().GetDeviceContext()->IASetIndexBuffer(
@@ -700,12 +617,6 @@ void Renderer::DrawModelsInScene()
 				break;
 			}
 		}
-
-		ID3D11DeviceContext* pDevivceContext =
-			std::static_pointer_cast<D3D11_Device>(m_spRHIDevice)
-				->GetDeviceContext();
-		pDevivceContext->IASetPrimitiveTopology(
-			D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
 		{
 			ModelWork modelWork;
