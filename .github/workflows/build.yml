@@ -49,12 +49,12 @@ jobs:
       shell: cmd
       
       
-#    - name: Upload Artifacts
-#      uses: actions/upload-artifact@v3
-#      if: always()
-#      with:
-#        name: BuildArtifact
-#        path: ./
+    - name: Upload Artifacts
+      uses: actions/upload-artifact@v3
+      if: always()
+      with:
+        name: Windows_x64
+        path: ${{github.workspace}}/
         
 
     # Post Discord Notify(by Actions Status Discord)
