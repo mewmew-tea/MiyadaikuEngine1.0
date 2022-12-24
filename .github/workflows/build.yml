@@ -34,12 +34,12 @@ jobs:
       # See https://cmake.org/cmake/help/latest/variable/CMAKE_BUILD_TYPE.html?highlight=cmake_build_type
       run: cmake -G "Visual Studio 17 2022" -A x64 -B ${{github.workspace}}/build -D EDITOR=OFF -D ENABLE_TEST=TRUE
 
-    - name: Upload Artifacts(without build)
-      uses: actions/upload-artifact@v3
-      if: always()
-      with:
-        name: Windows_x64_nobuild
-        path: ${{github.workspace}}/
+#     - name: Upload Artifacts(without build)
+#       uses: actions/upload-artifact@v3
+#       if: always()
+#       with:
+#         name: Windows_x64_nobuild
+#         path: ${{github.workspace}}/
         
     - name: Build
       # Build your program with the given configuration
@@ -56,12 +56,12 @@ jobs:
       shell: cmd
       
       
-    - name: Upload Artifacts
-      uses: actions/upload-artifact@v3
-      if: always()
-      with:
-        name: Windows_x64
-        path: ${{github.workspace}}/
+#     - name: Upload Artifacts
+#       uses: actions/upload-artifact@v3
+#       if: always()
+#       with:
+#         name: Windows_x64
+#         path: ${{github.workspace}}/
         
 
     # Post Discord Notify(by Actions Status Discord)
