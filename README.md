@@ -16,6 +16,16 @@
 Game engine that can be scripted in C#(mono).\
 Under development for the portfolio. (from July 2022)
 
+# 概要
+
+**技術紹介＆ポートフォリオ（随時更新します）**  
+
+[https://mewmew-tea.github.io/Portfolio/](https://mewmew-tea.github.io/Portfolio/)
+
+**紹介動画（随時更新します）**  
+
+[![サービス紹介動画](https://user-images.githubusercontent.com/66203904/209564866-0d7a097e-c8fa-4102-bbca-cdb6097b809c.png)](https://youtu.be/_BmQGiO4Gko)
+
 # How to build
 
 現在はWindows(x64)のみの対応です。
