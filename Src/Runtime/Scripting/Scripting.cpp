@@ -30,11 +30,16 @@
 #include "ScriptFieldInfo.h"
 
 // dear imgui
+#pragma warning(push)
+#pragma warning(disable : 6011)
+#pragma warning(disable : 6387)
+#pragma warning(disable : 28182)
+#pragma warning(disable : 33010)
 #include "imgui.h"
 
 #define IMGUI_DEFINE_MATH_OPERATORS
 #define IMGUI_DEFINE_PLACEMENT_NEW
-
+#pragma warning(pop)
 
 void DebugOutStringToVS(MonoString* str)
 {
