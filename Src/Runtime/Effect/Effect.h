@@ -4,13 +4,8 @@
 #include "../Core/Math/Matrix.h"
 
 #define _WINSOCKAPI_
-#pragma warning(push)
-#pragma warning(disable : 4100)
-#pragma warning(disable : 6385)
-#pragma warning(disable : 26495)
 #include <Effekseer.h>
 #include <EffekseerRendererDX11.h>
-#pragma warning(pop)
 
 #include <stdint.h>
 
