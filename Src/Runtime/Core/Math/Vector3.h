@@ -2,6 +2,9 @@
 
 namespace Miyadaiku
 {
+// Forward declaration
+struct Matrix;
+
 struct Vector3
 {
 	float x;
@@ -33,6 +36,9 @@ struct Vector3
 	static Vector3 Cross(const Vector3& _v1, const Vector3& _v2);
 
 	void Normalize();
+
+	// Transform the vector normal by the matrix
+	static Vector3 TransformNormal(const Vector3& _v, const Matrix& _m);
 
 	// 線形補間
 	static Vector3 Lerp(Vector3& _start, Vector3& _end, float _t);

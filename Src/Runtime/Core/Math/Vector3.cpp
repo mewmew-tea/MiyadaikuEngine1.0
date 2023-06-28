@@ -1,4 +1,5 @@
 ﻿#include "Vector3.h"
+#include "Matrix.h"
 #include <cmath>
 
 namespace Miyadaiku
@@ -71,6 +72,16 @@ void Vector3::Normalize()
 	x *= l;
 	y *= l;
 	z *= l;
+}
+
+Vector3 Vector3::TransformNormal(const Vector3& _v, const Matrix& _m)
+{
+	Vector3 result;
+	result = Vector3(_m.m21 * _v.y, _m.m22 * _v.y, _m.m23 * _v.y);
+	result += Vector3(_m.m11 * _v.x, _m.m12 * _v.x, _m.m13 * _v.x);
+	result += Vector3(_m.m31 * _v.z, _m.m32 * _v.z, _m.m33 * _v.z);
+
+	return result;
 }
 
 Vector3 Vector3::Lerp(Vector3& _start, Vector3& _end, float _t)
